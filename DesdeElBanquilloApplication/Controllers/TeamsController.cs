@@ -21,7 +21,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Teams
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Team.Include(t => t.Competition).Include(t => t.Country).Include(t => t.League).Include(t => t.Stadium);
+            var desdeElBanquilloAppDBContext = _context.Team.Include(t => t.Competition).Include(t => t.Country).Include(t => t.League);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -37,7 +37,6 @@ namespace DesdeElBanquilloApplication.Controllers
                 .Include(t => t.Competition)
                 .Include(t => t.Country)
                 .Include(t => t.League)
-                .Include(t => t.Stadium)
                 .FirstOrDefaultAsync(m => m.IdTeam == id);
             if (team == null)
             {
@@ -50,10 +49,9 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Teams/Create
         public IActionResult Create()
         {
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name");
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name");
-            ViewData["LeagueId"] = new SelectList(_context.Set<League>(), "IdLeague", "Name");
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name");
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name");
+            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name");
+            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name");
             return View();
         }
 
@@ -62,7 +60,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTeam,Name,City,FoundedDate,CompetitionId,CountryId,StadiumId,LeagueId")] Team team)
+        public async Task<IActionResult> Create([Bind("IdTeam,Name,City,FoundedDate,CompetitionId,CountryId,LeagueId")] Team team)
         {
             if (ModelState.IsValid)
             {
@@ -70,10 +68,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name", team.CompetitionId);
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", team.CountryId);
-            ViewData["LeagueId"] = new SelectList(_context.Set<League>(), "IdLeague", "Name", team.LeagueId);
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name", team.StadiumId);
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.CompetitionId);
+            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name", team.CountryId);
+            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", team.LeagueId);
             return View(team);
         }
 
@@ -90,10 +87,9 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name", team.CompetitionId);
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", team.CountryId);
-            ViewData["LeagueId"] = new SelectList(_context.Set<League>(), "IdLeague", "Name", team.LeagueId);
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name", team.StadiumId);
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.CompetitionId);
+            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name", team.CountryId);
+            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", team.LeagueId);
             return View(team);
         }
 
@@ -102,7 +98,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdTeam,Name,City,FoundedDate,CompetitionId,CountryId,StadiumId,LeagueId")] Team team)
+        public async Task<IActionResult> Edit(int id, [Bind("IdTeam,Name,City,FoundedDate,CompetitionId,CountryId,LeagueId")] Team team)
         {
             if (id != team.IdTeam)
             {
@@ -129,10 +125,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name", team.CompetitionId);
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", team.CountryId);
-            ViewData["LeagueId"] = new SelectList(_context.Set<League>(), "IdLeague", "Name", team.LeagueId);
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name", team.StadiumId);
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.CompetitionId);
+            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name", team.CountryId);
+            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", team.LeagueId);
             return View(team);
         }
 
@@ -148,7 +143,6 @@ namespace DesdeElBanquilloApplication.Controllers
                 .Include(t => t.Competition)
                 .Include(t => t.Country)
                 .Include(t => t.League)
-                .Include(t => t.Stadium)
                 .FirstOrDefaultAsync(m => m.IdTeam == id);
             if (team == null)
             {

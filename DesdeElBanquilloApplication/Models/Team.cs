@@ -1,4 +1,4 @@
-﻿ using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
@@ -24,7 +24,7 @@ namespace DesdeElBanquilloApplication.Models
         [DisplayName("Fecha Fundacion Equipo")]
         public DateTime FoundedDate { get; set; }
 
-        
+
 
         // Claves foráneas
         [ForeignKey("Competition")]
@@ -33,7 +33,7 @@ namespace DesdeElBanquilloApplication.Models
         [ForeignKey("Country")]
         public int CountryId { get; set; }
 
-      
+
 
         [ForeignKey("League")]
         public int LeagueId { get; set; }
