@@ -13,4 +13,8 @@ using DesdeElBanquilloApplication.Models;
         }
 
         public DbSet<DesdeElBanquilloApplication.Models.Match> Match { get; set; } = default!;
+
+public DbSet<DesdeElBanquilloApplication.Models.Team> Team { get; set; } = default!;
+
+public DbSet<DesdeElBanquilloApplication.Models.Player> Player { get; set; } = default!;
     }
