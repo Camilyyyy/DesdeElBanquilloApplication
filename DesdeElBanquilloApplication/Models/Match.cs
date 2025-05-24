@@ -23,10 +23,7 @@ namespace DesdeElBanquilloApplication.Models
         [Required]
         public MatchStatus Status { get; set; } = MatchStatus.Scheduled;
 
-        [StringLength(100)]
-        [Required]
-        [DisplayName("Estadio Partido")]
-        public string Stadium { get; set; }
+
 
         [StringLength(50)]
         [Required]
@@ -43,10 +40,14 @@ namespace DesdeElBanquilloApplication.Models
         [ForeignKey("Competition")]
         public int CompetitionId { get; set; }
 
+        [ForeignKey("Stadium")]
+        public int? StadiumId { get; set; }
+
         // Propiedades de navegación
         public virtual Team HomeTeam { get; set; }
         public virtual Team AwayTeam { get; set; }
         public virtual Competition Competition { get; set; }
+        public virtual Stadium Stadium { get; set; }
 
         // Relaciones
         public virtual ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
