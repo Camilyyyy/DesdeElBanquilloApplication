@@ -14,19 +14,24 @@ namespace DesdeElBanquilloApplication.Models
         [Required]
         [StringLength(100)]
         [DisplayName("Nombre Liga")]
-        public string Nombre { get; set; }
+        public string Name { get; set; }
 
-        [StringLength(50)]
-        [DisplayName("Pais Liga")]
-        public string Pais { get; set; }
+        [DisplayName("Fecha Crecion Liga")]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        
+        [DisplayName("Liga Activa")]
+        public bool IsActive { get; set; } = true;
 
-
-        public DateTime FechaCreacion { get; set; } = DateTime.Now;
+        // Clave foránea hacia Country
+        [ForeignKey("Country")]
+        public int? CountryId { get; set; }
+        // Propiedad de navegación
+        public virtual Country Country { get; set; }
 
         // Relación uno a muchos con Equipos
-        public virtual ICollection<Team> Equipos { get; set; } = new List<Team>();
+        public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
 
         // Relación uno a muchos con Temporadas
-        public virtual ICollection<Temporada> Temporadas { get; set; } = new List<Temporada>();
+        public virtual ICollection<Season> Seasons { get; set; } = new List<Season>();
     }
 }

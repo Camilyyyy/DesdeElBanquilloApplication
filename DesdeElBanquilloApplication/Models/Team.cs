@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
@@ -36,13 +36,19 @@ namespace DesdeElBanquilloApplication.Models
         [ForeignKey("Stadium")]
         public int? StadiumId { get; set; }
 
+        [ForeignKey("League")]
+        public int LeagueId { get; set; }
+
         // Propiedades de navegación
         public virtual Competition Competition { get; set; }
         public virtual Country Country { get; set; }
         public virtual Stadium Stadium { get; set; }
+        public virtual League League { get; set; }
+
 
         // Relaciones
         public virtual ICollection<Player> Players { get; set; } = new List<Player>();
+
 
         // Relación uno a muchos como equipo local
         [InverseProperty("HomeTeam")]
