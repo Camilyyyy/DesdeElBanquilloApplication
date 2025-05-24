@@ -33,4 +33,6 @@ public DbSet<DesdeElBanquilloApplication.Models.Position> Position { get; set; }
 public DbSet<DesdeElBanquilloApplication.Models.Season> Season { get; set; } = default!;
 
 public DbSet<DesdeElBanquilloApplication.Models.Stadium> Stadium { get; set; } = default!;
+
+public DbSet<DesdeElBanquilloApplication.Models.Administrator> Administrator { get; set; } = default!;
     }
