@@ -1,0 +1,35 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
+
+namespace DesdeElBanquilloApplication.Models
+{
+    [Table("Federations")]
+    public class Federation
+    {
+        [Key]
+        public int IdFederation { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        [DisplayName("Nombre Federacion")]
+
+        public string Name { get; set; }
+
+        [StringLength(20)]
+        public string Acronym { get; set; }
+
+        [DisplayName("Fecha de Creacion Federacion")]
+        public DateTime EstablishedDate { get; set; }
+
+        // Clave foránea hacia Country
+        [ForeignKey("Country")]
+        public int? CountryId { get; set; }
+
+        // Propiedad de navegación
+        public virtual Country Country { get; set; }
+
+        // Relaciones
+        public virtual ICollection<Competition> Competitions { get; set; } = new List<Competition>();
+    }
+}
