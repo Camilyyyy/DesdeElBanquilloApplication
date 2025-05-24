@@ -33,8 +33,7 @@ namespace DesdeElBanquilloApplication.Models
         [ForeignKey("Country")]
         public int CountryId { get; set; }
 
-        [ForeignKey("Stadium")]
-        public int? StadiumId { get; set; }
+      
 
         [ForeignKey("League")]
         public int LeagueId { get; set; }
