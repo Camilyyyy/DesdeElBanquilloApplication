@@ -25,4 +25,10 @@ public DbSet<DesdeElBanquilloApplication.Models.User> User { get; set; } = defau
 public DbSet<DesdeElBanquilloApplication.Models.Federation> Federation { get; set; } = default!;
 
 public DbSet<DesdeElBanquilloApplication.Models.League> League { get; set; } = default!;
+
+public DbSet<DesdeElBanquilloApplication.Models.Country> Country { get; set; } = default!;
+
+public DbSet<DesdeElBanquilloApplication.Models.Position> Position { get; set; } = default!;
+
+public DbSet<DesdeElBanquilloApplication.Models.Season> Season { get; set; } = default!;
     }
