@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesdeElBanquilloApplication.Migrations
 {
     [DbContext(typeof(DesdeElBanquilloAppDBContext))]
-    [Migration("20250525194809_MigrationFV")]
+    [Migration("20250525204252_MigrationFV")]
     partial class MigrationFV
     {
         /// <inheritdoc />
@@ -66,10 +66,13 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCompetition"));
 
-                    b.Property<int>("CountryId")
+                    b.Property<int>("FederationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FederationId")
+                    b.Property<int>("IdCountry")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdFederation")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -84,9 +87,9 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdCompetition");
 
-                    b.HasIndex("CountryId");
-
                     b.HasIndex("FederationId");
+
+                    b.HasIndex("IdCountry");
 
                     b.ToTable("Competitions");
                 });
@@ -148,11 +151,11 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdLeague"));
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdCountry")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -164,7 +167,7 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdLeague");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("IdCountry");
 
                     b.ToTable("Leagues");
                 });
@@ -184,6 +187,12 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("GoalsFor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdSeason")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdTeam")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastUpdated")
@@ -207,17 +216,11 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
-                    b.Property<int>("SeasonId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("IdLeagueTable");
 
-                    b.HasIndex("SeasonId");
+                    b.HasIndex("IdSeason");
 
-                    b.HasIndex("TeamId");
+                    b.HasIndex("IdTeam");
 
                     b.ToTable("LeagueTables");
                 });
@@ -233,16 +236,19 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<int?>("AwayGoals")
                         .HasColumnType("int");
 
-                    b.Property<int>("AwayTeamId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompetitionId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("HomeGoals")
                         .HasColumnType("int");
 
-                    b.Property<int>("HomeTeamId")
+                    b.Property<int>("IdAwayTeam")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCompetition")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdHomeTeam")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdStadium")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("MatchDate")
@@ -256,23 +262,20 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<int?>("SeasonIdSeason")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StadiumId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("IdMatch");
 
-                    b.HasIndex("AwayTeamId");
+                    b.HasIndex("IdAwayTeam");
 
-                    b.HasIndex("CompetitionId");
+                    b.HasIndex("IdCompetition");
 
-                    b.HasIndex("HomeTeamId");
+                    b.HasIndex("IdHomeTeam");
+
+                    b.HasIndex("IdStadium");
 
                     b.HasIndex("SeasonIdSeason");
-
-                    b.HasIndex("StadiumId");
 
                     b.ToTable("Matches");
                 });
@@ -291,19 +294,19 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<int>("Goals")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdMatch")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdPlayer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdPosition")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsStarter")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MatchId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MinutesPlayed")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionId")
                         .HasColumnType("int");
 
                     b.Property<int>("RedCards")
@@ -317,11 +320,11 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdMatchPlayers");
 
-                    b.HasIndex("MatchId");
+                    b.HasIndex("IdMatch");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("IdPlayer");
 
-                    b.HasIndex("PositionId");
+                    b.HasIndex("IdPosition");
 
                     b.ToTable("MatchPlayers");
                 });
@@ -340,12 +343,18 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("Height")
                         .IsRequired()
                         .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("IdCountry")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdPosition")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdTeam")
+                        .HasColumnType("int");
 
                     b.Property<int>("JerseyNumber")
                         .HasColumnType("int");
@@ -359,23 +368,17 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("Weight")
                         .IsRequired()
                         .HasColumnType("decimal(5,2)");
 
                     b.HasKey("IdPlayer");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("IdCountry");
 
-                    b.HasIndex("PositionId");
+                    b.HasIndex("IdPosition");
 
-                    b.HasIndex("TeamId");
+                    b.HasIndex("IdTeam");
 
                     b.ToTable("Players");
                 });
@@ -409,11 +412,11 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdLeague")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsCurrent")
                         .HasColumnType("bit");
-
-                    b.Property<int>("LeagueId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -428,7 +431,7 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdSeason");
 
-                    b.HasIndex("LeagueId");
+                    b.HasIndex("IdLeague");
 
                     b.ToTable("Seasons");
                 });
@@ -447,17 +450,17 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<DateTime>("FoundedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdTeam")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("IdStadium");
 
-                    b.HasIndex("TeamId")
+                    b.HasIndex("IdTeam")
                         .IsUnique();
 
                     b.ToTable("Stadiums");
@@ -476,16 +479,16 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("CompetitionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FoundedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LeagueId")
+                    b.Property<int>("IdCompetition")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCountry")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdLeague")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -495,11 +498,11 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdTeam");
 
-                    b.HasIndex("CompetitionId");
+                    b.HasIndex("IdCompetition");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("IdCountry");
 
-                    b.HasIndex("LeagueId");
+                    b.HasIndex("IdLeague");
 
                     b.ToTable("Teams");
                 });
@@ -540,15 +543,15 @@ namespace DesdeElBanquilloApplication.Migrations
 
             modelBuilder.Entity("DesdeElBanquilloApplication.Models.Competition", b =>
                 {
-                    b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
-                        .WithMany("Competitions")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("DesdeElBanquilloApplication.Models.Federation", "Federation")
                         .WithMany("Competitions")
                         .HasForeignKey("FederationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
+                        .WithMany("Competitions")
+                        .HasForeignKey("IdCountry")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -572,7 +575,7 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
                         .WithMany("Leagues")
-                        .HasForeignKey("CountryId")
+                        .HasForeignKey("IdCountry")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -583,13 +586,13 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Season", "Season")
                         .WithMany("LeagueTables")
-                        .HasForeignKey("SeasonId")
+                        .HasForeignKey("IdSeason")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Team", "Team")
                         .WithMany()
-                        .HasForeignKey("TeamId")
+                        .HasForeignKey("IdTeam")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -602,29 +605,31 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Team", "AwayTeam")
                         .WithMany("AwayMatches")
-                        .HasForeignKey("AwayTeamId")
+                        .HasForeignKey("IdAwayTeam")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Competition", "Competition")
                         .WithMany("Matches")
-                        .HasForeignKey("CompetitionId")
+                        .HasForeignKey("IdCompetition")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Team", "HomeTeam")
                         .WithMany("HomeMatches")
-                        .HasForeignKey("HomeTeamId")
+                        .HasForeignKey("IdHomeTeam")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DesdeElBanquilloApplication.Models.Stadium", "Stadium")
+                        .WithMany("Matches")
+                        .HasForeignKey("IdStadium")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Season", null)
                         .WithMany("Matches")
                         .HasForeignKey("SeasonIdSeason");
-
-                    b.HasOne("DesdeElBanquilloApplication.Models.Stadium", "Stadium")
-                        .WithMany("Matches")
-                        .HasForeignKey("StadiumId");
 
                     b.Navigation("AwayTeam");
 
@@ -639,19 +644,19 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Match", "Match")
                         .WithMany("MatchPlayers")
-                        .HasForeignKey("MatchId")
+                        .HasForeignKey("IdMatch")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Player", "Player")
                         .WithMany("MatchPlayers")
-                        .HasForeignKey("PlayerId")
+                        .HasForeignKey("IdPlayer")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Position", "Position")
                         .WithMany("MatchPlayers")
-                        .HasForeignKey("PositionId")
+                        .HasForeignKey("IdPosition")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -666,19 +671,19 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
                         .WithMany("Players")
-                        .HasForeignKey("CountryId")
+                        .HasForeignKey("IdCountry")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Position", "Position")
                         .WithMany("Players")
-                        .HasForeignKey("PositionId")
+                        .HasForeignKey("IdPosition")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Team", "Team")
                         .WithMany("Players")
-                        .HasForeignKey("TeamId")
+                        .HasForeignKey("IdTeam")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -693,7 +698,7 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.League", "League")
                         .WithMany("Seasons")
-                        .HasForeignKey("LeagueId")
+                        .HasForeignKey("IdLeague")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -704,7 +709,7 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Team", "Team")
                         .WithOne("Stadium")
-                        .HasForeignKey("DesdeElBanquilloApplication.Models.Stadium", "TeamId")
+                        .HasForeignKey("DesdeElBanquilloApplication.Models.Stadium", "IdTeam")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -715,19 +720,19 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Competition", "Competition")
                         .WithMany("Teams")
-                        .HasForeignKey("CompetitionId")
+                        .HasForeignKey("IdCompetition")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
                         .WithMany("Teams")
-                        .HasForeignKey("CountryId")
+                        .HasForeignKey("IdCountry")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DesdeElBanquilloApplication.Models.League", "League")
                         .WithMany("Teams")
-                        .HasForeignKey("LeagueId")
+                        .HasForeignKey("IdLeague")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -807,8 +812,7 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.Navigation("Players");
 
-                    b.Navigation("Stadium")
-                        .IsRequired();
+                    b.Navigation("Stadium");
                 });
 #pragma warning restore 612, 618
         }

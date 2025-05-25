@@ -49,9 +49,9 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Teams/Create
         public IActionResult Create()
         {
-            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name");
-            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name");
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name");
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name");
             return View();
         }
 
@@ -60,7 +60,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTeam,Name,City,FoundedDate,CompetitionId,CountryId,LeagueId")] Team team)
+        public async Task<IActionResult> Create([Bind("IdTeam,Name,City,FoundedDate,IdCompetition,IdCountry,IdLeague")] Team team)
         {
             if (ModelState.IsValid)
             {
@@ -68,9 +68,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.CompetitionId);
-            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name", team.CountryId);
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", team.LeagueId);
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.IdCompetition);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", team.IdCountry);
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", team.IdLeague);
             return View(team);
         }
 
@@ -87,9 +87,9 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.CompetitionId);
-            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name", team.CountryId);
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", team.LeagueId);
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.IdCompetition);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", team.IdCountry);
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", team.IdLeague);
             return View(team);
         }
 
@@ -98,7 +98,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdTeam,Name,City,FoundedDate,CompetitionId,CountryId,LeagueId")] Team team)
+        public async Task<IActionResult> Edit(int id, [Bind("IdTeam,Name,City,FoundedDate,IdCompetition,IdCountry,IdLeague")] Team team)
         {
             if (id != team.IdTeam)
             {
@@ -125,9 +125,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompetitionId"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.CompetitionId);
-            ViewData["CountryId"] = new SelectList(_context.Country, "IdCountry", "Name", team.CountryId);
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", team.LeagueId);
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.IdCompetition);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", team.IdCountry);
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", team.IdLeague);
             return View(team);
         }
 

@@ -16,31 +16,31 @@ using DesdeElBanquilloApplication.Models;
         modelBuilder.Entity<Team>()
             .HasOne(t => t.Competition)
             .WithMany(c => c.Teams)
-            .HasForeignKey(t => t.CompetitionId)
+            .HasForeignKey(t => t.IdCompetition)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Team>()
             .HasOne(t => t.Country)
             .WithMany(c => c.Teams)
-            .HasForeignKey(t => t.CountryId)
+            .HasForeignKey(t => t.IdCountry)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Team>()
             .HasOne(t => t.League)
             .WithMany(l => l.Teams)
-            .HasForeignKey(t => t.LeagueId)
+            .HasForeignKey(t => t.IdLeague)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<League>()
             .HasOne(l => l.Country)
             .WithMany(c => c.Leagues)
-            .HasForeignKey(l => l.CountryId)
+            .HasForeignKey(l => l.IdCountry)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Competition>()
             .HasOne(c => c.Country)
             .WithMany(cn => cn.Competitions)
-            .HasForeignKey(c => c.CountryId)
+            .HasForeignKey(c => c.IdCountry)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Competition>()
@@ -52,55 +52,55 @@ using DesdeElBanquilloApplication.Models;
         modelBuilder.Entity<Stadium>()
             .HasOne(s => s.Team)
             .WithOne(t => t.Stadium)
-            .HasForeignKey<Stadium>(s => s.TeamId)
+            .HasForeignKey<Stadium>(s => s.IdTeam)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Player>()
             .HasOne(p => p.Team)
             .WithMany(t => t.Players)
-            .HasForeignKey(p => p.TeamId)
+            .HasForeignKey(p => p.IdTeam)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Match>()
         .HasOne(m => m.HomeTeam)
         .WithMany(t => t.HomeMatches)
-        .HasForeignKey(m => m.HomeTeamId)
+        .HasForeignKey(m => m.IdHomeTeam)
        .OnDelete(DeleteBehavior.Cascade); // Uno con cascade
 
         modelBuilder.Entity<Match>()
             .HasOne(m => m.AwayTeam)
             .WithMany(t => t.AwayMatches)
-            .HasForeignKey(m => m.AwayTeamId)
+            .HasForeignKey(m => m.IdAwayTeam)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Match>()
         .HasOne(m => m.HomeTeam)
         .WithMany(t => t.HomeMatches)
-        .HasForeignKey(m => m.HomeTeamId)
+        .HasForeignKey(m => m.IdHomeTeam)
         .OnDelete(DeleteBehavior.Restrict); 
 
         modelBuilder.Entity<Match>()
             .HasOne(m => m.AwayTeam)
             .WithMany(t => t.AwayMatches)
-            .HasForeignKey(m => m.AwayTeamId)
+            .HasForeignKey(m => m.IdAwayTeam)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<MatchPlayer>()
         .HasOne(mp => mp.Match)
         .WithMany(m => m.MatchPlayers)
-        .HasForeignKey(mp => mp.MatchId)
+        .HasForeignKey(mp => mp.IdMatch)
         .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<MatchPlayer>()
             .HasOne(mp => mp.Player)
             .WithMany(p => p.MatchPlayers)
-            .HasForeignKey(mp => mp.PlayerId)
+            .HasForeignKey(mp => mp.IdPlayer)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<MatchPlayer>()
             .HasOne(mp => mp.Position)
             .WithMany(pos => pos.MatchPlayers)
-            .HasForeignKey(mp => mp.PositionId)
+            .HasForeignKey(mp => mp.IdPosition)
             .OnDelete(DeleteBehavior.Restrict);
     }
 

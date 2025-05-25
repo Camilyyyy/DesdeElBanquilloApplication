@@ -29,10 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="IdCountry" class="control-label"></label>
-                <select asp-for="IdCountry" class="form-control" asp-items="ViewBag.IdCountry">
-                    <option value="">-- Seleccione un País --</option>
-                </select>
-                <span asp-validation-for="IdCountry" class="text-danger"></span>
+                <select asp-for="IdCountry" class ="form-control" asp-items="ViewBag.IdCountry"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

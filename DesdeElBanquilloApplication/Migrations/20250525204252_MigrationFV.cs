@@ -102,14 +102,14 @@ namespace DesdeElBanquilloApplication.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false)
+                    IdCountry = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Leagues", x => x.IdLeague);
                     table.ForeignKey(
-                        name: "FK_Leagues_Countries_CountryId",
-                        column: x => x.CountryId,
+                        name: "FK_Leagues_Countries_IdCountry",
+                        column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
                         onDelete: ReferentialAction.Restrict);
@@ -123,15 +123,16 @@ namespace DesdeElBanquilloApplication.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Season = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    FederationId = table.Column<int>(type: "int", nullable: false)
+                    IdCountry = table.Column<int>(type: "int", nullable: false),
+                    FederationId = table.Column<int>(type: "int", nullable: false),
+                    IdFederation = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Competitions", x => x.IdCompetition);
                     table.ForeignKey(
-                        name: "FK_Competitions_Countries_CountryId",
-                        column: x => x.CountryId,
+                        name: "FK_Competitions_Countries_IdCountry",
+                        column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
                         onDelete: ReferentialAction.Restrict);
@@ -154,14 +155,14 @@ namespace DesdeElBanquilloApplication.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsCurrent = table.Column<bool>(type: "bit", nullable: false),
                     TotalMatchdays = table.Column<int>(type: "int", nullable: false),
-                    LeagueId = table.Column<int>(type: "int", nullable: false)
+                    IdLeague = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Seasons", x => x.IdSeason);
                     table.ForeignKey(
-                        name: "FK_Seasons_Leagues_LeagueId",
-                        column: x => x.LeagueId,
+                        name: "FK_Seasons_Leagues_IdLeague",
+                        column: x => x.IdLeague,
                         principalTable: "Leagues",
                         principalColumn: "IdLeague",
                         onDelete: ReferentialAction.Cascade);
@@ -176,28 +177,28 @@ namespace DesdeElBanquilloApplication.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FoundedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CompetitionId = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    LeagueId = table.Column<int>(type: "int", nullable: false)
+                    IdCompetition = table.Column<int>(type: "int", nullable: false),
+                    IdCountry = table.Column<int>(type: "int", nullable: false),
+                    IdLeague = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teams", x => x.IdTeam);
                     table.ForeignKey(
-                        name: "FK_Teams_Competitions_CompetitionId",
-                        column: x => x.CompetitionId,
+                        name: "FK_Teams_Competitions_IdCompetition",
+                        column: x => x.IdCompetition,
                         principalTable: "Competitions",
                         principalColumn: "IdCompetition",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Teams_Countries_CountryId",
-                        column: x => x.CountryId,
+                        name: "FK_Teams_Countries_IdCountry",
+                        column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Teams_Leagues_LeagueId",
-                        column: x => x.LeagueId,
+                        name: "FK_Teams_Leagues_IdLeague",
+                        column: x => x.IdLeague,
                         principalTable: "Leagues",
                         principalColumn: "IdLeague",
                         onDelete: ReferentialAction.Restrict);
@@ -219,21 +220,21 @@ namespace DesdeElBanquilloApplication.Migrations
                     GoalDifference = table.Column<int>(type: "int", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TeamId = table.Column<int>(type: "int", nullable: false),
-                    SeasonId = table.Column<int>(type: "int", nullable: false)
+                    IdTeam = table.Column<int>(type: "int", nullable: false),
+                    IdSeason = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LeagueTables", x => x.IdLeagueTable);
                     table.ForeignKey(
-                        name: "FK_LeagueTables_Seasons_SeasonId",
-                        column: x => x.SeasonId,
+                        name: "FK_LeagueTables_Seasons_IdSeason",
+                        column: x => x.IdSeason,
                         principalTable: "Seasons",
                         principalColumn: "IdSeason",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LeagueTables_Teams_TeamId",
-                        column: x => x.TeamId,
+                        name: "FK_LeagueTables_Teams_IdTeam",
+                        column: x => x.IdTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
                         onDelete: ReferentialAction.Cascade);
@@ -252,28 +253,28 @@ namespace DesdeElBanquilloApplication.Migrations
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Height = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     Weight = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    TeamId = table.Column<int>(type: "int", nullable: false),
-                    PositionId = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false)
+                    IdTeam = table.Column<int>(type: "int", nullable: false),
+                    IdPosition = table.Column<int>(type: "int", nullable: false),
+                    IdCountry = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Players", x => x.IdPlayer);
                     table.ForeignKey(
-                        name: "FK_Players_Countries_CountryId",
-                        column: x => x.CountryId,
+                        name: "FK_Players_Countries_IdCountry",
+                        column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Players_Positions_PositionId",
-                        column: x => x.PositionId,
+                        name: "FK_Players_Positions_IdPosition",
+                        column: x => x.IdPosition,
                         principalTable: "Positions",
                         principalColumn: "IdPosition",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Players_Teams_TeamId",
-                        column: x => x.TeamId,
+                        name: "FK_Players_Teams_IdTeam",
+                        column: x => x.IdTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
                         onDelete: ReferentialAction.Cascade);
@@ -288,14 +289,14 @@ namespace DesdeElBanquilloApplication.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FoundedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
-                    TeamId = table.Column<int>(type: "int", nullable: false)
+                    IdTeam = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stadiums", x => x.IdStadium);
                     table.ForeignKey(
-                        name: "FK_Stadiums_Teams_TeamId",
-                        column: x => x.TeamId,
+                        name: "FK_Stadiums_Teams_IdTeam",
+                        column: x => x.IdTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
                         onDelete: ReferentialAction.Restrict);
@@ -312,18 +313,18 @@ namespace DesdeElBanquilloApplication.Migrations
                     AwayGoals = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Referee = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    HomeTeamId = table.Column<int>(type: "int", nullable: false),
-                    AwayTeamId = table.Column<int>(type: "int", nullable: false),
-                    CompetitionId = table.Column<int>(type: "int", nullable: false),
-                    StadiumId = table.Column<int>(type: "int", nullable: true),
+                    IdHomeTeam = table.Column<int>(type: "int", nullable: false),
+                    IdAwayTeam = table.Column<int>(type: "int", nullable: false),
+                    IdCompetition = table.Column<int>(type: "int", nullable: false),
+                    IdStadium = table.Column<int>(type: "int", nullable: false),
                     SeasonIdSeason = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Matches", x => x.IdMatch);
                     table.ForeignKey(
-                        name: "FK_Matches_Competitions_CompetitionId",
-                        column: x => x.CompetitionId,
+                        name: "FK_Matches_Competitions_IdCompetition",
+                        column: x => x.IdCompetition,
                         principalTable: "Competitions",
                         principalColumn: "IdCompetition",
                         onDelete: ReferentialAction.Cascade);
@@ -333,19 +334,20 @@ namespace DesdeElBanquilloApplication.Migrations
                         principalTable: "Seasons",
                         principalColumn: "IdSeason");
                     table.ForeignKey(
-                        name: "FK_Matches_Stadiums_StadiumId",
-                        column: x => x.StadiumId,
+                        name: "FK_Matches_Stadiums_IdStadium",
+                        column: x => x.IdStadium,
                         principalTable: "Stadiums",
-                        principalColumn: "IdStadium");
+                        principalColumn: "IdStadium",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Matches_Teams_AwayTeamId",
-                        column: x => x.AwayTeamId,
+                        name: "FK_Matches_Teams_IdAwayTeam",
+                        column: x => x.IdAwayTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Matches_Teams_HomeTeamId",
-                        column: x => x.HomeTeamId,
+                        name: "FK_Matches_Teams_IdHomeTeam",
+                        column: x => x.IdHomeTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
                         onDelete: ReferentialAction.Restrict);
@@ -364,37 +366,32 @@ namespace DesdeElBanquilloApplication.Migrations
                     MinutesPlayed = table.Column<int>(type: "int", nullable: false),
                     IsStarter = table.Column<bool>(type: "bit", nullable: false),
                     SubstitutionMinute = table.Column<int>(type: "int", nullable: true),
-                    MatchId = table.Column<int>(type: "int", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false),
-                    PositionId = table.Column<int>(type: "int", nullable: false)
+                    IdMatch = table.Column<int>(type: "int", nullable: false),
+                    IdPlayer = table.Column<int>(type: "int", nullable: false),
+                    IdPosition = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MatchPlayers", x => x.IdMatchPlayers);
                     table.ForeignKey(
-                        name: "FK_MatchPlayers_Matches_MatchId",
-                        column: x => x.MatchId,
+                        name: "FK_MatchPlayers_Matches_IdMatch",
+                        column: x => x.IdMatch,
                         principalTable: "Matches",
                         principalColumn: "IdMatch",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MatchPlayers_Players_PlayerId",
-                        column: x => x.PlayerId,
+                        name: "FK_MatchPlayers_Players_IdPlayer",
+                        column: x => x.IdPlayer,
                         principalTable: "Players",
                         principalColumn: "IdPlayer",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_MatchPlayers_Positions_PositionId",
-                        column: x => x.PositionId,
+                        name: "FK_MatchPlayers_Positions_IdPosition",
+                        column: x => x.IdPosition,
                         principalTable: "Positions",
                         principalColumn: "IdPosition",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Competitions_CountryId",
-                table: "Competitions",
-                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Competitions_FederationId",
@@ -402,39 +399,49 @@ namespace DesdeElBanquilloApplication.Migrations
                 column: "FederationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Competitions_IdCountry",
+                table: "Competitions",
+                column: "IdCountry");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Federations_IdCountry",
                 table: "Federations",
                 column: "IdCountry");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Leagues_CountryId",
+                name: "IX_Leagues_IdCountry",
                 table: "Leagues",
-                column: "CountryId");
+                column: "IdCountry");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeagueTables_SeasonId",
+                name: "IX_LeagueTables_IdSeason",
                 table: "LeagueTables",
-                column: "SeasonId");
+                column: "IdSeason");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeagueTables_TeamId",
+                name: "IX_LeagueTables_IdTeam",
                 table: "LeagueTables",
-                column: "TeamId");
+                column: "IdTeam");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Matches_AwayTeamId",
+                name: "IX_Matches_IdAwayTeam",
                 table: "Matches",
-                column: "AwayTeamId");
+                column: "IdAwayTeam");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Matches_CompetitionId",
+                name: "IX_Matches_IdCompetition",
                 table: "Matches",
-                column: "CompetitionId");
+                column: "IdCompetition");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Matches_HomeTeamId",
+                name: "IX_Matches_IdHomeTeam",
                 table: "Matches",
-                column: "HomeTeamId");
+                column: "IdHomeTeam");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Matches_IdStadium",
+                table: "Matches",
+                column: "IdStadium");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matches_SeasonIdSeason",
@@ -442,65 +449,60 @@ namespace DesdeElBanquilloApplication.Migrations
                 column: "SeasonIdSeason");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Matches_StadiumId",
-                table: "Matches",
-                column: "StadiumId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MatchPlayers_MatchId",
+                name: "IX_MatchPlayers_IdMatch",
                 table: "MatchPlayers",
-                column: "MatchId");
+                column: "IdMatch");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchPlayers_PlayerId",
+                name: "IX_MatchPlayers_IdPlayer",
                 table: "MatchPlayers",
-                column: "PlayerId");
+                column: "IdPlayer");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatchPlayers_PositionId",
+                name: "IX_MatchPlayers_IdPosition",
                 table: "MatchPlayers",
-                column: "PositionId");
+                column: "IdPosition");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_CountryId",
+                name: "IX_Players_IdCountry",
                 table: "Players",
-                column: "CountryId");
+                column: "IdCountry");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_PositionId",
+                name: "IX_Players_IdPosition",
                 table: "Players",
-                column: "PositionId");
+                column: "IdPosition");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_TeamId",
+                name: "IX_Players_IdTeam",
                 table: "Players",
-                column: "TeamId");
+                column: "IdTeam");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Seasons_LeagueId",
+                name: "IX_Seasons_IdLeague",
                 table: "Seasons",
-                column: "LeagueId");
+                column: "IdLeague");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stadiums_TeamId",
+                name: "IX_Stadiums_IdTeam",
                 table: "Stadiums",
-                column: "TeamId",
+                column: "IdTeam",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teams_CompetitionId",
+                name: "IX_Teams_IdCompetition",
                 table: "Teams",
-                column: "CompetitionId");
+                column: "IdCompetition");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teams_CountryId",
+                name: "IX_Teams_IdCountry",
                 table: "Teams",
-                column: "CountryId");
+                column: "IdCountry");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Teams_LeagueId",
+                name: "IX_Teams_IdLeague",
                 table: "Teams",
-                column: "LeagueId");
+                column: "IdLeague");
         }
 
         /// <inheritdoc />

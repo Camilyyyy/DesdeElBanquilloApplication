@@ -42,7 +42,7 @@ namespace DesdeElBanquilloApplication.Models
         // Propiedades de navegación
         [ForeignKey("IdMatch")]
         public Match? Match { get; set; }
-        [ForeignKey("Idplayer")]
+        [ForeignKey("IdPlayer")]
         public Player? Player { get; set; }
         [ForeignKey("IdPosition")]
         public Position? Position { get; set; }

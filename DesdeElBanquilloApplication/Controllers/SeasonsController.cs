@@ -47,7 +47,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Seasons/Create
         public IActionResult Create()
         {
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name");
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdSeason,Name,StartDate,EndDate,IsCurrent,TotalMatchdays,LeagueId")] Season season)
+        public async Task<IActionResult> Create([Bind("IdSeason,Name,StartDate,EndDate,IsCurrent,TotalMatchdays,IdLeague")] Season season)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", season.LeagueId);
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", season.IdLeague);
             return View(season);
         }
 
@@ -81,7 +81,7 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", season.LeagueId);
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", season.IdLeague);
             return View(season);
         }
 
@@ -90,7 +90,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdSeason,Name,StartDate,EndDate,IsCurrent,TotalMatchdays,LeagueId")] Season season)
+        public async Task<IActionResult> Edit(int id, [Bind("IdSeason,Name,StartDate,EndDate,IsCurrent,TotalMatchdays,IdLeague")] Season season)
         {
             if (id != season.IdSeason)
             {
@@ -117,7 +117,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LeagueId"] = new SelectList(_context.League, "IdLeague", "Name", season.LeagueId);
+            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", season.IdLeague);
             return View(season);
         }
 

@@ -50,10 +50,10 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Matches/Create
         public IActionResult Create()
         {
-            ViewData["AwayTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name");
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name");
-            ViewData["HomeTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name");
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name");
+            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name");
+            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
+            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name");
             return View();
         }
 
@@ -62,7 +62,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdMatch,MatchDate,HomeGoals,AwayGoals,Status,Referee,HomeTeamId,AwayTeamId,CompetitionId,StadiumId")] Match match)
+        public async Task<IActionResult> Create([Bind("IdMatch,MatchDate,HomeGoals,AwayGoals,Status,Referee,IdHomeTeam,IdAwayTeam,IdCompetition,IdStadium")] Match match)
         {
             if (ModelState.IsValid)
             {
@@ -70,10 +70,10 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AwayTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name", match.AwayTeamId);
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name", match.CompetitionId);
-            ViewData["HomeTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name", match.HomeTeamId);
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name", match.StadiumId);
+            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdAwayTeam);
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", match.IdCompetition);
+            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdHomeTeam);
+            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name", match.IdStadium);
             return View(match);
         }
 
@@ -90,10 +90,10 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["AwayTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name", match.AwayTeamId);
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name", match.CompetitionId);
-            ViewData["HomeTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name", match.HomeTeamId);
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name", match.StadiumId);
+            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdAwayTeam);
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", match.IdCompetition);
+            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdHomeTeam);
+            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name", match.IdStadium);
             return View(match);
         }
 
@@ -102,7 +102,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdMatch,MatchDate,HomeGoals,AwayGoals,Status,Referee,HomeTeamId,AwayTeamId,CompetitionId,StadiumId")] Match match)
+        public async Task<IActionResult> Edit(int id, [Bind("IdMatch,MatchDate,HomeGoals,AwayGoals,Status,Referee,IdHomeTeam,IdAwayTeam,IdCompetition,IdStadium")] Match match)
         {
             if (id != match.IdMatch)
             {
@@ -129,10 +129,10 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AwayTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name", match.AwayTeamId);
-            ViewData["CompetitionId"] = new SelectList(_context.Set<Competition>(), "IdCompetition", "Name", match.CompetitionId);
-            ViewData["HomeTeamId"] = new SelectList(_context.Set<Team>(), "IdTeam", "Name", match.HomeTeamId);
-            ViewData["StadiumId"] = new SelectList(_context.Set<Stadium>(), "IdStadium", "Name", match.StadiumId);
+            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdAwayTeam);
+            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", match.IdCompetition);
+            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdHomeTeam);
+            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name", match.IdStadium);
             return View(match);
         }
 

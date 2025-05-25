@@ -48,8 +48,8 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Competitions/Create
         public IActionResult Create()
         {
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name");
-            ViewData["FederationId"] = new SelectList(_context.Set<Federation>(), "IdFederation", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
+            ViewData["FederationId"] = new SelectList(_context.Federation, "IdFederation", "Name");
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdCompetition,Name,Season,CountryId,FederationId")] Competition competition)
+        public async Task<IActionResult> Create([Bind("IdCompetition,Name,Season,IdCountry,FederationId")] Competition competition)
         {
             if (ModelState.IsValid)
             {
@@ -66,8 +66,8 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", competition.CountryId);
-            ViewData["FederationId"] = new SelectList(_context.Set<Federation>(), "IdFederation", "Name", competition.FederationId);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", competition.IdCountry);
+            ViewData["FederationId"] = new SelectList(_context.Federation, "IdFederation", "Name", competition.FederationId);
             return View(competition);
         }
 
@@ -84,8 +84,8 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", competition.CountryId);
-            ViewData["FederationId"] = new SelectList(_context.Set<Federation>(), "IdFederation", "Name", competition.FederationId);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", competition.IdCountry);
+            ViewData["FederationId"] = new SelectList(_context.Federation, "IdFederation", "Name", competition.FederationId);
             return View(competition);
         }
 
@@ -94,7 +94,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdCompetition,Name,Season,CountryId,FederationId")] Competition competition)
+        public async Task<IActionResult> Edit(int id, [Bind("IdCompetition,Name,Season,IdCountry,FederationId")] Competition competition)
         {
             if (id != competition.IdCompetition)
             {
@@ -121,8 +121,8 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", competition.CountryId);
-            ViewData["FederationId"] = new SelectList(_context.Set<Federation>(), "IdFederation", "Name", competition.FederationId);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", competition.IdCountry);
+            ViewData["FederationId"] = new SelectList(_context.Federation, "IdFederation", "Name", competition.FederationId);
             return View(competition);
         }
 

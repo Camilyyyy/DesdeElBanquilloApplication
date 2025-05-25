@@ -47,7 +47,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Stadiums/Create
         public IActionResult Create()
         {
-            ViewData["TeamId"] = new SelectList(_context.Team, "IdTeam", "Name");
+            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdStadium,Name,FoundedDate,Capacity,TeamId")] Stadium stadium)
+        public async Task<IActionResult> Create([Bind("IdStadium,Name,FoundedDate,Capacity,IdTeam")] Stadium stadium)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamId"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.TeamId);
+            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.IdTeam);
             return View(stadium);
         }
 
@@ -81,7 +81,7 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["TeamId"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.TeamId);
+            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.IdTeam);
             return View(stadium);
         }
 
@@ -90,7 +90,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdStadium,Name,FoundedDate,Capacity,TeamId")] Stadium stadium)
+        public async Task<IActionResult> Edit(int id, [Bind("IdStadium,Name,FoundedDate,Capacity,IdTeam")] Stadium stadium)
         {
             if (id != stadium.IdStadium)
             {
@@ -117,7 +117,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeamId"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.TeamId);
+            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.IdTeam);
             return View(stadium);
         }
 
