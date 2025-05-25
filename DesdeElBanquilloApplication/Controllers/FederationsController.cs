@@ -47,7 +47,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Federations/Create
         public IActionResult Create()
         {
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFederation,Name,Acronym,EstablishedDate,CountryId")] Federation federation)
+        public async Task<IActionResult> Create([Bind("IdFederation,Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", federation.CountryId);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -81,7 +81,7 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", federation.CountryId);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -90,7 +90,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdFederation,Name,Acronym,EstablishedDate,CountryId")] Federation federation)
+        public async Task<IActionResult> Edit(int id, [Bind("IdFederation,Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
         {
             if (id != federation.IdFederation)
             {
@@ -117,7 +117,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CountryId"] = new SelectList(_context.Set<Country>(), "IdCountry", "Name", federation.CountryId);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 

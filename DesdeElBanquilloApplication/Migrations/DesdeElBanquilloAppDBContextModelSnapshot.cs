@@ -119,11 +119,14 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryIdCountry")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EstablishedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdCountry")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -132,7 +135,7 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdFederation");
 
-                    b.HasIndex("CountryId");
+                    b.HasIndex("CountryIdCountry");
 
                     b.ToTable("Federations");
                 });
@@ -558,7 +561,9 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
                         .WithMany("Federations")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryIdCountry")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Country");
                 });

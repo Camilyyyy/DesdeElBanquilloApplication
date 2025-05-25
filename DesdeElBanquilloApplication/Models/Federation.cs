@@ -22,9 +22,10 @@ namespace DesdeElBanquilloApplication.Models
         [DisplayName("Fecha de Creacion Federacion")]
         public DateTime EstablishedDate { get; set; }
 
-        // Clave foránea hacia Country
-        [ForeignKey("Country")]
-        public int? CountryId { get; set; }
+        // Clave foránea hacia 
+        [Required] 
+        [DisplayName("País")]
+        public int IdCountry { get; set; }
 
         // Propiedad de navegación
         public virtual Country Country { get; set; }

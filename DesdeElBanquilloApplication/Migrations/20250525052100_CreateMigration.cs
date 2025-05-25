@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DesdeElBanquilloApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateMigrationFV : Migration
+    public partial class CreateMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,16 +80,18 @@ namespace DesdeElBanquilloApplication.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Acronym = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     EstablishedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: true)
+                    IdCountry = table.Column<int>(type: "int", nullable: false),
+                    CountryIdCountry = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Federations", x => x.IdFederation);
                     table.ForeignKey(
-                        name: "FK_Federations_Countries_CountryId",
-                        column: x => x.CountryId,
+                        name: "FK_Federations_Countries_CountryIdCountry",
+                        column: x => x.CountryIdCountry,
                         principalTable: "Countries",
-                        principalColumn: "IdCountry");
+                        principalColumn: "IdCountry",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -401,9 +403,9 @@ namespace DesdeElBanquilloApplication.Migrations
                 column: "FederationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Federations_CountryId",
+                name: "IX_Federations_CountryIdCountry",
                 table: "Federations",
-                column: "CountryId");
+                column: "CountryIdCountry");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Leagues_CountryId",
