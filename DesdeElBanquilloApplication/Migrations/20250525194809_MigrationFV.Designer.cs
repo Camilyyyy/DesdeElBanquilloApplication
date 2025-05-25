@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesdeElBanquilloApplication.Migrations
 {
     [DbContext(typeof(DesdeElBanquilloAppDBContext))]
-    [Migration("20250525052100_CreateMigration")]
-    partial class CreateMigration
+    [Migration("20250525194809_MigrationFV")]
+    partial class MigrationFV
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,9 +122,6 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("CountryIdCountry")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EstablishedDate")
                         .HasColumnType("datetime2");
 
@@ -138,7 +135,7 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     b.HasKey("IdFederation");
 
-                    b.HasIndex("CountryIdCountry");
+                    b.HasIndex("IdCountry");
 
                     b.ToTable("Federations");
                 });
@@ -564,7 +561,7 @@ namespace DesdeElBanquilloApplication.Migrations
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
                         .WithMany("Federations")
-                        .HasForeignKey("CountryIdCountry")
+                        .HasForeignKey("IdCountry")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

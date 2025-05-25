@@ -24,13 +24,15 @@ namespace DesdeElBanquilloApplication.Models
 
         // Claves foráneas
 
-        [ForeignKey("Team")]
-        public int TeamId { get; set; }
+        [Required]
+        [DisplayName("Equipo")]
+        public int IdTeam { get; set; }
 
         // Propiedades de navegación
-        public virtual Team Team { get; set; }
+        [ForeignKey("IdTeam")]
+        public Team? Team { get; set; }
 
         // Relaciones
-        public virtual ICollection<Match> Matches { get; set; } = new List<Match>();
+        public ICollection<Match> Matches { get; set; } = new List<Match>();
     }
 }

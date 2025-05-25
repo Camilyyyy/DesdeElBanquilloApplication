@@ -20,10 +20,10 @@ namespace DesdeElBanquilloApplication.Models
     
 
         // Relaciones
-        public virtual ICollection<Competition> Competitions { get; set; } = new List<Competition>();
-        public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
-        public virtual ICollection<Player> Players { get; set; } = new List<Player>();
-        public virtual ICollection<Federation> Federations { get; set; } = new List<Federation>();
-        public virtual ICollection<League> Leagues { get; set; } = new List<League>();
+        public  ICollection<Competition> Competitions { get; set; } = new List<Competition>();
+        public  ICollection<Team> Teams { get; set; } = new List<Team>();
+        public  ICollection<Player> Players { get; set; } = new List<Player>();
+        public  ICollection<Federation> Federations { get; set; } = new List<Federation>();
+        public  ICollection<League> Leagues { get; set; } = new List<League>();
     }
 }

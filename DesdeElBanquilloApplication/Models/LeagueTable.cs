@@ -42,17 +42,19 @@ namespace DesdeElBanquilloApplication.Models
         public DateTime LastUpdated { get; set; } = DateTime.Now;
 
         // Claves foráneas
-        [ForeignKey("Team")]
-        public int TeamId { get; set; }
+        [Required]
+        [DisplayName("Equipo")]
+        public int IdTeam { get; set; }
 
-        [ForeignKey("Season")]
-        public int SeasonId { get; set; }
+        [Required]
+        [DisplayName("Temporada")]
+        public int IdSeason { get; set; }
 
         // Propiedades de navegación
-        [DisplayName("Equipo")]
-        public virtual Team Team { get; set; }
+        [ForeignKey("IdTeam")]
+        public Team? Team { get; set; }
 
-        [DisplayName("Temporada")]
-        public virtual Season Season { get; set; }
+        [ForeignKey("IdSeason")]
+        public  Season? Season { get; set; }
     }
 }

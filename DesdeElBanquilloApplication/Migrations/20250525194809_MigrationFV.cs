@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DesdeElBanquilloApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateMigration : Migration
+    public partial class MigrationFV : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,15 +80,14 @@ namespace DesdeElBanquilloApplication.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Acronym = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     EstablishedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false),
-                    CountryIdCountry = table.Column<int>(type: "int", nullable: false)
+                    IdCountry = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Federations", x => x.IdFederation);
                     table.ForeignKey(
-                        name: "FK_Federations_Countries_CountryIdCountry",
-                        column: x => x.CountryIdCountry,
+                        name: "FK_Federations_Countries_IdCountry",
+                        column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
                         onDelete: ReferentialAction.Cascade);
@@ -403,9 +402,9 @@ namespace DesdeElBanquilloApplication.Migrations
                 column: "FederationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Federations_CountryIdCountry",
+                name: "IX_Federations_IdCountry",
                 table: "Federations",
-                column: "CountryIdCountry");
+                column: "IdCountry");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Leagues_CountryId",

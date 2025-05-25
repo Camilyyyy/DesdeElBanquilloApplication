@@ -31,26 +31,34 @@ namespace DesdeElBanquilloApplication.Models
         public string Referee { get; set; }
 
         // Claves foráneas
-        [ForeignKey("HomeTeam")]
-        public int HomeTeamId { get; set; }
+        [Required]
+        [DisplayName("Equipo Local")]
+        public int IdHomeTeam { get; set; }
 
-        [ForeignKey("AwayTeam")]
-        public int AwayTeamId { get; set; }
+        [Required]
+        [DisplayName("Equipo Visitante")]
+        public int IdAwayTeam { get; set; }
 
-        [ForeignKey("Competition")]
-        public int CompetitionId { get; set; }
+        [Required]
+        [DisplayName("Competicion")]
+        public int IdCompetition { get; set; }
 
-        [ForeignKey("Stadium")]
-        public int? StadiumId { get; set; }
+        [Required]
+        [DisplayName("Estadio")]
+        public int IdStadium { get; set; }
 
         // Propiedades de navegación
-        public virtual Team HomeTeam { get; set; }
-        public virtual Team AwayTeam { get; set; }
-        public virtual Competition Competition { get; set; }
-        public virtual Stadium Stadium { get; set; }
+        [ForeignKey("IdHomeTeam")]
+        public Team? HomeTeam { get; set; }
+        [ForeignKey("IdAwayTeam")]
+        public Team? AwayTeam { get; set; }
+        [ForeignKey("IdCompetition")]
+        public Competition? Competition { get; set; }
+        [ForeignKey("IdStadium")]
+        public Stadium? Stadium { get; set; }
 
         // Relaciones
-        public virtual ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
+        public  ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
     }
 
     public enum MatchStatus

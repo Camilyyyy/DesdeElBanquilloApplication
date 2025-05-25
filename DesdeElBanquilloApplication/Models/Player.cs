@@ -44,21 +44,27 @@ namespace DesdeElBanquilloApplication.Models
         public decimal? Weight { get; set; } // en kg
 
         // Claves foráneas
-        [ForeignKey("Team")]
-        public int TeamId { get; set; }
+        [Required]
+        [DisplayName("Equipo")]
+        public int IdTeam { get; set; }
 
-        [ForeignKey("Position")]
-        public int PositionId { get; set; }
+        [Required]
+        [DisplayName("Posicion")]
+        public int IdPosition { get; set; }
 
-        [ForeignKey("Country")]
-        public int CountryId { get; set; }
+        [Required]
+        [DisplayName("Pais")]
+        public int IdCountry { get; set; }
 
         // Propiedades de navegación
-        public virtual Team Team { get; set; }
-        public virtual Position Position { get; set; }
-        public virtual Country Country { get; set; }
+        [ForeignKey("IdTeam")]
+        public Team? Team { get; set; }
+        [ForeignKey("IdPosition")]
+        public Position? Position { get; set; }
+        [ForeignKey("IdCountry")]
+        public Country? Country { get; set; }
 
         // Relaciones
-        public virtual ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
+        public ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
     }
 }

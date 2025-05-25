@@ -47,7 +47,8 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Federations/Create
         public IActionResult Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
+            var countries = _context.Country.ToList();
+            ViewBag.IdCountry = new SelectList(countries, "IdCountry", "Name");
             return View();
         }
 
@@ -56,15 +57,32 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFederation,Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
+        public async Task<IActionResult> Create([Bind("Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
         {
+
+            // DEBUG: Verificar errores del ModelState
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelError in ModelState)
+                {
+                    var key = modelError.Key;
+                    var errors = modelError.Value.Errors;
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"Campo: {key} - Error: {error.ErrorMessage}");
+                        // O usa un breakpoint aquí para ver en el debugger
+                        System.Diagnostics.Debug.WriteLine($"Campo: {key} - Error: {error.ErrorMessage}");
+                    }
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(federation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
+            ViewBag.IdCountry = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -81,7 +99,7 @@ namespace DesdeElBanquilloApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
+            ViewBag.IdCountry = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -117,7 +135,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
+            ViewBag.IdCountry = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 

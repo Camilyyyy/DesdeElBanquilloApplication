@@ -27,18 +27,24 @@ namespace DesdeElBanquilloApplication.Models
         public int? SubstitutionMinute { get; set; }
 
         // Claves foráneas
-        [ForeignKey("Match")]
-        public int MatchId { get; set; }
+        [Required]
+        [DisplayName("Partido")]
+        public int IdMatch { get; set; }
 
-        [ForeignKey("Player")]
-        public int PlayerId { get; set; }
+        [Required]
+        [DisplayName("Jugador")]
+        public int IdPlayer { get; set; }
 
-        [ForeignKey("Position")]
-        public int PositionId { get; set; }
+        [Required]
+        [DisplayName("Posicion")]
+        public int IdPosition { get; set; }
 
         // Propiedades de navegación
-        public virtual Match Match { get; set; }
-        public virtual Player Player { get; set; }
-        public virtual Position Position { get; set; }
+        [ForeignKey("IdMatch")]
+        public Match? Match { get; set; }
+        [ForeignKey("Idplayer")]
+        public Player? Player { get; set; }
+        [ForeignKey("IdPosition")]
+        public Position? Position { get; set; }
     }
 }

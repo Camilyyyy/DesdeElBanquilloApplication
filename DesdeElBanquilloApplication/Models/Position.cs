@@ -16,7 +16,7 @@ namespace DesdeElBanquilloApplication.Models
         public string Name { get; set; }
 
         // Relaciones
-        public virtual ICollection<Player> Players { get; set; } = new List<Player>();
-        public virtual ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
+        public  ICollection<Player> Players { get; set; } = new List<Player>();
+        public  ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
     }
 }

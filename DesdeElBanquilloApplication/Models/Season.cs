@@ -30,17 +30,18 @@ namespace DesdeElBanquilloApplication.Models
         public int TotalMatchdays { get; set; }
 
         // Clave foránea hacia League
-        [ForeignKey("League")]
-        public int LeagueId { get; set; }
+        [Required]
+        [DisplayName("Liga")]
+        public int IdLeague { get; set; }
 
         // Propiedad de navegación hacia League
-        [DisplayName("Liga")]
-        public virtual League League { get; set; }
+        [ForeignKey("IdLeague")]
+        public League? League { get; set; }
 
         // Relación uno a muchos con Matches
-        public virtual ICollection<Match> Matches { get; set; } = new List<Match>();
+        public ICollection<Match> Matches { get; set; } = new List<Match>();
 
         // Relación uno a muchos con tabla de posiciones
-        public virtual ICollection<LeagueTable> LeagueTables { get; set; } = new List<LeagueTable>();
+        public ICollection<LeagueTable> LeagueTables { get; set; } = new List<LeagueTable>();
     }
 }

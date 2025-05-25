@@ -23,15 +23,18 @@ namespace DesdeElBanquilloApplication.Models
         public bool IsActive { get; set; } = true;
 
         // Clave foránea hacia Country
-        [ForeignKey("Country")]
-        public int CountryId { get; set; }
+        [Required]
+        [DisplayName("País")]
+        public int IdCountry { get; set; }
         // Propiedad de navegación
-        public virtual Country Country { get; set; }
+
+        [ForeignKey("IdCountry")]
+        public Country? Country { get; set; }
 
         // Relación uno a muchos con Equipos
-        public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
+        public  ICollection<Team> Teams { get; set; } = new List<Team>();
 
         // Relación uno a muchos con Temporadas
-        public virtual ICollection<Season> Seasons { get; set; } = new List<Season>();
+        public  ICollection<Season> Seasons { get; set; } = new List<Season>();
     }
 }

@@ -23,19 +23,23 @@ namespace DesdeElBanquilloApplication.Models
         public string Season { get; set; }
 
         // Clave foránea hacia Country
-        [ForeignKey("Country")]
-        public int CountryId { get; set; }
+        [Required]
+        [DisplayName("País")]
+        public int IdCountry { get; set; }
 
         // Clave foránea hacia Federation
-        [ForeignKey("Federation")]
+        [Required]
+        [DisplayName("Federacion")]
         public int FederationId { get; set; }
 
         // Propiedades de navegación
-        public virtual Country Country { get; set; }
-        public virtual Federation Federation { get; set; }
+        [ForeignKey("IdCountry")]
+        public Country? Country { get; set; }
+        [ForeignKey("IdFederation")]
+        public Federation? Federation { get; set; }
 
         // Relaciones
-        public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
-        public virtual ICollection<Match> Matches { get; set; } = new List<Match>();
+        public  ICollection<Team> Teams { get; set; } = new List<Team>();
+        public  ICollection<Match> Matches { get; set; } = new List<Match>();
     }
 }

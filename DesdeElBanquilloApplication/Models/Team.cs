@@ -27,34 +27,38 @@ namespace DesdeElBanquilloApplication.Models
 
 
         // Claves foráneas
-        [ForeignKey("Competition")]
-        public int CompetitionId { get; set; }
+        [Required]
+        [DisplayName("Competicion")]
+        public int IdCompetition { get; set; }
 
-        [ForeignKey("Country")]
-        public int CountryId { get; set; }
+        [Required]
+        [DisplayName("País")]
+        public int IdCountry { get; set; }
 
-
-
-        [ForeignKey("League")]
-        public int LeagueId { get; set; }
+        [Required]
+        [DisplayName("Liga")]
+        public int IdLeague { get; set; }
 
         // Propiedades de navegación
-        public virtual Competition Competition { get; set; }
-        public virtual Country Country { get; set; }
-        public virtual Stadium Stadium { get; set; }
-        public virtual League League { get; set; }
+        [ForeignKey("IdCompetition")]
+        public Competition? Competition { get; set; }
+        [ForeignKey("IdCountry")]
+        public Country? Country { get; set; }
+        public Stadium? Stadium { get; set; }
+        [ForeignKey("IdLeague")]
+        public League? League { get; set; }
 
 
         // Relaciones
-        public virtual ICollection<Player> Players { get; set; } = new List<Player>();
+        public ICollection<Player> Players { get; set; } = new List<Player>();
 
 
         // Relación uno a muchos como equipo local
         [InverseProperty("HomeTeam")]
-        public virtual ICollection<Match> HomeMatches { get; set; } = new List<Match>();
+        public ICollection<Match> HomeMatches { get; set; } = new List<Match>();
 
         // Relación uno a muchos como equipo visitante
         [InverseProperty("AwayTeam")]
-        public virtual ICollection<Match> AwayMatches { get; set; } = new List<Match>();
+        public ICollection<Match> AwayMatches { get; set; } = new List<Match>();
     }
 }

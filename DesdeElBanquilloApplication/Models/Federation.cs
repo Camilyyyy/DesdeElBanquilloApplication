@@ -28,9 +28,10 @@ namespace DesdeElBanquilloApplication.Models
         public int IdCountry { get; set; }
 
         // Propiedad de navegación
-        public virtual Country Country { get; set; }
+        [ForeignKey("IdCountry")]
+        public Country? Country { get; set; }
 
         // Relaciones
-        public virtual ICollection<Competition> Competitions { get; set; } = new List<Competition>();
+        public  ICollection<Competition> Competitions { get; set; } = new List<Competition>();
     }
 }
