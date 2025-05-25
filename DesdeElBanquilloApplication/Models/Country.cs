@@ -24,5 +24,6 @@ namespace DesdeElBanquilloApplication.Models
         public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
         public virtual ICollection<Player> Players { get; set; } = new List<Player>();
         public virtual ICollection<Federation> Federations { get; set; } = new List<Federation>();
+        public virtual ICollection<League> Leagues { get; set; } = new List<League>();
     }
 }

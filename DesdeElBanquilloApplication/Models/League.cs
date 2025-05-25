@@ -24,7 +24,7 @@ namespace DesdeElBanquilloApplication.Models
 
         // Clave foránea hacia Country
         [ForeignKey("Country")]
-        public int? CountryId { get; set; }
+        public int CountryId { get; set; }
         // Propiedad de navegación
         public virtual Country Country { get; set; }
 
