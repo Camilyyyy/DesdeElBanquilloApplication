@@ -2,7 +2,146 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootballHub - Tu repositorio de fútbol</title>
+</head>
+<body>
+ 
+    <section class="hero">
+        <div class="container">
+            <h1>Tu repositorio completo de fútbol</h1>
+            <p>Estadísticas, resultados y análisis de tus equipos y jugadores favoritos</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar equipos, jugadores, partidos...">
+                <button>Buscar</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="section-grid">
+                <div class="card">
+                    <h3>🏃‍​ Posiciones</h3>
+                    <p>Todas las posiciones.</p>
+                    <a class="card-button" class="nav-link text-dark" asp-area="" asp-controller="Positions" asp-action="Index">Ver Posiciones</a>
+                </div>
+
+                <div class="card">
+                    <h3>🌟​ Ligas</h3>
+                    <p>Ligas disponibles </p>
+                    <a class="card-button" class="nav-link text-dark" asp-area="" asp-controller="Leagues" asp-action="Index" >Ver Ligas </a>
+                </div>
+
+                <div class="card">
+                    <h3>⚽ Equipos</h3>
+                    <p>Información completa de equipos.</p>
+                    <a class="card-button" class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index">Ver equipos</a>
+                </div>
+
+                <div class="card">
+                    <h3>⛹️‍♀️ Jugadores</h3>
+                    <p>Perfiles detallados de jugadores.</p>
+                    <a class="card-button" class="nav-link text-dark" asp-area="" asp-controller="Players" asp-action="Index">Ver Jugadores</a>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #2d3748;">Estadísticas Globales</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">1,247</div>
+                        <div class="stat-label">Partidos registrados</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Equipos activos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2,156</div>
+                        <div class="stat-label">Jugadores</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15.2K</div>
+                        <div class="stat-label">Usuarios activos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="matches-section">
+                <h2 style="margin-bottom: 2rem; color: #2d3748;">Últimos Resultados</h2>
+                <div class="matches-list">
+                    <div class="match-item">
+                        <div class="match-teams">Real Madrid vs Barcelona</div>
+                        <div class="match-score">2 - 1</div>
+                        <div class="match-date">Hace 2 días</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-teams">Manchester City vs Liverpool</div>
+                        <div class="match-score">3 - 2</div>
+                        <div class="match-date">Hace 3 días</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-teams">PSG vs Bayern Munich</div>
+                        <div class="match-score">1 - 0</div>
+                        <div class="match-date">Hace 5 días</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-teams">Chelsea vs Arsenal</div>
+                        <div class="match-score">2 - 2</div>
+                        <div class="match-date">Hace 1 semana</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 FootballHub. Todos los derechos reservados. | Diseñado con ⚽ para los amantes del fútbol</p>
+        </div>
+    </footer>
+
+    <script>
+        // Funcionalidad básica de búsqueda
+        document.querySelector('.search-bar button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-bar input').value;
+            if (searchTerm.trim()) {
+                alert(Buscando: ${searchTerm});
+                // Aquí implementarías la lógica de búsqueda real
+            }
+        });
+
+        // Enter key para búsqueda
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-bar button').click();
+            }
+        });
+
+        // Efecto hover para las estadísticas
+        document.querySelectorAll('.stat-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+                this.style.transition = 'all 0.3s ease';
+            });
+
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Smooth scroll para la navegación
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Aquí implementarías el scroll suave a las secciones
+            });
+        });
+    </script>
+</body>
+</html>
