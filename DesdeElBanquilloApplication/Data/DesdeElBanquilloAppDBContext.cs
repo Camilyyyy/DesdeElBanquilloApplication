@@ -14,10 +14,10 @@ using DesdeElBanquilloApplication.Models;
         // Configuración para evitar múltiples cascadas
 
         modelBuilder.Entity<Team>()
-            .HasOne(t => t.Competition)
-            .WithMany(c => c.Teams)
-            .HasForeignKey(t => t.IdCompetition)
-            .OnDelete(DeleteBehavior.Cascade);
+                    .HasOne(t => t.Competition)
+                    .WithMany(c => c.Teams)
+                    .HasForeignKey(t => t.IdCompetition)
+                    .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Team>()
             .HasOne(t => t.Country)
@@ -46,7 +46,7 @@ using DesdeElBanquilloApplication.Models;
         modelBuilder.Entity<Competition>()
             .HasOne(c => c.Federation)
             .WithMany(f => f.Competitions)
-            .HasForeignKey(c => c.FederationId)
+            .HasForeignKey(c => c.IdFederation)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Stadium>()
@@ -77,7 +77,7 @@ using DesdeElBanquilloApplication.Models;
         .HasOne(m => m.HomeTeam)
         .WithMany(t => t.HomeMatches)
         .HasForeignKey(m => m.IdHomeTeam)
-        .OnDelete(DeleteBehavior.Restrict); 
+        .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Match>()
             .HasOne(m => m.AwayTeam)
@@ -102,6 +102,13 @@ using DesdeElBanquilloApplication.Models;
             .WithMany(pos => pos.MatchPlayers)
             .HasForeignKey(mp => mp.IdPosition)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Competition>()
+       .HasOne(c => c.Season)
+       .WithMany(s => s.Competitions)
+       .HasForeignKey(c => c.IdSeason)
+       .OnDelete(DeleteBehavior.Restrict);
+
     }
 
     public DesdeElBanquilloAppDBContext (DbContextOptions<DesdeElBanquilloAppDBContext> options)

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesdeElBanquilloApplication.Migrations
 {
     [DbContext(typeof(DesdeElBanquilloAppDBContext))]
-    [Migration("20250525204252_MigrationFV")]
+    [Migration("20250526025757_MigrationFV")]
     partial class MigrationFV
     {
         /// <inheritdoc />
@@ -66,13 +66,13 @@ namespace DesdeElBanquilloApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCompetition"));
 
-                    b.Property<int>("FederationId")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdCountry")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdFederation")
+                    b.Property<int>("IdFederation")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdSeason")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -80,16 +80,13 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Season")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.HasKey("IdCompetition");
 
-                    b.HasIndex("FederationId");
-
                     b.HasIndex("IdCountry");
+
+                    b.HasIndex("IdFederation");
+
+                    b.HasIndex("IdSeason");
 
                     b.ToTable("Competitions");
                 });
@@ -543,21 +540,29 @@ namespace DesdeElBanquilloApplication.Migrations
 
             modelBuilder.Entity("DesdeElBanquilloApplication.Models.Competition", b =>
                 {
-                    b.HasOne("DesdeElBanquilloApplication.Models.Federation", "Federation")
-                        .WithMany("Competitions")
-                        .HasForeignKey("FederationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("DesdeElBanquilloApplication.Models.Country", "Country")
                         .WithMany("Competitions")
                         .HasForeignKey("IdCountry")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DesdeElBanquilloApplication.Models.Federation", "Federation")
+                        .WithMany("Competitions")
+                        .HasForeignKey("IdFederation")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DesdeElBanquilloApplication.Models.Season", "Season")
+                        .WithMany("Competitions")
+                        .HasForeignKey("IdSeason")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Country");
 
                     b.Navigation("Federation");
+
+                    b.Navigation("Season");
                 });
 
             modelBuilder.Entity("DesdeElBanquilloApplication.Models.Federation", b =>
@@ -794,6 +799,8 @@ namespace DesdeElBanquilloApplication.Migrations
 
             modelBuilder.Entity("DesdeElBanquilloApplication.Models.Season", b =>
                 {
+                    b.Navigation("Competitions");
+
                     b.Navigation("LeagueTables");
 
                     b.Navigation("Matches");

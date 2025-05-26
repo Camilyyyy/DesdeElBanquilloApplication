@@ -116,35 +116,6 @@ namespace DesdeElBanquilloApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Competitions",
-                columns: table => new
-                {
-                    IdCompetition = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Season = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false),
-                    FederationId = table.Column<int>(type: "int", nullable: false),
-                    IdFederation = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Competitions", x => x.IdCompetition);
-                    table.ForeignKey(
-                        name: "FK_Competitions_Countries_IdCountry",
-                        column: x => x.IdCountry,
-                        principalTable: "Countries",
-                        principalColumn: "IdCountry",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Competitions_Federations_FederationId",
-                        column: x => x.FederationId,
-                        principalTable: "Federations",
-                        principalColumn: "IdFederation",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Seasons",
                 columns: table => new
                 {
@@ -166,6 +137,40 @@ namespace DesdeElBanquilloApplication.Migrations
                         principalTable: "Leagues",
                         principalColumn: "IdLeague",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Competitions",
+                columns: table => new
+                {
+                    IdCompetition = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IdCountry = table.Column<int>(type: "int", nullable: false),
+                    IdSeason = table.Column<int>(type: "int", nullable: false),
+                    IdFederation = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Competitions", x => x.IdCompetition);
+                    table.ForeignKey(
+                        name: "FK_Competitions_Countries_IdCountry",
+                        column: x => x.IdCountry,
+                        principalTable: "Countries",
+                        principalColumn: "IdCountry",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Competitions_Federations_IdFederation",
+                        column: x => x.IdFederation,
+                        principalTable: "Federations",
+                        principalColumn: "IdFederation",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Competitions_Seasons_IdSeason",
+                        column: x => x.IdSeason,
+                        principalTable: "Seasons",
+                        principalColumn: "IdSeason",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -394,14 +399,19 @@ namespace DesdeElBanquilloApplication.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Competitions_FederationId",
-                table: "Competitions",
-                column: "FederationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Competitions_IdCountry",
                 table: "Competitions",
                 column: "IdCountry");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Competitions_IdFederation",
+                table: "Competitions",
+                column: "IdFederation");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Competitions_IdSeason",
+                table: "Competitions",
+                column: "IdSeason");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Federations_IdCountry",
@@ -527,9 +537,6 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Players");
 
             migrationBuilder.DropTable(
-                name: "Seasons");
-
-            migrationBuilder.DropTable(
                 name: "Stadiums");
 
             migrationBuilder.DropTable(
@@ -542,10 +549,13 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Competitions");
 
             migrationBuilder.DropTable(
-                name: "Leagues");
+                name: "Federations");
 
             migrationBuilder.DropTable(
-                name: "Federations");
+                name: "Seasons");
+
+            migrationBuilder.DropTable(
+                name: "Leagues");
 
             migrationBuilder.DropTable(
                 name: "Countries");

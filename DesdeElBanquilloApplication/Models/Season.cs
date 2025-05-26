@@ -43,5 +43,8 @@ namespace DesdeElBanquilloApplication.Models
 
         // Relación uno a muchos con tabla de posiciones
         public ICollection<LeagueTable> LeagueTables { get; set; } = new List<LeagueTable>();
+
+        public  ICollection<Competition> Competitions { get; set; } = new List<Competition>();
+
     }
 }

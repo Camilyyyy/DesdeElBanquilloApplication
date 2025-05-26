@@ -16,13 +16,13 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Season)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Country)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Federation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Season)
             </th>
             <th></th>
         </tr>
@@ -34,13 +34,13 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Season)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Country.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Federation.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Season.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdCompetition">Edit</a> |

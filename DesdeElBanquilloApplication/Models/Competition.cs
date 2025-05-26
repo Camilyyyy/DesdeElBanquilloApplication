@@ -18,25 +18,30 @@ namespace DesdeElBanquilloApplication.Models
         [DisplayName("Nombre Competicion")]
         public string Name { get; set; }
 
-        [StringLength(20)]
-        [DisplayName("Temporada Competicion")]
-        public string Season { get; set; }
+        
 
         // Clave foránea hacia Country
         [Required]
         [DisplayName("País")]
         public int IdCountry { get; set; }
 
+        [Required]
+        [DisplayName("Temporada")]
+        public int IdSeason { get; set; }
+
         // Clave foránea hacia Federation
         [Required]
         [DisplayName("Federacion")]
-        public int FederationId { get; set; }
+        public int IdFederation { get; set; }
 
         // Propiedades de navegación
         [ForeignKey("IdCountry")]
         public Country? Country { get; set; }
         [ForeignKey("IdFederation")]
         public Federation? Federation { get; set; }
+
+        [ForeignKey("IdSeason")]
+        public Season? Season { get; set; }
 
         // Relaciones
         public  ICollection<Team> Teams { get; set; } = new List<Team>();
