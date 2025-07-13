@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<DesdeElBanquilloApplication.Models.Competition>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Competiciones";
 }
 
-<h1>Index</h1>
+<h1>Competicion</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Season.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdCompetition">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdCompetition">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdCompetition">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdCompetition" class="btn btn-primary">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdCompetition" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdCompetition" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }
