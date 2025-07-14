@@ -1,8 +1,12 @@
+using DesdeElBanquilloApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DesdeElBanquilloAppDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DesdeElBanquilloAppDBContext") ?? throw new InvalidOperationException("Connection string 'DesdeElBanquilloAppDBContext' not found.")));
+
+builder.Services.AddDbContext<DesdeElBanquilloAppSQLiteContext>(options =>
+        options.UseSqlite("Data Source=your_sqlite_database.db"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
