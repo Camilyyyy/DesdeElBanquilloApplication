@@ -18,11 +18,11 @@ builder.Services.AddDbContext<DesdeElBanquilloAppSQLiteContext>(options =>
     )
 );
 
-// Registrar servicio de Ligas
-builder.Services.AddScoped<ILigaService, LigaService>();
-
 // Añade MVC con vistas
 builder.Services.AddControllersWithViews();
+
+// Registrar servicio de Ligas
+builder.Services.AddScoped<ILigaService, LigaService>();
 
 var app = builder.Build();
 
@@ -47,4 +47,3 @@ app.MapControllerRoute(
 );
 
 app.Run();
-

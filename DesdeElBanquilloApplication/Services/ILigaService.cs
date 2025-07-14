@@ -1,4 +1,5 @@
 ﻿using DesdeElBanquilloApplication.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,5 +12,6 @@ namespace DesdeElBanquilloApplication.Services
         Task CreateAsync(LeagueViewModel vm);
         Task UpdateAsync(LeagueViewModel vm);
         Task DeleteAsync(int id);
+        Task<IEnumerable<SelectListItem>> GetCountriesAsync();
     }
 }

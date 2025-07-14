@@ -1,7 +1,9 @@
 ﻿using DesdeElBanquilloApplication.Data;
 using DesdeElBanquilloApplication.Models;
 using DesdeElBanquilloApplication.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,12 +12,16 @@ namespace DesdeElBanquilloApplication.Services
 {
     public class LigaService : ILigaService
     {
-        private readonly DesdeElBanquilloAppDBContext _ctx;
-        public LigaService(DesdeElBanquilloAppDBContext ctx) => _ctx = ctx;
+        private readonly DesdeElBanquilloAppDBContext _context;
+
+        public LigaService(DesdeElBanquilloAppDBContext context)
+        {
+            _context = context;
+        }
 
         public async Task<IEnumerable<LeagueViewModel>> GetAllAsync()
         {
-            return await _ctx.League
+            return await _context.League
                 .Include(l => l.Country)
                 .Select(l => new LeagueViewModel
                 {
@@ -24,60 +30,76 @@ namespace DesdeElBanquilloApplication.Services
                     CreatedDate = l.CreatedDate,
                     IsActive = l.IsActive,
                     IdCountry = l.IdCountry,
-                    CountryName = l.Country.Name
+                    CountryName = l.Country!.Name
                 })
                 .ToListAsync();
         }
 
         public async Task<LeagueViewModel?> GetByIdAsync(int id)
         {
-            var l = await _ctx.League
-                              .Include(x => x.Country)
-                              .FirstOrDefaultAsync(x => x.IdLeague == id);
-            if (l == null) return null;
+            var league = await _context.League
+                .Include(l => l.Country)
+                .FirstOrDefaultAsync(l => l.IdLeague == id);
+
+            if (league == null) return null;
+
             return new LeagueViewModel
             {
-                IdLeague = l.IdLeague,
-                Name = l.Name,
-                CreatedDate = l.CreatedDate,
-                IsActive = l.IsActive,
-                IdCountry = l.IdCountry,
-                CountryName = l.Country.Name
+                IdLeague = league.IdLeague,
+                Name = league.Name,
+                CreatedDate = league.CreatedDate,
+                IsActive = league.IsActive,
+                IdCountry = league.IdCountry,
+                CountryName = league.Country?.Name
             };
         }
 
         public async Task CreateAsync(LeagueViewModel vm)
         {
-            var entity = new League
+            var league = new League
             {
                 Name = vm.Name,
                 CreatedDate = vm.CreatedDate,
                 IsActive = vm.IsActive,
                 IdCountry = vm.IdCountry
             };
-            _ctx.League.Add(entity);
-            await _ctx.SaveChangesAsync();
+
+            _context.League.Add(league);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(LeagueViewModel vm)
         {
-            var entity = await _ctx.League.FindAsync(vm.IdLeague);
-            if (entity == null) return;
-            entity.Name = vm.Name;
-            entity.CreatedDate = vm.CreatedDate;
-            entity.IsActive = vm.IsActive;
-            entity.IdCountry = vm.IdCountry;
-            await _ctx.SaveChangesAsync();
+            var league = await _context.League.FindAsync(vm.IdLeague);
+            if (league == null)
+                throw new KeyNotFoundException($"Liga con ID {vm.IdLeague} no encontrada");
+
+            league.Name = vm.Name;
+            league.IsActive = vm.IsActive;
+            league.IdCountry = vm.IdCountry;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
         {
-            var entity = await _ctx.League.FindAsync(id);
-            if (entity != null)
+            var league = await _context.League.FindAsync(id);
+            if (league != null)
             {
-                _ctx.League.Remove(entity);
-                await _ctx.SaveChangesAsync();
+                _context.League.Remove(league);
+                await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetCountriesAsync()
+        {
+            return await _context.Country
+                .Select(c => new SelectListItem
+                {
+                    Value = c.IdCountry.ToString(),
+                    Text = c.Name
+                })
+                .ToListAsync();
         }
     }
 }
