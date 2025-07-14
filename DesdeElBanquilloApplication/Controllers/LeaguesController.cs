@@ -1,163 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DesdeElBanquilloApplication.Models;
+using DesdeElBanquilloApplication.Data;
+using DesdeElBanquilloApplication.Services;
+using DesdeElBanquilloApplication.ViewModels;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class LeaguesController : Controller
     {
+        private readonly ILigaService _service;
         private readonly DesdeElBanquilloAppDBContext _context;
 
-        public LeaguesController(DesdeElBanquilloAppDBContext context)
+        public LeaguesController(ILigaService service,
+                                 DesdeElBanquilloAppDBContext context)
         {
+            _service = service;
             _context = context;
         }
 
-        // GET: Leagues
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.League.Include(l => l.Country);
-            return View(await desdeElBanquilloAppDBContext.ToListAsync());
+            var listVm = await _service.GetAllAsync();
+            return View(listVm);
         }
 
-        // GET: Leagues/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var league = await _context.League
-                .Include(l => l.Country)
-                .FirstOrDefaultAsync(m => m.IdLeague == id);
-            if (league == null)
-            {
-                return NotFound();
-            }
-
-            return View(league);
+            if (id == null) return NotFound();
+            var vm = await _service.GetByIdAsync(id.Value);
+            return vm == null ? NotFound() : View(vm);
         }
 
-        // GET: Leagues/Create
         public IActionResult Create()
         {
             ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
-            return View();
+            return View(new LeagueViewModel { CreatedDate = DateTime.Now, IsActive = true });
         }
 
-        // POST: Leagues/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdLeague,Name,CreatedDate,IsActive,IdCountry")] League league)
+        public async Task<IActionResult> Create(LeagueViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(league);
-                await _context.SaveChangesAsync();
+                await _service.CreateAsync(vm);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
-            return View(league);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", vm.IdCountry);
+            return View(vm);
         }
 
-        // GET: Leagues/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var league = await _context.League.FindAsync(id);
-            if (league == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
-            return View(league);
+            if (id == null) return NotFound();
+            var vm = await _service.GetByIdAsync(id.Value);
+            if (vm == null) return NotFound();
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", vm.IdCountry);
+            return View(vm);
         }
 
-        // POST: Leagues/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdLeague,Name,CreatedDate,IsActive,IdCountry")] League league)
+        public async Task<IActionResult> Edit(int id, LeagueViewModel vm)
         {
-            if (id != league.IdLeague)
-            {
-                return NotFound();
-            }
-
+            if (id != vm.IdLeague) return NotFound();
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(league);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LeagueExists(league.IdLeague))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _service.UpdateAsync(vm);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
-            return View(league);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", vm.IdCountry);
+            return View(vm);
         }
 
-        // GET: Leagues/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var league = await _context.League
-                .Include(l => l.Country)
-                .FirstOrDefaultAsync(m => m.IdLeague == id);
-            if (league == null)
-            {
-                return NotFound();
-            }
-
-            return View(league);
+            if (id == null) return NotFound();
+            var vm = await _service.GetByIdAsync(id.Value);
+            return vm == null ? NotFound() : View(vm);
         }
 
-        // POST: Leagues/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var league = await _context.League.FindAsync(id);
-            if (league != null)
-            {
-                _context.League.Remove(league);
-            }
-
-            await _context.SaveChangesAsync();
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool LeagueExists(int id)
-        {
-            return _context.League.Any(e => e.IdLeague == id);
         }
     }
 }
