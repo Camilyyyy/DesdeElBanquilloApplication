@@ -79,9 +79,9 @@
                 @Html.DisplayFor(modelItem => item.Country.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdPlayer">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdPlayer">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdPlayer">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdPlayer" class="btn btn-success btn-sm">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdPlayer" class="btn btn-primary btn-sm">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdPlayer" class="btn btn-danger btn-sm">Eliminar</a>
             </td>
         </tr>
 }

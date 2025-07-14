@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.League.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdSeason">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdSeason">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdSeason">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdSeason" class="btn btn-warning btn-sm">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdSeason" class="btn btn-primary btn-sm">Detalles</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdSeason" class="btn btn-danger btn-sm">Eliminar</a>
             </td>
         </tr>
 }
