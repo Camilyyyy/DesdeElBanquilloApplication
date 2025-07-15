@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DesdeElBanquilloApplication.Models;
+using DEAModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DEAPI.Controllers
+namespace DesdeElBanquilloApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
