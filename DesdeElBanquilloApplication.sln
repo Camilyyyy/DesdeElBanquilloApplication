@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEAMaui", "DEAMaui\DEAMaui.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEAModels", "DEAModels\DEAModels.csproj", "{0213BD59-3A6A-4233-A743-369492C304DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEAApi", "DEAApi\DEAApi.csproj", "{0B401587-74E1-4C54-BBC2-BBE2E0934287}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{0213BD59-3A6A-4233-A743-369492C304DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0213BD59-3A6A-4233-A743-369492C304DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0213BD59-3A6A-4233-A743-369492C304DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B401587-74E1-4C54-BBC2-BBE2E0934287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B401587-74E1-4C54-BBC2-BBE2E0934287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B401587-74E1-4C54-BBC2-BBE2E0934287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B401587-74E1-4C54-BBC2-BBE2E0934287}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

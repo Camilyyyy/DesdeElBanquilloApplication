@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace DEAMaui
+namespace DesdeElBanquillo
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

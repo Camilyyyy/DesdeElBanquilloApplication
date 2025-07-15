@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace DEAMaui
+namespace DesdeElBanquillo
 {
     [Application]
     public class MainApplication : MauiApplication
