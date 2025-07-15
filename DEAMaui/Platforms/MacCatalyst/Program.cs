@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace DesdeElBanquillo
+namespace DEAMaui
 {
     public class Program
     {

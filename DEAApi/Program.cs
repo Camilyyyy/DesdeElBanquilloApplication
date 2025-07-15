@@ -1,35 +1,45 @@
-using System.Text.Json.Serialization;
+// Reemplaza todo el contenido de tu Program.cs en el proyecto DEAApi con esto:
 
-var builder = WebApplication.CreateSlimBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using DEAApi.Data; // Asegúrate que este sea el namespace correcto de tu DbContext
 
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
-});
+var builder = WebApplication.CreateBuilder(args);
+
+// --- PASO 1: AÑADIR SERVICIOS AL CONTENEDOR ---
+
+// Registra el DbContext para que la aplicación sepa cómo conectarse a la base de datos.
+// Lee la cadena de conexión desde appsettings.json.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString)); // O .UseSqlite() si usas SQLite en la API
+
+// Registra los servicios para que los controladores de la API funcionen.
+builder.Services.AddControllers();
+
+// Opcional pero recomendado: Añade Swagger/OpenAPI para poder probar tu API fácilmente desde el navegador.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+// --- PASO 2: CONSTRUIR LA APLICACIÓN ---
 
 var app = builder.Build();
 
-var sampleTodos = new Todo[] {
-    new(1, "Walk the dog"),
-    new(2, "Do the dishes", DateOnly.FromDateTime(DateTime.Now)),
-    new(3, "Do the laundry", DateOnly.FromDateTime(DateTime.Now.AddDays(1))),
-    new(4, "Clean the bathroom"),
-    new(5, "Clean the car", DateOnly.FromDateTime(DateTime.Now.AddDays(2)))
-};
 
-var todosApi = app.MapGroup("/todos");
-todosApi.MapGet("/", () => sampleTodos);
-todosApi.MapGet("/{id}", (int id) =>
-    sampleTodos.FirstOrDefault(a => a.Id == id) is { } todo
-        ? Results.Ok(todo)
-        : Results.NotFound());
+// --- PASO 3: CONFIGURAR EL PIPELINE DE SOLICITUDES HTTP ---
+
+// Configura Swagger solo en el entorno de desarrollo.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// Configura el enrutamiento para que las solicitudes lleguen a tus controladores.
+app.UseAuthorization();
+app.MapControllers();
+
+
+// --- PASO 4: EJECUTAR LA APLICACIÓN ---
 
 app.Run();
-
-public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
-
-[JsonSerializable(typeof(Todo[]))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
-
-}

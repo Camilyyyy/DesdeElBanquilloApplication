@@ -1,27 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <PublishAot>true</PublishAot>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<!-- La propiedad 'InvariantGlobalization' a menudo no es necesaria para la mayoría de las APIs -->
+		<!-- ELIMINADO: <InvariantGlobalization>true</InvariantGlobalization> -->
+		<!-- ELIMINADO: <PublishAot>true</PublishAot> (ESTE ERA EL PROBLEMA PRINCIPAL) -->
+	</PropertyGroup>
 
-  <ItemGroup>
+	<!-- No es necesario tener carpetas vacías declaradas aquí, se gestionan solas -->
+	<!-- <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Controllers\" />
-  </ItemGroup>
+  </ItemGroup> -->
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
-	  <ProjectReference Include="..\DEAModels\DEAModels.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- Referencias de Paquetes Limpias y Alineadas con .NET 8 -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+		<!-- ELIMINADO: Microsoft.EntityFrameworkCore (es una dependencia transitiva de SqlServer, no es necesario declararlo explícitamente) -->
+		<!-- ELIMINADO: Microsoft.VisualStudio.Web.CodeGeneration.Design (para simplificar y evitar conflictos) -->
+
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
+		<!-- Referencia al proyecto de Modelos (esto está perfecto) -->
+		<ProjectReference Include="..\DEAModels\DEAModels.csproj" />
+	</ItemGroup>
 
 </Project>
