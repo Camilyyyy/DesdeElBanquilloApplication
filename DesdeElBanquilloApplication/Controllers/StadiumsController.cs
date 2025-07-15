@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
+using DEAApi.Data;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class StadiumsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public StadiumsController(DesdeElBanquilloAppDBContext context)
+        public StadiumsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Stadiums
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Stadium.Include(s => s.Team);
+            var desdeElBanquilloAppDBContext = _context.Stadiums.Include(s => s.Team);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +34,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var stadium = await _context.Stadium
+            var stadium = await _context.Stadiums
                 .Include(s => s.Team)
                 .FirstOrDefaultAsync(m => m.IdStadium == id);
             if (stadium == null)
@@ -47,7 +48,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Stadiums/Create
         public IActionResult Create()
         {
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name");
             return View();
         }
 
@@ -64,7 +65,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.IdTeam);
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", stadium.IdTeam);
             return View(stadium);
         }
 
@@ -76,12 +77,12 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var stadium = await _context.Stadium.FindAsync(id);
+            var stadium = await _context.Stadiums.FindAsync(id);
             if (stadium == null)
             {
                 return NotFound();
             }
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.IdTeam);
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", stadium.IdTeam);
             return View(stadium);
         }
 
@@ -117,7 +118,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", stadium.IdTeam);
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", stadium.IdTeam);
             return View(stadium);
         }
 
@@ -129,7 +130,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var stadium = await _context.Stadium
+            var stadium = await _context.Stadiums
                 .Include(s => s.Team)
                 .FirstOrDefaultAsync(m => m.IdStadium == id);
             if (stadium == null)
@@ -145,10 +146,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var stadium = await _context.Stadium.FindAsync(id);
+            var stadium = await _context.Stadiums.FindAsync(id);
             if (stadium != null)
             {
-                _context.Stadium.Remove(stadium);
+                _context.Stadiums.Remove(stadium);
             }
 
             await _context.SaveChangesAsync();
@@ -157,7 +158,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool StadiumExists(int id)
         {
-            return _context.Stadium.Any(e => e.IdStadium == id);
+            return _context.Stadiums.Any(e => e.IdStadium == id);
         }
     }
 }

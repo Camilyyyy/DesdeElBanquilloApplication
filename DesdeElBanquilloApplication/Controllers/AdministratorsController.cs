@@ -12,9 +12,9 @@ namespace DesdeElBanquilloApplication.Controllers
 {
     public class AdministratorsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AdministratorsController(DesdeElBanquilloAppDBContext context)
+        public AdministratorsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Administrators
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Administrator.ToListAsync());
+            return View(await _context.Administrators.ToListAsync());
         }
 
         // GET: Administrators/Details/5
@@ -33,7 +33,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var administrator = await _context.Administrator
+            var administrator = await _context.Administrators
                 .FirstOrDefaultAsync(m => m.IdAdministrator == id);
             if (administrator == null)
             {
@@ -73,7 +73,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var administrator = await _context.Administrator.FindAsync(id);
+            var administrator = await _context.Administrators.FindAsync(id);
             if (administrator == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var administrator = await _context.Administrator
+            var administrator = await _context.Administrators
                 .FirstOrDefaultAsync(m => m.IdAdministrator == id);
             if (administrator == null)
             {
@@ -139,10 +139,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var administrator = await _context.Administrator.FindAsync(id);
+            var administrator = await _context.Administrators.FindAsync(id);
             if (administrator != null)
             {
-                _context.Administrator.Remove(administrator);
+                _context.Administrators.Remove(administrator);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool AdministratorExists(int id)
         {
-            return _context.Administrator.Any(e => e.IdAdministrator == id);
+            return _context.Administrators.Any(e => e.IdAdministrator == id);
         }
     }
 }

@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
-
+using DEAApi.Data;
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class SeasonsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public SeasonsController(DesdeElBanquilloAppDBContext context)
+        public SeasonsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Seasons
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Season.Include(s => s.League);
+            var desdeElBanquilloAppDBContext = _context.Seasons.Include(s => s.League);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +33,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var season = await _context.Season
+            var season = await _context.Seasons
                 .Include(s => s.League)
                 .FirstOrDefaultAsync(m => m.IdSeason == id);
             if (season == null)
@@ -47,7 +47,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Seasons/Create
         public IActionResult Create()
         {
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name");
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", season.IdLeague);
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", season.IdLeague);
             return View(season);
         }
 
@@ -76,12 +76,12 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var season = await _context.Season.FindAsync(id);
+            var season = await _context.Seasons.FindAsync(id);
             if (season == null)
             {
                 return NotFound();
             }
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", season.IdLeague);
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", season.IdLeague);
             return View(season);
         }
 
@@ -117,7 +117,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", season.IdLeague);
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", season.IdLeague);
             return View(season);
         }
 
@@ -129,7 +129,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var season = await _context.Season
+            var season = await _context.Seasons
                 .Include(s => s.League)
                 .FirstOrDefaultAsync(m => m.IdSeason == id);
             if (season == null)
@@ -145,10 +145,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var season = await _context.Season.FindAsync(id);
+            var season = await _context.Seasons.FindAsync(id);
             if (season != null)
             {
-                _context.Season.Remove(season);
+                _context.Seasons.Remove(season);
             }
 
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool SeasonExists(int id)
         {
-            return _context.Season.Any(e => e.IdSeason == id);
+            return _context.Seasons.Any(e => e.IdSeason == id);
         }
     }
 }

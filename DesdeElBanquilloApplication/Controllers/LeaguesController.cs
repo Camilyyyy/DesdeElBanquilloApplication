@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
-
+using DEAApi.Data;
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class LeaguesController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public LeaguesController(DesdeElBanquilloAppDBContext context)
+        public LeaguesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Leagues
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.League.Include(l => l.Country);
+            var desdeElBanquilloAppDBContext = _context.Leagues.Include(l => l.Country);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +33,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var league = await _context.League
+            var league = await _context.Leagues
                 .Include(l => l.Country)
                 .FirstOrDefaultAsync(m => m.IdLeague == id);
             if (league == null)
@@ -47,7 +47,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Leagues/Create
         public IActionResult Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", league.IdCountry);
             return View(league);
         }
 
@@ -76,12 +76,12 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var league = await _context.League.FindAsync(id);
+            var league = await _context.Leagues.FindAsync(id);
             if (league == null)
             {
                 return NotFound();
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", league.IdCountry);
             return View(league);
         }
 
@@ -117,7 +117,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", league.IdCountry);
             return View(league);
         }
 
@@ -129,7 +129,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var league = await _context.League
+            var league = await _context.Leagues
                 .Include(l => l.Country)
                 .FirstOrDefaultAsync(m => m.IdLeague == id);
             if (league == null)
@@ -145,10 +145,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var league = await _context.League.FindAsync(id);
+            var league = await _context.Leagues.FindAsync(id);
             if (league != null)
             {
-                _context.League.Remove(league);
+                _context.Leagues.Remove(league);
             }
 
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool LeagueExists(int id)
         {
-            return _context.League.Any(e => e.IdLeague == id);
+            return _context.Leagues.Any(e => e.IdLeague == id);
         }
     }
 }

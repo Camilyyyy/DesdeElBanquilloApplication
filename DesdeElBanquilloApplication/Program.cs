@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using DEAApi.Data;
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<DesdeElBanquilloAppDBContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DesdeElBanquilloAppDBContext") ?? throw new InvalidOperationException("Connection string 'DesdeElBanquilloAppDBContext' not found.")));
 
 // Add services to the container.

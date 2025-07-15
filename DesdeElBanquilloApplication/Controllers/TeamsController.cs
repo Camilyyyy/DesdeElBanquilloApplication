@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
-
+using DEAApi.Data;
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class TeamsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TeamsController(DesdeElBanquilloAppDBContext context)
+        public TeamsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Teams
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Team.Include(t => t.Competition).Include(t => t.Country).Include(t => t.League);
+            var desdeElBanquilloAppDBContext = _context.Teams.Include(t => t.Competition).Include(t => t.Country).Include(t => t.League);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +33,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Team
+            var team = await _context.Teams
                 .Include(t => t.Competition)
                 .Include(t => t.Country)
                 .Include(t => t.League)
@@ -49,9 +49,9 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Teams/Create
         public IActionResult Create()
         {
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name");
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name");
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name");
             return View();
         }
 
@@ -68,9 +68,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.IdCompetition);
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", team.IdCountry);
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", team.IdLeague);
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", team.IdCompetition);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", team.IdCountry);
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", team.IdLeague);
             return View(team);
         }
 
@@ -82,14 +82,14 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Team.FindAsync(id);
+            var team = await _context.Teams.FindAsync(id);
             if (team == null)
             {
                 return NotFound();
             }
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.IdCompetition);
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", team.IdCountry);
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", team.IdLeague);
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", team.IdCompetition);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", team.IdCountry);
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", team.IdLeague);
             return View(team);
         }
 
@@ -125,9 +125,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", team.IdCompetition);
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", team.IdCountry);
-            ViewData["IdLeague"] = new SelectList(_context.League, "IdLeague", "Name", team.IdLeague);
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", team.IdCompetition);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", team.IdCountry);
+            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", team.IdLeague);
             return View(team);
         }
 
@@ -139,7 +139,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Team
+            var team = await _context.Teams
                 .Include(t => t.Competition)
                 .Include(t => t.Country)
                 .Include(t => t.League)
@@ -157,10 +157,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _context.Team.FindAsync(id);
+            var team = await _context.Teams.FindAsync(id);
             if (team != null)
             {
-                _context.Team.Remove(team);
+                _context.Teams.Remove(team);
             }
 
             await _context.SaveChangesAsync();
@@ -169,7 +169,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool TeamExists(int id)
         {
-            return _context.Team.Any(e => e.IdTeam == id);
+            return _context.Teams.Any(e => e.IdTeam == id);
         }
     }
 }

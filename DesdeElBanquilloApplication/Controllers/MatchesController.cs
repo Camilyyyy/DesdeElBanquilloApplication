@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
+using DEAApi.Data;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class MatchesController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public MatchesController(DesdeElBanquilloAppDBContext context)
+        public MatchesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Matches
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Match.Include(m => m.AwayTeam).Include(m => m.Competition).Include(m => m.HomeTeam).Include(m => m.Stadium);
+            var desdeElBanquilloAppDBContext = _context.Matches.Include(m => m.AwayTeam).Include(m => m.Competition).Include(m => m.HomeTeam).Include(m => m.Stadium);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +34,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var match = await _context.Match
+            var match = await _context.Matches
                 .Include(m => m.AwayTeam)
                 .Include(m => m.Competition)
                 .Include(m => m.HomeTeam)
@@ -50,10 +51,10 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Matches/Create
         public IActionResult Create()
         {
-            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name");
-            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
-            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name");
+            ViewData["IdAwayTeam"] = new SelectList(_context.Teams, "IdTeam", "Name");
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name");
+            ViewData["IdHomeTeam"] = new SelectList(_context.Teams, "IdTeam", "Name");
+            ViewData["IdStadium"] = new SelectList(_context.Stadiums, "IdStadium", "Name");
             return View();
         }
 
@@ -70,10 +71,10 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdAwayTeam);
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", match.IdCompetition);
-            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdHomeTeam);
-            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name", match.IdStadium);
+            ViewData["IdAwayTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", match.IdAwayTeam);
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", match.IdCompetition);
+            ViewData["IdHomeTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", match.IdHomeTeam);
+            ViewData["IdStadium"] = new SelectList(_context.Stadiums, "IdStadium", "Name", match.IdStadium);
             return View(match);
         }
 
@@ -85,15 +86,15 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var match = await _context.Match.FindAsync(id);
+            var match = await _context.Matches.FindAsync(id);
             if (match == null)
             {
                 return NotFound();
             }
-            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdAwayTeam);
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", match.IdCompetition);
-            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdHomeTeam);
-            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name", match.IdStadium);
+            ViewData["IdAwayTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", match.IdAwayTeam);
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", match.IdCompetition);
+            ViewData["IdHomeTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", match.IdHomeTeam);
+            ViewData["IdStadium"] = new SelectList(_context.Stadiums, "IdStadium", "Name", match.IdStadium);
             return View(match);
         }
 
@@ -129,10 +130,10 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdAwayTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdAwayTeam);
-            ViewData["IdCompetition"] = new SelectList(_context.Competition, "IdCompetition", "Name", match.IdCompetition);
-            ViewData["IdHomeTeam"] = new SelectList(_context.Team, "IdTeam", "Name", match.IdHomeTeam);
-            ViewData["IdStadium"] = new SelectList(_context.Stadium, "IdStadium", "Name", match.IdStadium);
+            ViewData["IdAwayTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", match.IdAwayTeam);
+            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", match.IdCompetition);
+            ViewData["IdHomeTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", match.IdHomeTeam);
+            ViewData["IdStadium"] = new SelectList(_context.Stadiums, "IdStadium", "Name", match.IdStadium);
             return View(match);
         }
 
@@ -144,7 +145,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var match = await _context.Match
+            var match = await _context.Matches
                 .Include(m => m.AwayTeam)
                 .Include(m => m.Competition)
                 .Include(m => m.HomeTeam)
@@ -163,10 +164,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var match = await _context.Match.FindAsync(id);
+            var match = await _context.Matches.FindAsync(id);
             if (match != null)
             {
-                _context.Match.Remove(match);
+                _context.Matches.Remove(match);
             }
 
             await _context.SaveChangesAsync();
@@ -175,7 +176,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool MatchExists(int id)
         {
-            return _context.Match.Any(e => e.IdMatch == id);
+            return _context.Matches.Any(e => e.IdMatch == id);
         }
     }
 }

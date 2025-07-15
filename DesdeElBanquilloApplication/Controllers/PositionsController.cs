@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
-
+using DEAApi.Data;
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class PositionsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public PositionsController(DesdeElBanquilloAppDBContext context)
+        public PositionsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Positions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Position.ToListAsync());
+            return View(await _context.Positions.ToListAsync());
         }
 
         // GET: Positions/Details/5
@@ -32,7 +32,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var position = await _context.Position
+            var position = await _context.Positions
                 .FirstOrDefaultAsync(m => m.IdPosition == id);
             if (position == null)
             {
@@ -72,7 +72,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var position = await _context.Position.FindAsync(id);
+            var position = await _context.Positions.FindAsync(id);
             if (position == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var position = await _context.Position
+            var position = await _context.Positions
                 .FirstOrDefaultAsync(m => m.IdPosition == id);
             if (position == null)
             {
@@ -138,10 +138,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var position = await _context.Position.FindAsync(id);
+            var position = await _context.Positions.FindAsync(id);
             if (position != null)
             {
-                _context.Position.Remove(position);
+                _context.Positions.Remove(position);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool PositionExists(int id)
         {
-            return _context.Position.Any(e => e.IdPosition == id);
+            return _context.Positions.Any(e => e.IdPosition == id);
         }
     }
 }

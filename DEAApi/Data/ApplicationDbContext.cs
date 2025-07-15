@@ -10,6 +10,10 @@ namespace DEAApi.Data
 {
     public class ApplicationDbContext : DbContext
     {
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Competition> Competitions { get; set; }
         public DbSet<Country> Countries { get; set; }
@@ -24,6 +28,10 @@ namespace DEAApi.Data
         public DbSet<Stadium> Stadiums { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<User> Users { get; set; }
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            // Configuración de relaciones complejas si es necesario
+        }
     }
 }

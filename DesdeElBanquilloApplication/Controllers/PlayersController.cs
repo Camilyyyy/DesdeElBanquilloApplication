@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
+using DEAApi.Data;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public PlayersController(DesdeElBanquilloAppDBContext context)
+        public PlayersController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Player.Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
+            var desdeElBanquilloAppDBContext = _context.Players.Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +34,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var player = await _context.Player
+            var player = await _context.Players
                 .Include(p => p.Country)
                 .Include(p => p.Position)
                 .Include(p => p.Team)
@@ -49,9 +50,9 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
-            ViewData["IdPosition"] = new SelectList(_context.Position, "IdPosition", "Name");
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
+            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name");
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name");
             return View();
         }
 
@@ -68,9 +69,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", player.IdCountry);
-            ViewData["IdPosition"] = new SelectList(_context.Position, "IdPosition", "Name", player.IdPosition);
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", player.IdTeam);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", player.IdCountry);
+            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name", player.IdPosition);
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", player.IdTeam);
             return View(player);
         }
 
@@ -82,14 +83,14 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var player = await _context.Player.FindAsync(id);
+            var player = await _context.Players.FindAsync(id);
             if (player == null)
             {
                 return NotFound();
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", player.IdCountry);
-            ViewData["IdPosition"] = new SelectList(_context.Position, "IdPosition", "Name", player.IdPosition);
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", player.IdTeam);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", player.IdCountry);
+            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name", player.IdPosition);
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", player.IdTeam);
             return View(player);
         }
 
@@ -125,9 +126,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", player.IdCountry);
-            ViewData["IdPosition"] = new SelectList(_context.Position, "IdPosition", "Name", player.IdPosition);
-            ViewData["IdTeam"] = new SelectList(_context.Team, "IdTeam", "Name", player.IdTeam);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", player.IdCountry);
+            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name", player.IdPosition);
+            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", player.IdTeam);
             return View(player);
         }
 
@@ -139,7 +140,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var player = await _context.Player
+            var player = await _context.Players
                 .Include(p => p.Country)
                 .Include(p => p.Position)
                 .Include(p => p.Team)
@@ -157,10 +158,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var player = await _context.Player.FindAsync(id);
+            var player = await _context.Players.FindAsync(id);
             if (player != null)
             {
-                _context.Player.Remove(player);
+                _context.Players.Remove(player);
             }
 
             await _context.SaveChangesAsync();
@@ -169,7 +170,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool PlayerExists(int id)
         {
-            return _context.Player.Any(e => e.IdPlayer == id);
+            return _context.Players.Any(e => e.IdPlayer == id);
         }
     }
 }

@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
+using DEAApi.Data;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class CompetitionsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CompetitionsController(DesdeElBanquilloAppDBContext context)
+        public CompetitionsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Competitions
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Competition.Include(c => c.Country).Include(c => c.Federation).Include(c => c.Season);
+            var desdeElBanquilloAppDBContext = _context.Competitions.Include(c => c.Country).Include(c => c.Federation).Include(c => c.Season);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +34,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var competition = await _context.Competition
+            var competition = await _context.Competitions
                 .Include(c => c.Country)
                 .Include(c => c.Federation)
                 .Include(c => c.Season)
@@ -49,9 +50,9 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Competitions/Create
         public IActionResult Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
-            ViewData["IdFederation"] = new SelectList(_context.Federation, "IdFederation", "Name");
-            ViewData["IdSeason"] = new SelectList(_context.Season, "IdSeason", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
+            ViewData["IdFederation"] = new SelectList(_context.Federations, "IdFederation", "Name");
+            ViewData["IdSeason"] = new SelectList(_context.Seasons, "IdSeason", "Name");
             return View();
         }
 
@@ -68,9 +69,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", competition.IdCountry);
-            ViewData["IdFederation"] = new SelectList(_context.Federation, "IdFederation", "Name", competition.IdFederation);
-            ViewData["IdSeason"] = new SelectList(_context.Season, "IdSeason", "Name", competition.IdSeason);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", competition.IdCountry);
+            ViewData["IdFederation"] = new SelectList(_context.Federations, "IdFederation", "Name", competition.IdFederation);
+            ViewData["IdSeason"] = new SelectList(_context.Seasons, "IdSeason", "Name", competition.IdSeason);
             return View(competition);
         }
 
@@ -82,14 +83,14 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var competition = await _context.Competition.FindAsync(id);
+            var competition = await _context.Competitions.FindAsync(id);
             if (competition == null)
             {
                 return NotFound();
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", competition.IdCountry);
-            ViewData["IdFederation"] = new SelectList(_context.Federation, "IdFederation", "Name", competition.IdFederation);
-            ViewData["IdSeason"] = new SelectList(_context.Season, "IdSeason", "Name", competition.IdSeason);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", competition.IdCountry);
+            ViewData["IdFederation"] = new SelectList(_context.Federations, "IdFederation", "Name", competition.IdFederation);
+            ViewData["IdSeason"] = new SelectList(_context.Seasons, "IdSeason", "Name", competition.IdSeason);
             return View(competition);
         }
 
@@ -125,9 +126,9 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", competition.IdCountry);
-            ViewData["IdFederation"] = new SelectList(_context.Federation, "IdFederation", "Name", competition.IdFederation);
-            ViewData["IdSeason"] = new SelectList(_context.Season, "IdSeason", "Name", competition.IdSeason);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", competition.IdCountry);
+            ViewData["IdFederation"] = new SelectList(_context.Federations, "IdFederation", "Name", competition.IdFederation);
+            ViewData["IdSeason"] = new SelectList(_context.Seasons, "IdSeason", "Name", competition.IdSeason);
             return View(competition);
         }
 
@@ -139,7 +140,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var competition = await _context.Competition
+            var competition = await _context.Competitions
                 .Include(c => c.Country)
                 .Include(c => c.Federation)
                 .Include(c => c.Season)
@@ -157,10 +158,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var competition = await _context.Competition.FindAsync(id);
+            var competition = await _context.Competitions.FindAsync(id);
             if (competition != null)
             {
-                _context.Competition.Remove(competition);
+                _context.Competitions.Remove(competition);
             }
 
             await _context.SaveChangesAsync();
@@ -169,7 +170,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool CompetitionExists(int id)
         {
-            return _context.Competition.Any(e => e.IdCompetition == id);
+            return _context.Competitions.Any(e => e.IdCompetition == id);
         }
     }
 }

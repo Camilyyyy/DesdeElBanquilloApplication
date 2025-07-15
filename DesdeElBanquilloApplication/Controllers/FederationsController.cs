@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
+using DEAApi.Data;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class FederationsController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public FederationsController(DesdeElBanquilloAppDBContext context)
+        public FederationsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Federations
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Federation.Include(f => f.Country);
+            var desdeElBanquilloAppDBContext = _context.Federations.Include(f => f.Country);
             return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
@@ -33,7 +34,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var federation = await _context.Federation
+            var federation = await _context.Federations
                 .Include(f => f.Country)
                 .FirstOrDefaultAsync(m => m.IdFederation == id);
             if (federation == null)
@@ -47,7 +48,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Federations/Create
         public IActionResult Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
             return View();
         }
 
@@ -64,7 +65,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -76,12 +77,12 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var federation = await _context.Federation.FindAsync(id);
+            var federation = await _context.Federations.FindAsync(id);
             if (federation == null)
             {
                 return NotFound();
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -117,7 +118,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", federation.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", federation.IdCountry);
             return View(federation);
         }
 
@@ -129,7 +130,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var federation = await _context.Federation
+            var federation = await _context.Federations
                 .Include(f => f.Country)
                 .FirstOrDefaultAsync(m => m.IdFederation == id);
             if (federation == null)
@@ -145,10 +146,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var federation = await _context.Federation.FindAsync(id);
+            var federation = await _context.Federations.FindAsync(id);
             if (federation != null)
             {
-                _context.Federation.Remove(federation);
+                _context.Federations.Remove(federation);
             }
 
             await _context.SaveChangesAsync();
@@ -157,7 +158,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool FederationExists(int id)
         {
-            return _context.Federation.Any(e => e.IdFederation == id);
+            return _context.Federations.Any(e => e.IdFederation == id);
         }
     }
 }

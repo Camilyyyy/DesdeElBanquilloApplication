@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DEAModels;
+using DEAApi.Data;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class CountriesController : Controller
     {
-        private readonly DesdeElBanquilloAppDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CountriesController(DesdeElBanquilloAppDBContext context)
+        public CountriesController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -21,7 +22,7 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Country.ToListAsync());
+            return View(await _context.Countries.ToListAsync());
         }
 
         // GET: Countries/Details/5
@@ -32,7 +33,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Country
+            var country = await _context.Countries
                 .FirstOrDefaultAsync(m => m.IdCountry == id);
             if (country == null)
             {
@@ -72,7 +73,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Country.FindAsync(id);
+            var country = await _context.Countries.FindAsync(id);
             if (country == null)
             {
                 return NotFound();
@@ -123,7 +124,7 @@ namespace DesdeElBanquilloApplication.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Country
+            var country = await _context.Countries
                 .FirstOrDefaultAsync(m => m.IdCountry == id);
             if (country == null)
             {
@@ -138,10 +139,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var country = await _context.Country.FindAsync(id);
+            var country = await _context.Countries.FindAsync(id);
             if (country != null)
             {
-                _context.Country.Remove(country);
+                _context.Countries.Remove(country);
             }
 
             await _context.SaveChangesAsync();
@@ -150,7 +151,7 @@ namespace DesdeElBanquilloApplication.Controllers
 
         private bool CountryExists(int id)
         {
-            return _context.Country.Any(e => e.IdCountry == id);
+            return _context.Countries.Any(e => e.IdCountry == id);
         }
     }
 }
