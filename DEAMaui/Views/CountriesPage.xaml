@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:DEAMaui.ViewModels"
+             x:Class="DEAMaui.Views.CountriesPage"
+             Title="Lista de Países">
+
+    <ContentPage.BindingContext>
+        <viewModels:CountriesViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Spacing="10" Padding="20">
+
+        <Label Text="Nuevo País" FontSize="Medium" FontAttributes="Bold" />
+        <Entry x:Name="NewCountryName" Placeholder="Nombre del país" />
+        <Button Text="Agregar País" 
+                Command="{Binding AddCountryCommand}" 
+                CommandParameter="{Binding Source={x:Reference NewCountryName}, Path=Text}" />
+
+        <Line Stroke="LightGray" StrokeThickness="1" Margin="0,10" />
+
+        <Label Text="Países Existentes" FontSize="Medium" FontAttributes="Bold" />
+
+        <Button Text="Cargar Países" Command="{Binding LoadCountriesCommand}" Margin="0,0,0,10"/>
+
+        <CollectionView ItemsSource="{Binding Countries}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10" ColumnDefinitions="*, Auto">
+                        <Label Text="{Binding Name}" VerticalOptions="Center" />
+                        <Button Grid.Column="1" 
+                                Text="Eliminar" 
+                                BackgroundColor="Red" 
+                                TextColor="White"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CountriesViewModel}}, Path=DeleteCountryCommand}"
+                                CommandParameter="{Binding .}"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DEAMaui.Views;
+using Microsoft.Extensions.Logging;
 
 namespace DEAMaui
 {
@@ -15,9 +16,12 @@ namespace DEAMaui
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            builder.Services.AddSingleton<ApiService>();
+
+            // Registrar ViewModels y Vistas
+            builder.Services.AddSingleton<CountriesViewModel>();
+            builder.Services.AddSingleton<CountriesPage>();
+
 
             return builder.Build();
         }
