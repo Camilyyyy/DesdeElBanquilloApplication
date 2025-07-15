@@ -1,35 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<!-- Sin cambios aquí -->
 		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-
-		<!-- Note for MacCatalyst:
-		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
-		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
-		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
-		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-
 		<OutputType>Exe</OutputType>
 		<RootNamespace>DEAMaui</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
-		<!-- Display name -->
 		<ApplicationTitle>DEAMaui</ApplicationTitle>
-
-		<!-- App Identifier -->
 		<ApplicationId>com.companyname.deamaui</ApplicationId>
-
-		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
@@ -39,49 +23,50 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- App Icon -->
+		<!-- Sin cambios aquí -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
-		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
-
-		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
-
-		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
-
-		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<!-- PAQUETES NUGET CORREGIDOS -->
+
+		<!-- Paquetes estándar de MAUI -->
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
-		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+
+		<!-- PAQUETE CORRECTO para usar Entity Framework Core con una base de datos SQLite local -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
+
+		<!-- ELIMINADO: Microsoft.EntityFrameworkCore (viene incluido con el de Sqlite) -->
+		<!-- ELIMINADO: Microsoft.EntityFrameworkCore.SqlServer (es para el servidor, no para el cliente) -->
+		<!-- ELIMINADO: Microsoft.EntityFrameworkCore.Tools (son herramientas de desarrollo, no necesarias en el cliente) -->
+		<!-- ELIMINADO: Microsoft.VisualStudio.Web.CodeGeneration.Design (es para el servidor, no para el cliente) -->
+		<!-- ELIMINADO: sqlite-net-pcl (para evitar confusión, nos quedamos solo con el enfoque de EF Core) -->
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\CountriesPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Views\CountriesPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Data\" />
-	<Folder Include="DEAModels\" />
+		<Folder Include="Data\" />
+		<!-- La carpeta DEAModels no es necesaria si usas el proyecto compartido -->
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DEAModels\DEAModels.csproj" />
-		<ProjectReference Include="..\DEAApi\DEAApi.csproj" />
+		<!-- REFERENCIA DE PROYECTO CORRECTA -->
+		<!-- Referenciamos SOLAMENTE el proyecto que contiene los modelos (clases) compartidos -->
+		<ProjectReference Include="..\DEAModels\DEAModels.csproj" />
+
+		<!-- ELIMINADO: <ProjectReference Include="..\DEAApi\DEAApi.csproj" /> -->
 	</ItemGroup>
 
 </Project>
