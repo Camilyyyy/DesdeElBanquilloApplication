@@ -1,4 +1,4 @@
-using DesdeElBanquilloApplication.Models;
+using DEAModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

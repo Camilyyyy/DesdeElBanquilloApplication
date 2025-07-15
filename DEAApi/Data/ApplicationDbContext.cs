@@ -6,21 +6,17 @@ using System.Numerics;
 using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 
-namespace DesdeElBanquillo.Api.Data
+namespace DEAApi.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
-
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Competition> Competitions { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Federation> Federations { get; set; }
         public DbSet<League> Leagues { get; set; }
         public DbSet<LeagueTable> LeagueTables { get; set; }
-        public DbSet<Match> Matches { get; set; }
+        public DbSet<DEAModels.Match> Matches { get; set; }
         public DbSet<MatchPlayer> MatchPlayers { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Position> Positions { get; set; }
@@ -29,10 +25,5 @@ namespace DesdeElBanquillo.Api.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            // Configuración de relaciones complejas si es necesario
-        }
     }
 }
