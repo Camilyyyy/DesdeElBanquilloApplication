@@ -1,35 +1,19 @@
-using DesdeElBanquilloApplication.Data;
-using DesdeElBanquilloApplication.Services;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
-
-// SQL Server (producción / staging)
 builder.Services.AddDbContext<DesdeElBanquilloAppDBContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DesdeElBanquilloAppDBContext")
-    )
-);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DesdeElBanquilloAppDBContext") ?? throw new InvalidOperationException("Connection string 'DesdeElBanquilloAppDBContext' not found.")));
 
-// SQLite (desarrollo local)
-builder.Services.AddDbContext<DesdeElBanquilloAppSQLiteContext>(options =>
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("DesdeElBanquilloAppSQLiteContext")
-    )
-);
-
-// Añade MVC con vistas
+// Add services to the container.
 builder.Services.AddControllersWithViews();
-
-// Registrar servicio de Ligas
-builder.Services.AddScoped<ILigaService, LigaService>();
 
 var app = builder.Build();
 
-// Configura el pipeline HTTP
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -40,10 +24,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Rutas convencionales MVC
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
-);
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

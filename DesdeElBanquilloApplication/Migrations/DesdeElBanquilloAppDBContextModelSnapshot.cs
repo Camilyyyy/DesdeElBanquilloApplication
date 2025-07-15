@@ -16,7 +16,7 @@ namespace DesdeElBanquilloApplication.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -337,7 +337,8 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Height")
+                    b.Property<decimal?>("Height")
+                        .IsRequired()
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<int>("IdCountry")
@@ -352,7 +353,8 @@ namespace DesdeElBanquilloApplication.Migrations
                     b.Property<int>("JerseyNumber")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("MarketValue")
+                    b.Property<decimal?>("MarketValue")
+                        .IsRequired()
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Name")
@@ -360,7 +362,8 @@ namespace DesdeElBanquilloApplication.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Weight")
+                    b.Property<decimal?>("Weight")
+                        .IsRequired()
                         .HasColumnType("decimal(5,2)");
 
                     b.HasKey("IdPlayer");
@@ -696,7 +699,7 @@ namespace DesdeElBanquilloApplication.Migrations
             modelBuilder.Entity("DesdeElBanquilloApplication.Models.Season", b =>
                 {
                     b.HasOne("DesdeElBanquilloApplication.Models.League", "League")
-                        .WithMany()
+                        .WithMany("Seasons")
                         .HasForeignKey("IdLeague")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -769,6 +772,8 @@ namespace DesdeElBanquilloApplication.Migrations
 
             modelBuilder.Entity("DesdeElBanquilloApplication.Models.League", b =>
                 {
+                    b.Navigation("Seasons");
+
                     b.Navigation("Teams");
                 });
 

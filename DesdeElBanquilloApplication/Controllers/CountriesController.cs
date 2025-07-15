@@ -1,33 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using DesdeElBanquilloApplication.Models;
-using DesdeElBanquilloApplication.Services;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class CountriesController : Controller
     {
-        private readonly CountryApiService _service;
+        private readonly DesdeElBanquilloAppDBContext _context;
 
-        public CountriesController(CountryApiService service)
+        public CountriesController(DesdeElBanquilloAppDBContext context)
         {
-            _service = service;
+            _context = context;
         }
 
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-            var countries = await _service.GetAllAsync();
-            return View(countries);
+            return View(await _context.Country.ToListAsync());
         }
 
         // GET: Countries/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
-            var country = await _service.GetByIdAsync(id.Value);
-            if (country == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var country = await _context.Country
+                .FirstOrDefaultAsync(m => m.IdCountry == id);
+            if (country == null)
+            {
+                return NotFound();
+            }
+
             return View(country);
         }
 
@@ -42,12 +53,13 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Country country)
+        public async Task<IActionResult> Create([Bind("IdCountry,Name")] Country country)
         {
             if (ModelState.IsValid)
             {
-                var ok = await _service.CreateAsync(country);
-                if (ok) return RedirectToAction(nameof(Index));
+                _context.Add(country);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             return View(country);
         }
@@ -55,9 +67,16 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Countries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
-            var country = await _service.GetByIdAsync(id.Value);
-            if (country == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var country = await _context.Country.FindAsync(id);
+            if (country == null)
+            {
+                return NotFound();
+            }
             return View(country);
         }
 
@@ -66,13 +85,32 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
+        public async Task<IActionResult> Edit(int id, [Bind("IdCountry,Name")] Country country)
         {
-            if (id != country.IdCountry) return NotFound();
+            if (id != country.IdCountry)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                var ok = await _service.UpdateAsync(id, country);
-                if (ok) return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Update(country);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CountryExists(country.IdCountry))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
             return View(country);
         }
@@ -80,9 +118,18 @@ namespace DesdeElBanquilloApplication.Controllers
         // GET: Countries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
-            var country = await _service.GetByIdAsync(id.Value);
-            if (country == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var country = await _context.Country
+                .FirstOrDefaultAsync(m => m.IdCountry == id);
+            if (country == null)
+            {
+                return NotFound();
+            }
+
             return View(country);
         }
 
@@ -91,8 +138,19 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ok = await _service.DeleteAsync(id);
+            var country = await _context.Country.FindAsync(id);
+            if (country != null)
+            {
+                _context.Country.Remove(country);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool CountryExists(int id)
+        {
+            return _context.Country.Any(e => e.IdCountry == id);
         }
     }
 }

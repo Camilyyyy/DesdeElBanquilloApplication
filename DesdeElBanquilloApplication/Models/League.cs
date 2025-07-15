@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesdeElBanquilloApplication.Models
 {
     [Table("Leagues")]
+
     public class League
     {
         [Key]
@@ -12,17 +13,28 @@ namespace DesdeElBanquilloApplication.Models
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; } = null!;
+        [DisplayName("Nombre Liga")]
+        public string Name { get; set; }
 
+        [DisplayName("Fecha Crecion Liga")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        
+        [DisplayName("Liga Activa")]
         public bool IsActive { get; set; } = true;
 
-        [ForeignKey("Country")]
+        // Clave foránea hacia Country
+        [Required]
+        [DisplayName("País")]
         public int IdCountry { get; set; }
-        public virtual Country? Country { get; set; }
+        // Propiedad de navegación
 
-        // Propiedad de navegación NUEVA para la relación con Team
-        [InverseProperty("League")]
-        public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
+        [ForeignKey("IdCountry")]
+        public Country? Country { get; set; }
+
+        // Relación uno a muchos con Equipos
+        public  ICollection<Team> Teams { get; set; } = new List<Team>();
+
+        // Relación uno a muchos con Temporadas
+        public  ICollection<Season> Seasons { get; set; } = new List<Season>();
     }
 }

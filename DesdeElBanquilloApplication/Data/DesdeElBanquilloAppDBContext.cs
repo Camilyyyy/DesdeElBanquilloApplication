@@ -68,6 +68,12 @@ using DesdeElBanquilloApplication.Models;
        .OnDelete(DeleteBehavior.Cascade); // Uno con cascade
 
         modelBuilder.Entity<Match>()
+            .HasOne(m => m.AwayTeam)
+            .WithMany(t => t.AwayMatches)
+            .HasForeignKey(m => m.IdAwayTeam)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Match>()
         .HasOne(m => m.HomeTeam)
         .WithMany(t => t.HomeMatches)
         .HasForeignKey(m => m.IdHomeTeam)
@@ -107,7 +113,7 @@ using DesdeElBanquilloApplication.Models;
 
     public DesdeElBanquilloAppDBContext (DbContextOptions<DesdeElBanquilloAppDBContext> options)
             : base(options)
-        {
+    {
         }
 
         public DbSet<DesdeElBanquilloApplication.Models.Match> Match { get; set; } = default!;

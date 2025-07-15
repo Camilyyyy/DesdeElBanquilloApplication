@@ -4,42 +4,50 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using DesdeElBanquilloApplication.Models;
-using DesdeElBanquilloApplication.Services;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class LeaguesController : Controller
     {
-        private readonly LeagueApiService _service;
-        private readonly CountryApiService _countryService;
+        private readonly DesdeElBanquilloAppDBContext _context;
 
-        public LeaguesController(LeagueApiService service, CountryApiService countryService)
+        public LeaguesController(DesdeElBanquilloAppDBContext context)
         {
-            _service = service;
-            _countryService = countryService;
+            _context = context;
         }
 
         // GET: Leagues
         public async Task<IActionResult> Index()
         {
-            var leagues = await _service.GetAllAsync();
-            return View(leagues);
+            var desdeElBanquilloAppDBContext = _context.League.Include(l => l.Country);
+            return View(await desdeElBanquilloAppDBContext.ToListAsync());
         }
 
         // GET: Leagues/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
-            var league = await _service.GetByIdAsync(id.Value);
-            if (league == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var league = await _context.League
+                .Include(l => l.Country)
+                .FirstOrDefaultAsync(m => m.IdLeague == id);
+            if (league == null)
+            {
+                return NotFound();
+            }
+
             return View(league);
         }
 
         // GET: Leagues/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            ViewData["IdCountry"] = new SelectList(await _countryService.GetAllAsync(), "IdCountry", "Name");
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name");
             return View();
         }
 
@@ -48,24 +56,32 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(League league)
+        public async Task<IActionResult> Create([Bind("IdLeague,Name,CreatedDate,IsActive,IdCountry")] League league)
         {
             if (ModelState.IsValid)
             {
-                var ok = await _service.CreateAsync(league);
-                if (ok) return RedirectToAction(nameof(Index));
+                _context.Add(league);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(await _countryService.GetAllAsync(), "IdCountry", "Name", league.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
             return View(league);
         }
 
         // GET: Leagues/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
-            var league = await _service.GetByIdAsync(id.Value);
-            if (league == null) return NotFound();
-            ViewData["IdCountry"] = new SelectList(await _countryService.GetAllAsync(), "IdCountry", "Name", league.IdCountry);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var league = await _context.League.FindAsync(id);
+            if (league == null)
+            {
+                return NotFound();
+            }
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
             return View(league);
         }
 
@@ -74,24 +90,53 @@ namespace DesdeElBanquilloApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, League league)
+        public async Task<IActionResult> Edit(int id, [Bind("IdLeague,Name,CreatedDate,IsActive,IdCountry")] League league)
         {
-            if (id != league.IdLeague) return NotFound();
+            if (id != league.IdLeague)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                var ok = await _service.UpdateAsync(id, league);
-                if (ok) return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Update(league);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LeagueExists(league.IdLeague))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCountry"] = new SelectList(await _countryService.GetAllAsync(), "IdCountry", "Name", league.IdCountry);
+            ViewData["IdCountry"] = new SelectList(_context.Country, "IdCountry", "Name", league.IdCountry);
             return View(league);
         }
 
         // GET: Leagues/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) return NotFound();
-            var league = await _service.GetByIdAsync(id.Value);
-            if (league == null) return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var league = await _context.League
+                .Include(l => l.Country)
+                .FirstOrDefaultAsync(m => m.IdLeague == id);
+            if (league == null)
+            {
+                return NotFound();
+            }
+
             return View(league);
         }
 
@@ -100,8 +145,19 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ok = await _service.DeleteAsync(id);
+            var league = await _context.League.FindAsync(id);
+            if (league != null)
+            {
+                _context.League.Remove(league);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool LeagueExists(int id)
+        {
+            return _context.League.Any(e => e.IdLeague == id);
         }
     }
 }

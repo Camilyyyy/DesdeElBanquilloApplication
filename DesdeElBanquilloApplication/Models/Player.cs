@@ -24,7 +24,7 @@ namespace DesdeElBanquilloApplication.Models
         [Range(1, 99)]
         [DisplayName("Numero Camiseta Jugador")]
         public int JerseyNumber { get; set; }
-
+        
         [Required]
         [Column(TypeName = "decimal(10,2)")]
         [DisplayName("Valor Mercado Jugador")]

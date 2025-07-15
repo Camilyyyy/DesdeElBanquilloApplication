@@ -1,4 +1,4 @@
-namespace DEAAPI
+namespace APIDB
 {
     public class WeatherForecast
     {

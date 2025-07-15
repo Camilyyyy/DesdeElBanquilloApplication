@@ -1,39 +1,53 @@
-﻿@model IEnumerable<DesdeElBanquilloApplication.ViewModels.LeagueViewModel>
+﻿@model IEnumerable<DesdeElBanquilloApplication.Models.League>
 
 @{
-    ViewData["Title"] = "Ligas";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Ligas</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Crear Nueva</a>
+    <a asp-action="Create">Create New</a>
 </p>
-
-<table class="table table-striped">
+<table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
-            <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
-            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
-            <th>@Html.DisplayNameFor(model => model.CountryName)</th>
-            <th>Acciones</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
-                <td>@(item.IsActive ? "Sí" : "No")</td>
-                <td>@Html.DisplayFor(modelItem => item.CountryName)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdLeague" class="btn btn-sm btn-primary">Editar</a>
-                    <a asp-action="Details" asp-route-id="@item.IdLeague" class="btn btn-sm btn-info">Detalles</a>
-                    <a asp-action="Delete" asp-route-id="@item.IdLeague" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdLeague">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdLeague">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdLeague">Delete</a>
+            </td>
+        </tr>
+}
     </tbody>
 </table>
