@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesdeElBanquilloApplication", "DesdeElBanquilloApplication\DesdeElBanquilloApplication.csproj", "{133BC40B-81E5-41A0-A8C1-54E2C543EB3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEAAPI", "DEAAPI\DEAAPI.csproj", "{6343C7F9-E6B7-430C-B63D-1BA6C77E28D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEAMaui", "DEAMaui\DEAMaui.csproj", "{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,16 @@ Global
 		{133BC40B-81E5-41A0-A8C1-54E2C543EB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{133BC40B-81E5-41A0-A8C1-54E2C543EB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{133BC40B-81E5-41A0-A8C1-54E2C543EB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6343C7F9-E6B7-430C-B63D-1BA6C77E28D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6343C7F9-E6B7-430C-B63D-1BA6C77E28D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6343C7F9-E6B7-430C-B63D-1BA6C77E28D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6343C7F9-E6B7-430C-B63D-1BA6C77E28D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CC7E1B1-240F-4BB4-8E60-B38BB79E6605}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
