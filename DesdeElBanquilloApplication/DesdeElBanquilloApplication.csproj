@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DEAModels\DEAModels.csproj" />
+	 <ProjectReference Include="..\DEAApi\DEAApi.csproj" />
   </ItemGroup>
 
 </Project>
