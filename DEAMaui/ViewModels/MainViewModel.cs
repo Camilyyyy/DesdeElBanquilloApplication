@@ -10,7 +10,7 @@ using DesdeElBanquillo.Models;
 using DesdeElBanquillo.Services;
 using System.Diagnostics;
 
-namespace DesdeElBanquillo.ViewModels
+namespace DEAMaui.ViewModels
 {
     public partial class MainViewModel : BaseViewModel
     {

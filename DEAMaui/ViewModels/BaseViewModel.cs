@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace DesdeElBanquillo.ViewModels
+namespace DEAMaui.ViewModels
 {
     public partial class BaseViewModel : ObservableObject
     {

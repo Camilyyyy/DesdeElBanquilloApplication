@@ -1,4 +1,4 @@
-﻿using DesdeElBanquillo.ViewModels;
+﻿using DEAMaui.ViewModels;
 
 namespace DesdeElBanquillo.Views;
 

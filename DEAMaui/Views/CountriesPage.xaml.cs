@@ -1,4 +1,5 @@
 namespace DEAMaui.Views;
+using DEAMaui.ViewModels;
 
 public partial class CountriesPage : ContentPage
 {

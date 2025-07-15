@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodel="clr-namespace:DesdeElBanquillo.ViewModels"
-             xmlns:model="clr-namespace:DesdeElBanquillo.Models"
-             x:Class="DesdeElBanquillo.Views.MainPage"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             xmlns:model="clr-namespace:DEAModels"
+             x:Class="DEAMaui.Views.MainPage"
              x:DataType="viewmodel:MainViewModel"
              NavigationPage.HasNavigationBar="False">
 
