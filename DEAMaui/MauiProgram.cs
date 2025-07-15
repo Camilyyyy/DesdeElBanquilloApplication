@@ -1,4 +1,5 @@
 ﻿using DEAMaui.Views;
+using DEAMaui.ViewModels;
 using Microsoft.Extensions.Logging;
 
 namespace DEAMaui
