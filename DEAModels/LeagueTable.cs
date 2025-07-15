@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DesdeElBanquilloApplication.Models
+namespace DEAModels
 {
     [Table("LeagueTables")]
     public class LeagueTable

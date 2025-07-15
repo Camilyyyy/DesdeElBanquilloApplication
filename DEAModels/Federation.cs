@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
-namespace DesdeElBanquilloApplication.Models
+namespace DEAModels
 {
     [Table("Federations")]
     public class Federation

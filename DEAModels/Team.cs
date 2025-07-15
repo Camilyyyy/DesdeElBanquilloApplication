@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace DesdeElBanquilloApplication.Models
+namespace DEAModels
 {
     [Table("Teams")]
     public class Team

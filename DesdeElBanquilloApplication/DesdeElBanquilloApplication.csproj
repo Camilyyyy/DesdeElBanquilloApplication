@@ -18,8 +18,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
-	<Folder Include="DEAModels\" />
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DEAModels\DEAModels.csproj" />
   </ItemGroup>
 
 </Project>

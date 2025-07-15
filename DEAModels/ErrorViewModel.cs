@@ -1,4 +1,4 @@
-namespace DesdeElBanquilloApplication.Models
+namespace DEAModels
 {
     public class ErrorViewModel
     {

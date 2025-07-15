@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
 
-namespace DesdeElBanquilloApplication.Models
+namespace DEAModels
 {
     [Table("MatchPlayers")]
     public class MatchPlayer

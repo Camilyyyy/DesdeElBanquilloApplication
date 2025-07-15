@@ -4,7 +4,7 @@ using System.Diagnostics.Metrics;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 
-namespace DesdeElBanquilloApplication.Models
+namespace DEAModels
 {
     [Table("Competitions")]
 
