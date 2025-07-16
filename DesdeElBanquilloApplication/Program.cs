@@ -1,9 +1,14 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using DEAApi.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DesdeElBanquilloAppDBContext") ?? throw new InvalidOperationException("Connection string 'DesdeElBanquilloAppDBContext' not found.")));
+builder.Services.AddHttpClient("api", client =>
+{
+    // Asegúrate de que este puerto (5062) sea el correcto para tu DEAApi.
+    // Lo puedes verificar en las propiedades de depuración del proyecto DEAApi.
+    client.BaseAddress = new Uri("http://localhost:5062");
+});
+// ---------------
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

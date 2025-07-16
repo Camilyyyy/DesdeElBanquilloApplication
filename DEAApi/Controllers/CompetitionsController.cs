@@ -25,14 +25,24 @@ namespace DEAApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Competition>>> GetCompetitions()
         {
-            return await _context.Competitions.ToListAsync();
+            // LA MODIFICACIÓN CLAVE: Añadimos .Include() para cada tabla relacionada
+            // que queremos que viaje en el JSON de respuesta.
+            return await _context.Competitions
+                                 .Include(c => c.Country)
+                                 .Include(c => c.Federation)
+                                 .Include(c => c.Season)
+                                 .ToListAsync();
         }
 
         // GET: api/Competitions/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Competition>> GetCompetition(int id)
         {
-            var competition = await _context.Competitions.FindAsync(id);
+            var competition = await _context.Competitions
+                                        .Include(c => c.Country)
+                                        .Include(c => c.Federation)
+                                        .Include(c => c.Season)
+                                        .FirstOrDefaultAsync(c => c.IdCompetition == id);
 
             if (competition == null)
             {

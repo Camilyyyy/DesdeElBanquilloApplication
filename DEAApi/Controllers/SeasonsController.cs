@@ -25,14 +25,19 @@ namespace DEAApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
         {
-            return await _context.Seasons.ToListAsync();
+            return await _context.Seasons.Include(s => s.League).ToListAsync();
         }
 
         // GET: api/Seasons/5
+        // EN: DEAApi/Controllers/SeasonsController.cs
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Season>> GetSeason(int id)
         {
-            var season = await _context.Seasons.FindAsync(id);
+            // Usamos FirstOrDefaultAsync con Include para poder cargar la liga.
+            var season = await _context.Seasons
+                                       .Include(s => s.League)
+                                       .FirstOrDefaultAsync(s => s.IdSeason == id);
 
             if (season == null)
             {

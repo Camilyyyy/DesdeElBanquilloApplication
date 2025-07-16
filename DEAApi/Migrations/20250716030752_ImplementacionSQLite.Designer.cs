@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DEAApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250715205624_CreacionSQLite")]
-    partial class CreacionSQLite
+    [Migration("20250716030752_ImplementacionSQLite")]
+    partial class ImplementacionSQLite
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,7 @@ namespace DEAApi.Migrations
 
                     b.HasKey("IdAdministrator");
 
-                    b.ToTable("Administrators");
+                    b.ToTable("Administrator");
                 });
 
             modelBuilder.Entity("DEAModels.Competition", b =>

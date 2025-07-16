@@ -1,142 +1,163 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DEAModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DEAModels;
-using DEAApi.Data;
+using Microsoft.AspNetCore.Mvc.Rendering; // Necesario para SelectList
+using System.Text;
+using System.Text.Json;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class FederationsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        public FederationsController(ApplicationDbContext context)
+        public FederationsController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        // Crea un cliente HTTP preconfigurado para hablar con nuestra API
+        private HttpClient GetApiClient()
+        {
+            return _httpClientFactory.CreateClient("api");
+        }
+
+        // --- Método Auxiliar para Cargar Dropdown de Países ---
+        // Este método obtiene la lista de países y la prepara para el dropdown.
+        private async Task PopulateCountriesDropdownAsync(object? selectedCountry = null)
+        {
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/countries");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var countries = JsonSerializer.Deserialize<List<Country>>(json, _jsonOptions);
+                ViewData["IdCountry"] = new SelectList(countries, "IdCountry", "Name", selectedCountry);
+            }
         }
 
         // GET: Federations
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Federations.Include(f => f.Country);
-            return View(await desdeElBanquilloAppDBContext.ToListAsync());
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/federations");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View(new List<Federation>());
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var federations = JsonSerializer.Deserialize<List<Federation>>(jsonString, _jsonOptions);
+
+            return View(federations);
         }
 
         // GET: Federations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var federation = await _context.Federations
-                .Include(f => f.Country)
-                .FirstOrDefaultAsync(m => m.IdFederation == id);
-            if (federation == null)
-            {
-                return NotFound();
-            }
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/federations/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var federation = JsonSerializer.Deserialize<Federation>(jsonString, _jsonOptions);
 
             return View(federation);
         }
 
         // GET: Federations/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
+            // Cargamos el dropdown de países antes de mostrar el formulario.
+            await PopulateCountriesDropdownAsync();
             return View();
         }
 
         // POST: Federations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFederation,Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
+        public async Task<IActionResult> Create([Bind("Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(federation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(federation), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("api/federations", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Error al crear la federación desde la API.");
             }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", federation.IdCountry);
+
+            // Si hay un error, volvemos a cargar el dropdown antes de mostrar la vista.
+            await PopulateCountriesDropdownAsync(federation.IdCountry);
             return View(federation);
         }
 
         // GET: Federations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var federation = await _context.Federations.FindAsync(id);
-            if (federation == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", federation.IdCountry);
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/federations/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var federation = JsonSerializer.Deserialize<Federation>(jsonString, _jsonOptions);
+
+            if (federation == null) return NotFound();
+
+            // Cargamos el dropdown y pre-seleccionamos el país de la federación.
+            await PopulateCountriesDropdownAsync(federation.IdCountry);
             return View(federation);
         }
 
         // POST: Federations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdFederation,Name,Acronym,EstablishedDate,IdCountry")] Federation federation)
         {
-            if (id != federation.IdFederation)
-            {
-                return NotFound();
-            }
+            if (id != federation.IdFederation) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(federation), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"api/federations/{id}", jsonContent);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(federation);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FederationExists(federation.IdFederation))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Error al actualizar la federación desde la API.");
             }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", federation.IdCountry);
+
+            // Si hay un error, volvemos a cargar el dropdown.
+            await PopulateCountriesDropdownAsync(federation.IdCountry);
             return View(federation);
         }
 
         // GET: Federations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var federation = await _context.Federations
-                .Include(f => f.Country)
-                .FirstOrDefaultAsync(m => m.IdFederation == id);
-            if (federation == null)
-            {
-                return NotFound();
-            }
+            // Reutilizamos la lógica de Details para mostrar la página de confirmación.
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/federations/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var federation = JsonSerializer.Deserialize<Federation>(jsonString, _jsonOptions);
 
             return View(federation);
         }
@@ -146,19 +167,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var federation = await _context.Federations.FindAsync(id);
-            if (federation != null)
-            {
-                _context.Federations.Remove(federation);
-            }
+            var client = GetApiClient();
+            await client.DeleteAsync($"api/federations/{id}");
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool FederationExists(int id)
-        {
-            return _context.Federations.Any(e => e.IdFederation == id);
         }
     }
 }

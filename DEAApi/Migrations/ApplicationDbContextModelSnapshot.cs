@@ -46,7 +46,7 @@ namespace DEAApi.Migrations
 
                     b.HasKey("IdAdministrator");
 
-                    b.ToTable("Administrators");
+                    b.ToTable("Administrator");
                 });
 
             modelBuilder.Entity("DEAModels.Competition", b =>

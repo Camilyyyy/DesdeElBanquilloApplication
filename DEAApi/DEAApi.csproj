@@ -1,34 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+	<!-- Configuración principal del proyecto -->
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<!-- La propiedad 'InvariantGlobalization' a menudo no es necesaria para la mayoría de las APIs -->
-		<!-- ELIMINADO: <InvariantGlobalization>true</InvariantGlobalization> -->
-		<!-- ELIMINADO: <PublishAot>true</PublishAot> (ESTE ERA EL PROBLEMA PRINCIPAL) -->
 	</PropertyGroup>
 
-	<!-- No es necesario tener carpetas vacías declaradas aquí, se gestionan solas -->
-	<!-- <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Controllers\" />
-  </ItemGroup> -->
-
+	<!-- Grupo de paquetes de NuGet -->
 	<ItemGroup>
-		<!-- Referencias de Paquetes Limpias y Alineadas con .NET 8 -->
+		<!-- Paquete para la documentación de la API (Swagger/OpenAPI) -->
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
+		<!-- Paquetes para Entity Framework Core usando SQLite como base de datos -->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+
+		<!-- Paquete para las herramientas de generación de código de Visual Studio (Scaffolding) -->
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
-		<!-- ELIMINADO: Microsoft.EntityFrameworkCore (es una dependencia transitiva de SqlServer, no es necesario declararlo explícitamente) -->
-		<!-- ELIMINADO: Microsoft.VisualStudio.Web.CodeGeneration.Design (para simplificar y evitar conflictos) -->
+	</ItemGroup>
 
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-
-		<!-- Referencia al proyecto de Modelos (esto está perfecto) -->
+	<!-- Grupo de referencias a otros proyectos de la solución -->
+	<ItemGroup>
+		<!-- Referencia al proyecto que contiene los modelos de datos (ej. Season, League, etc.) -->
 		<ProjectReference Include="..\DEAModels\DEAModels.csproj" />
 	</ItemGroup>
 

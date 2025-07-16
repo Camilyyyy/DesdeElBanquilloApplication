@@ -14,7 +14,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));  // O .UseSqlite() si usas SQLite en la API
 
 // Registra los servicios para que los controladores de la API funcionen.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Esta es la línea clave que soluciona el problema de la vista en blanco
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 
 // Opcional pero recomendado: Añade Swagger/OpenAPI para poder probar tu API fácilmente desde el navegador.
 builder.Services.AddEndpointsApiExplorer();

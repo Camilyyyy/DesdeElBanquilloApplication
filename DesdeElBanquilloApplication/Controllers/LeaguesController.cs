@@ -1,141 +1,163 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DEAModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DEAModels;
-using DEAApi.Data;
+using Microsoft.AspNetCore.Mvc.Rendering; // Necesario para SelectList
+using System.Text;
+using System.Text.Json;
+
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class LeaguesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        public LeaguesController(ApplicationDbContext context)
+        public LeaguesController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        // Crea un cliente HTTP preconfigurado para hablar con nuestra API
+        private HttpClient GetApiClient()
+        {
+            return _httpClientFactory.CreateClient("api");
+        }
+
+        // --- Método Auxiliar para Cargar Dropdown de Países ---
+        // Este método obtiene la lista de países y la prepara para el dropdown.
+        private async Task PopulateCountriesDropdownAsync(object? selectedCountry = null)
+        {
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/countries");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var countries = JsonSerializer.Deserialize<List<Country>>(json, _jsonOptions);
+                ViewData["IdCountry"] = new SelectList(countries, "IdCountry", "Name", selectedCountry);
+            }
         }
 
         // GET: Leagues
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Leagues.Include(l => l.Country);
-            return View(await desdeElBanquilloAppDBContext.ToListAsync());
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/leagues");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View(new List<League>());
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var leagues = JsonSerializer.Deserialize<List<League>>(jsonString, _jsonOptions);
+
+            return View(leagues);
         }
 
         // GET: Leagues/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var league = await _context.Leagues
-                .Include(l => l.Country)
-                .FirstOrDefaultAsync(m => m.IdLeague == id);
-            if (league == null)
-            {
-                return NotFound();
-            }
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/leagues/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var league = JsonSerializer.Deserialize<League>(jsonString, _jsonOptions);
 
             return View(league);
         }
 
         // GET: Leagues/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
+            // Cargamos el dropdown de países antes de mostrar el formulario.
+            await PopulateCountriesDropdownAsync();
             return View();
         }
 
         // POST: Leagues/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdLeague,Name,CreatedDate,IsActive,IdCountry")] League league)
+        public async Task<IActionResult> Create([Bind("Name,CreatedDate,IsActive,IdCountry")] League league)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(league);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(league), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("api/leagues", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Error al crear la liga desde la API.");
             }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", league.IdCountry);
+
+            // Si hay un error, volvemos a cargar el dropdown antes de mostrar la vista.
+            await PopulateCountriesDropdownAsync(league.IdCountry);
             return View(league);
         }
 
         // GET: Leagues/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var league = await _context.Leagues.FindAsync(id);
-            if (league == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", league.IdCountry);
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/leagues/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var league = JsonSerializer.Deserialize<League>(jsonString, _jsonOptions);
+
+            if (league == null) return NotFound();
+
+            // Cargamos el dropdown y pre-seleccionamos el país de la liga.
+            await PopulateCountriesDropdownAsync(league.IdCountry);
             return View(league);
         }
 
         // POST: Leagues/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdLeague,Name,CreatedDate,IsActive,IdCountry")] League league)
         {
-            if (id != league.IdLeague)
-            {
-                return NotFound();
-            }
+            if (id != league.IdLeague) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(league), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"api/leagues/{id}", jsonContent);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(league);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LeagueExists(league.IdLeague))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Error al actualizar la liga desde la API.");
             }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", league.IdCountry);
+
+            // Si hay un error, volvemos a cargar el dropdown.
+            await PopulateCountriesDropdownAsync(league.IdCountry);
             return View(league);
         }
 
         // GET: Leagues/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var league = await _context.Leagues
-                .Include(l => l.Country)
-                .FirstOrDefaultAsync(m => m.IdLeague == id);
-            if (league == null)
-            {
-                return NotFound();
-            }
+            // Reutilizamos la lógica de Details para mostrar la página de confirmación.
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/leagues/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var league = JsonSerializer.Deserialize<League>(jsonString, _jsonOptions);
 
             return View(league);
         }
@@ -145,19 +167,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var league = await _context.Leagues.FindAsync(id);
-            if (league != null)
-            {
-                _context.Leagues.Remove(league);
-            }
+            var client = GetApiClient();
+            await client.DeleteAsync($"api/leagues/{id}");
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool LeagueExists(int id)
-        {
-            return _context.Leagues.Any(e => e.IdLeague == id);
         }
     }
 }

@@ -1,141 +1,162 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DEAModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DEAModels;
-using DEAApi.Data;
+using Microsoft.AspNetCore.Mvc.Rendering; 
+using System.Text;
+using System.Text.Json;
+
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class SeasonsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        public SeasonsController(ApplicationDbContext context)
+        public SeasonsController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        // Crea un cliente HTTP preconfigurado para hablar con nuestra API
+        private HttpClient GetApiClient()
+        {
+            return _httpClientFactory.CreateClient("api");
+        }
+
+        // --- Método Auxiliar para Cargar Dropdown de Ligas ---
+        private async Task PopulateLeaguesDropdownAsync(object? selectedLeague = null)
+        {
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/leagues");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var leagues = JsonSerializer.Deserialize<List<League>>(json, _jsonOptions);
+                ViewData["IdLeague"] = new SelectList(leagues, "IdLeague", "Name", selectedLeague);
+            }
         }
 
         // GET: Seasons
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Seasons.Include(s => s.League);
-            return View(await desdeElBanquilloAppDBContext.ToListAsync());
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/seasons");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View(new List<Season>());
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var seasons = JsonSerializer.Deserialize<List<Season>>(jsonString, _jsonOptions);
+
+            return View(seasons);
         }
 
         // GET: Seasons/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var season = await _context.Seasons
-                .Include(s => s.League)
-                .FirstOrDefaultAsync(m => m.IdSeason == id);
-            if (season == null)
-            {
-                return NotFound();
-            }
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/seasons/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var season = JsonSerializer.Deserialize<Season>(jsonString, _jsonOptions);
 
             return View(season);
         }
 
         // GET: Seasons/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name");
+            // Cargamos el dropdown de ligas antes de mostrar el formulario.
+            await PopulateLeaguesDropdownAsync();
             return View();
         }
 
         // POST: Seasons/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdSeason,Name,StartDate,EndDate,IsCurrent,TotalMatchdays,IdLeague")] Season season)
+        public async Task<IActionResult> Create([Bind("Name,StartDate,EndDate,IsCurrent,TotalMatchdays,IdLeague")] Season season)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(season);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(season), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("api/seasons", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Error al crear la temporada desde la API.");
             }
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", season.IdLeague);
+
+            // Si hay un error, volvemos a cargar el dropdown.
+            await PopulateLeaguesDropdownAsync(season.IdLeague);
             return View(season);
         }
 
         // GET: Seasons/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var season = await _context.Seasons.FindAsync(id);
-            if (season == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", season.IdLeague);
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/seasons/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var season = JsonSerializer.Deserialize<Season>(jsonString, _jsonOptions);
+
+            if (season == null) return NotFound();
+
+            // Cargamos el dropdown y pre-seleccionamos la liga de la temporada.
+            await PopulateLeaguesDropdownAsync(season.IdLeague);
             return View(season);
         }
 
         // POST: Seasons/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdSeason,Name,StartDate,EndDate,IsCurrent,TotalMatchdays,IdLeague")] Season season)
         {
-            if (id != season.IdSeason)
-            {
-                return NotFound();
-            }
+            if (id != season.IdSeason) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(season), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"api/seasons/{id}", jsonContent);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(season);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SeasonExists(season.IdSeason))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Error al actualizar la temporada desde la API.");
             }
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", season.IdLeague);
+
+            // Si hay un error, volvemos a cargar el dropdown.
+            await PopulateLeaguesDropdownAsync(season.IdLeague);
             return View(season);
         }
 
         // GET: Seasons/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var season = await _context.Seasons
-                .Include(s => s.League)
-                .FirstOrDefaultAsync(m => m.IdSeason == id);
-            if (season == null)
-            {
-                return NotFound();
-            }
+            // Reutilizamos la lógica de Details para la página de confirmación.
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/seasons/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var season = JsonSerializer.Deserialize<Season>(jsonString, _jsonOptions);
 
             return View(season);
         }
@@ -145,19 +166,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var season = await _context.Seasons.FindAsync(id);
-            if (season != null)
-            {
-                _context.Seasons.Remove(season);
-            }
+            var client = GetApiClient();
+            await client.DeleteAsync($"api/seasons/{id}");
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SeasonExists(int id)
-        {
-            return _context.Seasons.Any(e => e.IdSeason == id);
         }
     }
 }

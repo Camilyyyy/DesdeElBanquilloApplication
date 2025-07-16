@@ -1,154 +1,182 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DEAModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DEAModels;
-using DEAApi.Data;
+using Microsoft.AspNetCore.Mvc.Rendering; // Necesario para SelectList
+using System.Text;
+using System.Text.Json;
 
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        public PlayersController(ApplicationDbContext context)
+        public PlayersController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        // Crea un cliente HTTP preconfigurado para hablar con nuestra API
+        private HttpClient GetApiClient()
+        {
+            return _httpClientFactory.CreateClient("api");
+        }
+
+        // --- Método Auxiliar para Cargar todos los Dropdowns necesarios ---
+        private async Task PopulateDropdownsAsync(Player? player = null)
+        {
+            var client = GetApiClient();
+
+            // 1. Cargar Equipos
+            var teamsResponse = await client.GetAsync("api/teams");
+            if (teamsResponse.IsSuccessStatusCode)
+            {
+                var json = await teamsResponse.Content.ReadAsStringAsync();
+                var teams = JsonSerializer.Deserialize<List<Team>>(json, _jsonOptions);
+                ViewData["IdTeam"] = new SelectList(teams, "IdTeam", "Name", player?.IdTeam);
+            }
+
+            // 2. Cargar Posiciones
+            var positionsResponse = await client.GetAsync("api/positions");
+            if (positionsResponse.IsSuccessStatusCode)
+            {
+                var json = await positionsResponse.Content.ReadAsStringAsync();
+                var positions = JsonSerializer.Deserialize<List<Position>>(json, _jsonOptions);
+                ViewData["IdPosition"] = new SelectList(positions, "IdPosition", "Name", player?.IdPosition);
+            }
+
+            // 3. Cargar Países
+            var countriesResponse = await client.GetAsync("api/countries");
+            if (countriesResponse.IsSuccessStatusCode)
+            {
+                var json = await countriesResponse.Content.ReadAsStringAsync();
+                var countries = JsonSerializer.Deserialize<List<Country>>(json, _jsonOptions);
+                ViewData["IdCountry"] = new SelectList(countries, "IdCountry", "Name", player?.IdCountry);
+            }
         }
 
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Players.Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
-            return View(await desdeElBanquilloAppDBContext.ToListAsync());
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/players");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View(new List<Player>());
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var players = JsonSerializer.Deserialize<List<Player>>(jsonString, _jsonOptions);
+
+            return View(players);
         }
 
         // GET: Players/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var player = await _context.Players
-                .Include(p => p.Country)
-                .Include(p => p.Position)
-                .Include(p => p.Team)
-                .FirstOrDefaultAsync(m => m.IdPlayer == id);
-            if (player == null)
-            {
-                return NotFound();
-            }
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/players/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var player = JsonSerializer.Deserialize<Player>(jsonString, _jsonOptions);
 
             return View(player);
         }
 
         // GET: Players/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
-            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name");
-            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name");
+            // Cargamos todos los dropdowns necesarios antes de mostrar el formulario.
+            await PopulateDropdownsAsync();
             return View();
         }
 
         // POST: Players/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPlayer,Name,Age,JerseyNumber,MarketValue,BirthDate,Height,Weight,IdTeam,IdPosition,IdCountry")] Player player)
+        public async Task<IActionResult> Create([Bind("Name,Age,JerseyNumber,MarketValue,BirthDate,Height,Weight,IdTeam,IdPosition,IdCountry")] Player player)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(player);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(player), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("api/players", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Error al crear el jugador desde la API.");
             }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", player.IdCountry);
-            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name", player.IdPosition);
-            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", player.IdTeam);
+
+            // Si hay un error, volvemos a cargar los dropdowns.
+            await PopulateDropdownsAsync(player);
             return View(player);
         }
 
         // GET: Players/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var player = await _context.Players.FindAsync(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", player.IdCountry);
-            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name", player.IdPosition);
-            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", player.IdTeam);
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/players/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var player = JsonSerializer.Deserialize<Player>(jsonString, _jsonOptions);
+
+            if (player == null) return NotFound();
+
+            // Cargamos los dropdowns y pre-seleccionamos los valores del jugador.
+            await PopulateDropdownsAsync(player);
             return View(player);
         }
 
         // POST: Players/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdPlayer,Name,Age,JerseyNumber,MarketValue,BirthDate,Height,Weight,IdTeam,IdPosition,IdCountry")] Player player)
         {
-            if (id != player.IdPlayer)
-            {
-                return NotFound();
-            }
+            if (id != player.IdPlayer) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(player), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"api/players/{id}", jsonContent);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(player);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlayerExists(player.IdPlayer))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Error al actualizar el jugador desde la API.");
             }
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", player.IdCountry);
-            ViewData["IdPosition"] = new SelectList(_context.Positions, "IdPosition", "Name", player.IdPosition);
-            ViewData["IdTeam"] = new SelectList(_context.Teams, "IdTeam", "Name", player.IdTeam);
+
+            // Si hay un error, volvemos a cargar los dropdowns.
+            await PopulateDropdownsAsync(player);
             return View(player);
         }
 
         // GET: Players/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var player = await _context.Players
-                .Include(p => p.Country)
-                .Include(p => p.Position)
-                .Include(p => p.Team)
-                .FirstOrDefaultAsync(m => m.IdPlayer == id);
-            if (player == null)
-            {
-                return NotFound();
-            }
+            // Reutilizamos la lógica de Details para la página de confirmación.
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/players/{id}");
+
+            if (!response.IsSuccessStatusCode) return NotFound();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var player = JsonSerializer.Deserialize<Player>(jsonString, _jsonOptions);
 
             return View(player);
         }
@@ -158,19 +186,10 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var player = await _context.Players.FindAsync(id);
-            if (player != null)
-            {
-                _context.Players.Remove(player);
-            }
+            var client = GetApiClient();
+            await client.DeleteAsync($"api/players/{id}");
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PlayerExists(int id)
-        {
-            return _context.Players.Any(e => e.IdPlayer == id);
         }
     }
 }
