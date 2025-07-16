@@ -25,14 +25,14 @@ namespace DEAApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Federation>>> GetFederations()
         {
-            return await _context.Federations.ToListAsync();
+            return await _context.Federations.Include(f => f.Country).ToListAsync();
         }
 
         // GET: api/Federations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Federation>> GetFederation(int id)
         {
-            var federation = await _context.Federations.FindAsync(id);
+            var federation = await _context.Federations.Include(f => f.Country).FirstOrDefaultAsync(f => f.IdFederation==id);
 
             if (federation == null)
             {

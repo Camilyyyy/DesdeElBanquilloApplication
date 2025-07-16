@@ -1,155 +1,153 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// EN: DesdeElBanquilloApplication/Controllers/TeamsController.cs
+
+using DEAModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DEAModels;
-using DEAApi.Data;
+using System.Text;
+using System.Text.Json;
+
 namespace DesdeElBanquilloApplication.Controllers
 {
     public class TeamsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-        public TeamsController(ApplicationDbContext context)
+        public TeamsController(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        private HttpClient GetApiClient()
+        {
+            return _httpClientFactory.CreateClient("api");
+        }
+
+        private async Task PopulateDropdownsAsync(Team? team = null)
+        {
+            var client = GetApiClient();
+
+            var competitionsResponse = await client.GetAsync("api/competitions");
+            if (competitionsResponse.IsSuccessStatusCode)
+            {
+                var json = await competitionsResponse.Content.ReadAsStringAsync();
+                var items = JsonSerializer.Deserialize<List<Competition>>(json, _jsonOptions);
+                ViewData["IdCompetition"] = new SelectList(items, "IdCompetition", "Name", team?.IdCompetition);
+            }
+
+            var countriesResponse = await client.GetAsync("api/countries");
+            if (countriesResponse.IsSuccessStatusCode)
+            {
+                var json = await countriesResponse.Content.ReadAsStringAsync();
+                var items = JsonSerializer.Deserialize<List<Country>>(json, _jsonOptions);
+                ViewData["IdCountry"] = new SelectList(items, "IdCountry", "Name", team?.IdCountry);
+            }
+
+            var leaguesResponse = await client.GetAsync("api/leagues");
+            if (leaguesResponse.IsSuccessStatusCode)
+            {
+                var json = await leaguesResponse.Content.ReadAsStringAsync();
+                var items = JsonSerializer.Deserialize<List<League>>(json, _jsonOptions);
+                ViewData["IdLeague"] = new SelectList(items, "IdLeague", "Name", team?.IdLeague);
+            }
         }
 
         // GET: Teams
         public async Task<IActionResult> Index()
         {
-            var desdeElBanquilloAppDBContext = _context.Teams.Include(t => t.Competition).Include(t => t.Country).Include(t => t.League);
-            return View(await desdeElBanquilloAppDBContext.ToListAsync());
+            var client = GetApiClient();
+            var response = await client.GetAsync("api/teams");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return View(new List<Team>());
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var teams = JsonSerializer.Deserialize<List<Team>>(jsonString, _jsonOptions);
+            return View(teams);
         }
 
         // GET: Teams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var team = await _context.Teams
-                .Include(t => t.Competition)
-                .Include(t => t.Country)
-                .Include(t => t.League)
-                .FirstOrDefaultAsync(m => m.IdTeam == id);
-            if (team == null)
-            {
-                return NotFound();
-            }
-
+            if (id == null) return NotFound();
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/teams/{id}");
+            if (!response.IsSuccessStatusCode) return NotFound();
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var team = JsonSerializer.Deserialize<Team>(jsonString, _jsonOptions);
             return View(team);
         }
 
         // GET: Teams/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name");
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name");
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name");
+            await PopulateDropdownsAsync();
             return View();
         }
 
         // POST: Teams/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdTeam,Name,City,FoundedDate,IdCompetition,IdCountry,IdLeague")] Team team)
+        public async Task<IActionResult> Create([Bind("Name,City,FoundedDate,IdCompetition,IdCountry,IdLeague")] Team team)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(team);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(team), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("api/teams", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError(string.Empty, "Error al crear el equipo desde la API.");
             }
-            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", team.IdCompetition);
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", team.IdCountry);
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", team.IdLeague);
+            await PopulateDropdownsAsync(team);
             return View(team);
         }
 
         // GET: Teams/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", team.IdCompetition);
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", team.IdCountry);
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", team.IdLeague);
+            if (id == null) return NotFound();
+            var client = GetApiClient();
+            var response = await client.GetAsync($"api/teams/{id}");
+            if (!response.IsSuccessStatusCode) return NotFound();
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var team = JsonSerializer.Deserialize<Team>(jsonString, _jsonOptions);
+            if (team == null) return NotFound();
+            await PopulateDropdownsAsync(team);
             return View(team);
         }
 
         // POST: Teams/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdTeam,Name,City,FoundedDate,IdCompetition,IdCountry,IdLeague")] Team team)
         {
-            if (id != team.IdTeam)
-            {
-                return NotFound();
-            }
-
+            if (id != team.IdTeam) return NotFound();
             if (ModelState.IsValid)
             {
-                try
+                var client = GetApiClient();
+                var jsonContent = new StringContent(JsonSerializer.Serialize(team), Encoding.UTF8, "application/json");
+                var response = await client.PutAsync($"api/teams/{id}", jsonContent);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _context.Update(team);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TeamExists(team.IdTeam))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Error al actualizar el equipo desde la API.");
             }
-            ViewData["IdCompetition"] = new SelectList(_context.Competitions, "IdCompetition", "Name", team.IdCompetition);
-            ViewData["IdCountry"] = new SelectList(_context.Countries, "IdCountry", "Name", team.IdCountry);
-            ViewData["IdLeague"] = new SelectList(_context.Leagues, "IdLeague", "Name", team.IdLeague);
+            await PopulateDropdownsAsync(team);
             return View(team);
         }
 
         // GET: Teams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var team = await _context.Teams
-                .Include(t => t.Competition)
-                .Include(t => t.Country)
-                .Include(t => t.League)
-                .FirstOrDefaultAsync(m => m.IdTeam == id);
-            if (team == null)
-            {
-                return NotFound();
-            }
-
-            return View(team);
+            return await Details(id);
         }
 
         // POST: Teams/Delete/5
@@ -157,19 +155,9 @@ namespace DesdeElBanquilloApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team != null)
-            {
-                _context.Teams.Remove(team);
-            }
-
-            await _context.SaveChangesAsync();
+            var client = GetApiClient();
+            await client.DeleteAsync($"api/teams/{id}");
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TeamExists(int id)
-        {
-            return _context.Teams.Any(e => e.IdTeam == id);
         }
     }
 }

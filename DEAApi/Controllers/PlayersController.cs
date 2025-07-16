@@ -25,14 +25,14 @@ namespace DEAApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            return await _context.Players.ToListAsync();
+            return await _context.Players.Include(p => p.Team).Include(p => p.Position).Include(p => p.Country).ToListAsync();
         }
 
         // GET: api/Players/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Player>> GetPlayer(int id)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = await _context.Players.Include(p => p.Team).Include(p => p.Position).Include(p => p.Country).FirstOrDefaultAsync(p => p.IdPlayer==id);
 
             if (player == null)
             {
