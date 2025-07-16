@@ -13,7 +13,7 @@ namespace DEAModels
         [Required]
         [StringLength(50)]
         [DisplayName("Nombre Posicion")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         // Relaciones
         public  ICollection<Player> Players { get; set; } = new List<Player>();

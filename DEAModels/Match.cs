@@ -28,7 +28,7 @@ namespace DEAModels
         [StringLength(50)]
         [Required]
         [DisplayName("Arbitro Partido")]
-        public string Referee { get; set; }
+        public string Referee { get; set; } = string.Empty;
 
         // Claves foráneas
         [Required]

@@ -14,10 +14,10 @@ namespace DEAModels
         [StringLength(100)]
         [DisplayName("Nombre Federacion")]
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [StringLength(20)]
-        public string Acronym { get; set; }
+        public string Acronym { get; set; } = string.Empty;
 
         [DisplayName("Fecha de Creacion Federacion")]
         public DateTime EstablishedDate { get; set; }

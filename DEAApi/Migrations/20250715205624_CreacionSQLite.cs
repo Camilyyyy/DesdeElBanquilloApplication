@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DesdeElBanquilloApplication.Migrations
+namespace DEAApi.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationFV : Migration
+    public partial class CreacionSQLite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,13 +15,13 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Administrators",
                 columns: table => new
                 {
-                    IdAdministrator = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IdAdministrator = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,9 +32,9 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    IdCountry = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    IdCountry = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,9 +45,9 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Positions",
                 columns: table => new
                 {
-                    IdPosition = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    IdPosition = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,13 +58,13 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    IdUser = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
+                    IdUser = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    Nombre = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    RegisterDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,12 +75,12 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Federations",
                 columns: table => new
                 {
-                    IdFederation = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Acronym = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    EstablishedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false)
+                    IdFederation = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Acronym = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    EstablishedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IdCountry = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,12 +97,12 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Leagues",
                 columns: table => new
                 {
-                    IdLeague = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false)
+                    IdLeague = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IdCountry = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,21 +112,21 @@ namespace DesdeElBanquilloApplication.Migrations
                         column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Seasons",
                 columns: table => new
                 {
-                    IdSeason = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsCurrent = table.Column<bool>(type: "bit", nullable: false),
-                    TotalMatchdays = table.Column<int>(type: "int", nullable: false),
-                    IdLeague = table.Column<int>(type: "int", nullable: false)
+                    IdSeason = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsCurrent = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TotalMatchdays = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdLeague = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,12 +143,12 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Competitions",
                 columns: table => new
                 {
-                    IdCompetition = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false),
-                    IdSeason = table.Column<int>(type: "int", nullable: false),
-                    IdFederation = table.Column<int>(type: "int", nullable: false)
+                    IdCompetition = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    IdCountry = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdSeason = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdFederation = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,33 +158,33 @@ namespace DesdeElBanquilloApplication.Migrations
                         column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Competitions_Federations_IdFederation",
                         column: x => x.IdFederation,
                         principalTable: "Federations",
                         principalColumn: "IdFederation",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Competitions_Seasons_IdSeason",
                         column: x => x.IdSeason,
                         principalTable: "Seasons",
                         principalColumn: "IdSeason",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Teams",
                 columns: table => new
                 {
-                    IdTeam = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    FoundedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdCompetition = table.Column<int>(type: "int", nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false),
-                    IdLeague = table.Column<int>(type: "int", nullable: false)
+                    IdTeam = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    City = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    FoundedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IdCompetition = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdCountry = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdLeague = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -200,33 +200,33 @@ namespace DesdeElBanquilloApplication.Migrations
                         column: x => x.IdCountry,
                         principalTable: "Countries",
                         principalColumn: "IdCountry",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Teams_Leagues_IdLeague",
                         column: x => x.IdLeague,
                         principalTable: "Leagues",
                         principalColumn: "IdLeague",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "LeagueTables",
                 columns: table => new
                 {
-                    IdLeagueTable = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Position = table.Column<int>(type: "int", nullable: false),
-                    MatchesPlayed = table.Column<int>(type: "int", nullable: false),
-                    MatchesWon = table.Column<int>(type: "int", nullable: false),
-                    MatchesDrawn = table.Column<int>(type: "int", nullable: false),
-                    MatchesLost = table.Column<int>(type: "int", nullable: false),
-                    GoalsFor = table.Column<int>(type: "int", nullable: false),
-                    GoalsAgainst = table.Column<int>(type: "int", nullable: false),
-                    GoalDifference = table.Column<int>(type: "int", nullable: false),
-                    Points = table.Column<int>(type: "int", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdTeam = table.Column<int>(type: "int", nullable: false),
-                    IdSeason = table.Column<int>(type: "int", nullable: false)
+                    IdLeagueTable = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Position = table.Column<int>(type: "INTEGER", nullable: false),
+                    MatchesPlayed = table.Column<int>(type: "INTEGER", nullable: false),
+                    MatchesWon = table.Column<int>(type: "INTEGER", nullable: false),
+                    MatchesDrawn = table.Column<int>(type: "INTEGER", nullable: false),
+                    MatchesLost = table.Column<int>(type: "INTEGER", nullable: false),
+                    GoalsFor = table.Column<int>(type: "INTEGER", nullable: false),
+                    GoalsAgainst = table.Column<int>(type: "INTEGER", nullable: false),
+                    GoalDifference = table.Column<int>(type: "INTEGER", nullable: false),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IdTeam = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdSeason = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,18 +249,18 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Players",
                 columns: table => new
                 {
-                    IdPlayer = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    JerseyNumber = table.Column<int>(type: "int", nullable: false),
+                    IdPlayer = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Age = table.Column<int>(type: "INTEGER", nullable: false),
+                    JerseyNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     MarketValue = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Height = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     Weight = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    IdTeam = table.Column<int>(type: "int", nullable: false),
-                    IdPosition = table.Column<int>(type: "int", nullable: false),
-                    IdCountry = table.Column<int>(type: "int", nullable: false)
+                    IdTeam = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdPosition = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdCountry = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -289,12 +289,12 @@ namespace DesdeElBanquilloApplication.Migrations
                 name: "Stadiums",
                 columns: table => new
                 {
-                    IdStadium = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FoundedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    IdTeam = table.Column<int>(type: "int", nullable: false)
+                    IdStadium = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    FoundedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Capacity = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdTeam = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -304,25 +304,25 @@ namespace DesdeElBanquilloApplication.Migrations
                         column: x => x.IdTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Matches",
                 columns: table => new
                 {
-                    IdMatch = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MatchDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HomeGoals = table.Column<int>(type: "int", nullable: true),
-                    AwayGoals = table.Column<int>(type: "int", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Referee = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IdHomeTeam = table.Column<int>(type: "int", nullable: false),
-                    IdAwayTeam = table.Column<int>(type: "int", nullable: false),
-                    IdCompetition = table.Column<int>(type: "int", nullable: false),
-                    IdStadium = table.Column<int>(type: "int", nullable: false),
-                    SeasonIdSeason = table.Column<int>(type: "int", nullable: true)
+                    IdMatch = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MatchDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    HomeGoals = table.Column<int>(type: "INTEGER", nullable: true),
+                    AwayGoals = table.Column<int>(type: "INTEGER", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Referee = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    IdHomeTeam = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdAwayTeam = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdCompetition = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdStadium = table.Column<int>(type: "INTEGER", nullable: false),
+                    SeasonIdSeason = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -349,31 +349,31 @@ namespace DesdeElBanquilloApplication.Migrations
                         column: x => x.IdAwayTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Matches_Teams_IdHomeTeam",
                         column: x => x.IdHomeTeam,
                         principalTable: "Teams",
                         principalColumn: "IdTeam",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "MatchPlayers",
                 columns: table => new
                 {
-                    IdMatchPlayers = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Goals = table.Column<int>(type: "int", nullable: false),
-                    Assists = table.Column<int>(type: "int", nullable: false),
-                    YellowCards = table.Column<int>(type: "int", nullable: false),
-                    RedCards = table.Column<int>(type: "int", nullable: false),
-                    MinutesPlayed = table.Column<int>(type: "int", nullable: false),
-                    IsStarter = table.Column<bool>(type: "bit", nullable: false),
-                    SubstitutionMinute = table.Column<int>(type: "int", nullable: true),
-                    IdMatch = table.Column<int>(type: "int", nullable: false),
-                    IdPlayer = table.Column<int>(type: "int", nullable: false),
-                    IdPosition = table.Column<int>(type: "int", nullable: false)
+                    IdMatchPlayers = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Goals = table.Column<int>(type: "INTEGER", nullable: false),
+                    Assists = table.Column<int>(type: "INTEGER", nullable: false),
+                    YellowCards = table.Column<int>(type: "INTEGER", nullable: false),
+                    RedCards = table.Column<int>(type: "INTEGER", nullable: false),
+                    MinutesPlayed = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsStarter = table.Column<bool>(type: "INTEGER", nullable: false),
+                    SubstitutionMinute = table.Column<int>(type: "INTEGER", nullable: true),
+                    IdMatch = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdPlayer = table.Column<int>(type: "INTEGER", nullable: false),
+                    IdPosition = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -389,13 +389,13 @@ namespace DesdeElBanquilloApplication.Migrations
                         column: x => x.IdPlayer,
                         principalTable: "Players",
                         principalColumn: "IdPlayer",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MatchPlayers_Positions_IdPosition",
                         column: x => x.IdPosition,
                         principalTable: "Positions",
                         principalColumn: "IdPosition",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -14,7 +14,7 @@ namespace DEAModels
         [Required]
         [StringLength(100)]
         [DisplayName("Nombre Liga")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [DisplayName("Fecha Crecion Liga")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;

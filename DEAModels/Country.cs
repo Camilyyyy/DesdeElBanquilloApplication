@@ -15,9 +15,9 @@ namespace DEAModels
         [StringLength(100)]
         [DisplayName("Nombre Pais")]
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-    
+
 
         // Relaciones
         public  ICollection<Competition> Competitions { get; set; } = new List<Competition>();

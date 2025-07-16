@@ -13,7 +13,7 @@ namespace DEAModels
         [Required]
         [StringLength(100)]
         [DisplayName("Nombre Jugador")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [Range(16, 50)]

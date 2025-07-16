@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
+
 namespace DEAModels
 {
     [Table("Teams")]
@@ -15,11 +16,11 @@ namespace DEAModels
         [Required]
         [StringLength(100)]
         [DisplayName("Nombre Equipo")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [StringLength(50)]
         [DisplayName("Ciudad Equipo")]
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         [DisplayName("Fecha Fundacion Equipo")]
         public DateTime FoundedDate { get; set; }

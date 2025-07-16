@@ -16,9 +16,9 @@ namespace DEAModels
         [Required]
         [StringLength(100)]
         [DisplayName("Nombre Competicion")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        
+
 
         // Clave foránea hacia Country
         [Required]

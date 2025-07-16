@@ -13,16 +13,16 @@ namespace DEAModels
         [Required]
         [StringLength(100)]
         [DisplayName("Email User")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         [StringLength(255)]
         [DisplayName("Password User")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [StringLength(50)]
         [DisplayName("Nombre User")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [DisplayName("Register Date User")]
         public DateTime RegisterDate { get; set; } = DateTime.Now;

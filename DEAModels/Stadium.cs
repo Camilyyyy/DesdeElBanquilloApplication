@@ -13,7 +13,7 @@ namespace DEAModels
         [Required]
         [StringLength(100)]
         [DisplayName("Nombre Estadio")]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [DisplayName("Fecha Creación Estadio")]
         public DateTime FoundedDate { get; set; }

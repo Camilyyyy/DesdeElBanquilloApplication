@@ -13,7 +13,7 @@ namespace DEAModels
         [Required]
         [StringLength(20)]
         [DisplayName("Nombre Temporada")]
-        public string Name { get; set; } // Ej: "2024-2025"
+        public string Name { get; set; } = string.Empty;
 
         [DisplayName("Fecha Inicio")]
         public DateTime StartDate { get; set; }

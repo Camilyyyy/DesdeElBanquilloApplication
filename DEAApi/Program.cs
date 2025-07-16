@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Lee la cadena de conexión desde appsettings.json.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)); // O .UseSqlite() si usas SQLite en la API
+    options.UseSqlite(connectionString));  // O .UseSqlite() si usas SQLite en la API
 
 // Registra los servicios para que los controladores de la API funcionen.
 builder.Services.AddControllers();
