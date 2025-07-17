@@ -26,9 +26,6 @@ namespace DEAMaui.Services
             // En modo Release (producción), se usa el HttpClient normal y seguro.
             _httpClient = new HttpClient();
 #endif
-            // ===================================================================
-            // FIN: ARREGLO FUNDAMENTAL
-            // ===================================================================
 
             string baseAddress = GetBaseAddress();
             _httpClient.BaseAddress = new Uri(baseAddress);

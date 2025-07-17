@@ -12,6 +12,14 @@ namespace DEAMaui
             //Posicion
             Routing.RegisterRoute(nameof(PositionDetailPage), typeof(PositionDetailPage));
             Routing.RegisterRoute(nameof(PositionInfoPage), typeof(PositionInfoPage));
+
+            //Federacion
+            Routing.RegisterRoute(nameof(FederationDetailPage), typeof(FederationDetailPage));
+            Routing.RegisterRoute(nameof(FederationInfoPage), typeof(FederationInfoPage));
+            
+            //Liga
+            Routing.RegisterRoute(nameof(LeagueDetailPage), typeof(LeagueDetailPage));
+            Routing.RegisterRoute(nameof(LeagueInfoPage), typeof(LeagueInfoPage));
         }
     }
 }

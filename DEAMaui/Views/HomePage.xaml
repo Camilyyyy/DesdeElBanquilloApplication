@@ -52,7 +52,13 @@
                 HeightRequest="50"
                 FontSize="Medium"/>
 
-           
+            <!-- Botón para ir a Equipos -->
+            <Button 
+            Text="Ver Federaciones"
+            Command="{Binding NavigateToCommand}"
+            CommandParameter="FederationsPage"
+            HeightRequest="50"
+            FontSize="Medium"/>
 
         </VerticalStackLayout>
     </ScrollView>

@@ -42,6 +42,24 @@ namespace DEAMaui
             builder.Services.AddTransient<PositionInfoViewModel>();
             builder.Services.AddTransient<PositionInfoPage>();
 
+            //Federation
+
+            builder.Services.AddSingleton<FederationsViewModel>();
+            builder.Services.AddSingleton<FederationsPage>();
+            builder.Services.AddTransient<FederationDetailViewModel>();
+            builder.Services.AddTransient<FederationDetailPage>();
+            builder.Services.AddTransient<FederationInfoViewModel>();
+            builder.Services.AddTransient<FederationInfoPage>();
+
+            //Ligas
+
+            builder.Services.AddSingleton<LeaguesViewModel>();
+            builder.Services.AddSingleton<LeaguesPage>();
+            builder.Services.AddTransient<LeagueDetailViewModel>();
+            builder.Services.AddTransient<LeagueDetailPage>();
+            builder.Services.AddTransient<LeagueInfoViewModel>();
+            builder.Services.AddTransient<LeagueInfoPage>();
+
             return builder.Build();
         }
     }

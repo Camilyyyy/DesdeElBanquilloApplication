@@ -25,6 +25,16 @@
             ContentTemplate="{DataTemplate views:PositionsPage}"
             Route="PositionsPage" />
 
+        <ShellContent
+            Title="Federaciones"
+            ContentTemplate="{DataTemplate views:FederationsPage}"
+            Route="FederationsPage" />
+
+        <ShellContent
+            Title="Ligas"
+            ContentTemplate="{DataTemplate views:LeaguesPage}"
+            Route="LeaguesPage" />
+
     </TabBar>
 
 </Shell>
