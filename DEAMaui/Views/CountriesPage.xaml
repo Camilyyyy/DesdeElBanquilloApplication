@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             xmlns:model="clr-namespace:DEAModels;assembly=DEAModels"
+             x:DataType="viewmodel:CountriesViewModel"
+             x:Class="DEAMaui.Views.CountriesPage"
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        
+        <ToolbarItem Text="Añadir" Command="{Binding GoToEditPageCommand}" CommandParameter="{x:Null}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*">
+
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" 
+                           Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" />
+
+        <RefreshView Command="{Binding GetCountriesCommand}" 
+                     IsRefreshing="{Binding IsBusy}"
+                     RefreshColor="Red"
+                     Grid.Row="0">
+
+            <CollectionView ItemsSource="{Binding Countries}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Country">
+                       
+                        <Grid x:Name="ItemContainer" Padding="10">
+                            <Frame Padding="15" CornerRadius="8" HasShadow="True" BorderColor="LightGray">
+
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                             
+                                        <MenuFlyoutItem Text="Editar"
+                                                        IconImageSource="edit.png" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CountriesViewModel}}, Path=GoToEditPageCommand}"
+                                                        CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}"/>
+
+                                            <!-- La opción "Ver Información" ahora llama al nuevo comando de información -->
+                                            <MenuFlyoutItem Text="Ver Información"
+                                                        IconImageSource="info.png" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CountriesViewModel}}, Path=GoToInfoPageCommand}"
+                                                        CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}"/>
+
+                                                <MenuFlyoutSeparator />
+
+                                                <!-- La opción "Eliminar" se mantiene igual -->
+                                                <MenuFlyoutItem Text="Eliminar"
+                                                        IconImageSource="delete.png" 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CountriesViewModel}}, Path=DeleteCountryCommand}"
+                                                        CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}" />
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+
+                                <Label Text="{Binding Name}" FontSize="Medium" VerticalOptions="Center"/>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button Text="Refrescar Lista" 
+                Command="{Binding GetCountriesCommand}" 
+                IsEnabled="{Binding IsNotBusy}" 
+                Grid.Row="1" Margin="10"/>
+
+    </Grid>
+</ContentPage>

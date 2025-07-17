@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             x:DataType="viewmodel:CountryInfoViewModel"
+             x:Class="DEAMaui.Views.CountryInfoPage"
+             Title="{Binding Title}">
+    <!-- El título de la página ahora mostrará el nombre del país -->
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="25">
+
+            <Frame Padding="20" CornerRadius="10" BorderColor="LightGray" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label 
+                        Text="Información del País"
+                        FontSize="Title"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"/>
+
+                    <!-- Usamos un Grid para alinear bien las etiquetas y los valores -->
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" RowSpacing="10" ColumnSpacing="15" Margin="0,20,0,0">
+
+                        <!-- SE HA ELIMINADO LA FILA DEL ID -->
+
+                        <Label Grid.Row="0" Grid.Column="0" Text="Nombre:" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center"/>
+
+                        <!-- Este es el Label que ahora debería mostrar el nombre correctamente -->
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding Country.Name}" FontSize="Medium" VerticalOptions="Center"/>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Este botón ahora debería funcionar -->
+            <Button Text="Volver" 
+                    Command="{Binding GoBackCommand}" 
+                    HorizontalOptions="Fill" 
+                    Margin="0,30,0,0"
+                    HeightRequest="50"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

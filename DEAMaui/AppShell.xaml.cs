@@ -1,4 +1,4 @@
-﻿using DEAMaui.Views.Country;
+﻿using DEAMaui.Views;
 namespace DEAMaui
 {
     public partial class AppShell : Shell
@@ -7,6 +7,7 @@ namespace DEAMaui
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(CountryDetailPage), typeof(CountryDetailPage));
+            Routing.RegisterRoute(nameof(CountryInfoPage), typeof(CountryInfoPage));
         }
     }
 }

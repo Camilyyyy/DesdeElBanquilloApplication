@@ -1,7 +1,9 @@
-using DEAMaui.Services; // Asegúrate que este using apunte a tu interfaz
+// EN: Services/ApiService.cs (VERSIÓN FINAL CORREGIDA Y REFACTORIZADA)
+
+using DEAMaui.Services;
 using DEAModels;
 using System.Diagnostics;
-using System.Net.Http.Json; // ¡Este using es crucial para los métodos .GetFromJsonAsync, .PostAsJsonAsync, etc.!
+using System.Net.Http.Json;
 
 namespace DEAMaui.Services
 {
@@ -11,198 +13,180 @@ namespace DEAMaui.Services
 
         public ApiService()
         {
-            _httpClient = new HttpClient();
 
-            // Determina la dirección base correcta para la plataforma actual
+#if DEBUG
+
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+            _httpClient = new HttpClient(handler);
+#else
+            // En modo Release (producción), se usa el HttpClient normal y seguro.
+            _httpClient = new HttpClient();
+#endif
+            // ===================================================================
+            // FIN: ARREGLO FUNDAMENTAL
+            // ===================================================================
+
             string baseAddress = GetBaseAddress();
             _httpClient.BaseAddress = new Uri(baseAddress);
         }
 
         private string GetBaseAddress()
         {
+            const string HttpPort = "5062";
+
             return DeviceInfo.Platform == DevicePlatform.Android
-                ? "https://10.0.2.2:5062"
-                : "https://localhost:5062";
+                ? $"http://10.0.2.2:{HttpPort}"
+                : $"http://localhost:{HttpPort}";
         }
 
-  
-        // MÉTODOS PARA POSITIONS
 
-        public async Task<List<Position>> GetPositionsAsync()
+
+        #region Positions
+        public Task<List<Position>> GetPositionsAsync() => GetAsync<Position>("api/positions");
+        public Task<Position> GetPositionAsync(int id) => GetByIdAsync<Position>("api/positions", id);
+
+        public Task<bool> AddPositionAsync(Position position) => PostAsync("api/positions", position);
+        public Task<bool> UpdatePositionAsync(int id, Position position) => PutAsync($"api/positions/{id}", position);
+        public Task<bool> DeletePositionAsync(int id) => DeleteAsync($"api/positions/{id}");
+        #endregion
+
+        #region Leagues
+        public Task<List<League>> GetLeaguesAsync() => GetAsync<League>("api/leagues");
+        public Task<League> GetLeagueAsync(int id) => GetByIdAsync<League>("api/leagues", id);
+        public Task<bool> AddLeagueAsync(League league) => PostAsync("api/leagues", league);
+        public Task<bool> UpdateLeagueAsync(int id, League league) => PutAsync($"api/leagues/{id}", league);
+        public Task<bool> DeleteLeagueAsync(int id) => DeleteAsync($"api/leagues/{id}");
+        #endregion
+
+        #region Teams
+        public Task<List<Team>> GetTeamsAsync() => GetAsync<Team>("api/teams");
+        public Task<Team> GetTeamAsync(int id) => GetByIdAsync<Team>("api/teams", id);
+        public Task<bool> AddTeamAsync(Team team) => PostAsync("api/teams", team);
+        public Task<bool> UpdateTeamAsync(int id, Team team) => PutAsync($"api/teams/{id}", team);
+        public Task<bool> DeleteTeamAsync(int id) => DeleteAsync($"api/teams/{id}");
+        #endregion
+
+        #region Players
+        public Task<List<Player>> GetPlayersAsync() => GetAsync<Player>("api/players");
+        public Task<Player> GetPlayerAsync(int id) => GetByIdAsync<Player>("api/players", id);
+        public Task<bool> AddPlayerAsync(Player player) => PostAsync("api/players", player);
+        public Task<bool> UpdatePlayerAsync(int id, Player player) => PutAsync($"api/players/{id}", player);
+        public Task<bool> DeletePlayerAsync(int id) => DeleteAsync($"api/players/{id}");
+        #endregion
+
+        #region Competitions
+        public Task<List<Competition>> GetCompetitionsAsync() => GetAsync<Competition>("api/competitions");
+        public Task<Competition> GetCompetitionAsync(int id) => GetByIdAsync<Competition>("api/competitions", id);
+        public Task<bool> AddCompetitionAsync(Competition competition) => PostAsync("api/competitions", competition);
+        public Task<bool> UpdateCompetitionAsync(int id, Competition competition) => PutAsync($"api/competitions/{id}", competition);
+        public Task<bool> DeleteCompetitionAsync(int id) => DeleteAsync($"api/competitions/{id}");
+        #endregion
+
+        #region Countries
+        public Task<List<Country>> GetCountriesAsync() => GetAsync<Country>("api/countries");
+        public Task<Country> GetCountryAsync(int id) => GetByIdAsync<Country>("api/countries", id);
+        public Task<bool> AddCountryAsync(Country country) => PostAsync("api/countries", country);
+        public Task<bool> UpdateCountryAsync(int id, Country country) => PutAsync($"api/countries/{id}", country);
+        public Task<bool> DeleteCountryAsync(int id) => DeleteAsync($"api/countries/{id}");
+        #endregion
+
+        #region Federations
+        public Task<List<Federation>> GetFederationsAsync() => GetAsync<Federation>("api/federations");
+        public Task<Federation> GetFederationAsync(int id) => GetByIdAsync<Federation>("api/federations", id);
+        public Task<bool> AddFederationAsync(Federation federation) => PostAsync("api/federations", federation);
+        public Task<bool> UpdateFederationAsync(int id, Federation federation) => PutAsync($"api/federations/{id}", federation);
+        public Task<bool> DeleteFederationAsync(int id) => DeleteAsync($"api/federations/{id}");
+        #endregion
+
+        #region Matches
+        public Task<List<Match>> GetMatchesAsync() => GetAsync<Match>("api/matches");
+        public Task<Match> GetMatchAsync(int id) => GetByIdAsync<Match>("api/matches", id);
+        public Task<bool> AddMatchAsync(Match match) => PostAsync("api/matches", match);
+        public Task<bool> UpdateMatchAsync(int id, Match match) => PutAsync($"api/matches/{id}", match);
+        public Task<bool> DeleteMatchAsync(int id) => DeleteAsync($"api/matches/{id}");
+        #endregion
+
+        #region Seasons
+        public Task<List<Season>> GetSeasonsAsync() => GetAsync<Season>("api/seasons");
+        public Task<Season> GetSeasonAsync(int id) => GetByIdAsync<Season>("api/seasons", id);
+        public Task<bool> AddSeasonAsync(Season season) => PostAsync("api/seasons", season);
+        public Task<bool> UpdateSeasonAsync(int id, Season season) => PutAsync($"api/seasons/{id}", season);
+        public Task<bool> DeleteSeasonAsync(int id) => DeleteAsync($"api/seasons/{id}");
+        #endregion
+
+        #region Stadiums
+        public Task<List<Stadium>> GetStadiumsAsync() => GetAsync<Stadium>("api/stadiums");
+        public Task<Stadium> GetStadiumAsync(int id) => GetByIdAsync<Stadium>("api/stadiums", id);
+        public Task<bool> AddStadiumAsync(Stadium stadium) => PostAsync("api/stadiums", stadium);
+        public Task<bool> UpdateStadiumAsync(int id, Stadium stadium) => PutAsync($"api/stadiums/{id}", stadium);
+        public Task<bool> DeleteStadiumAsync(int id) => DeleteAsync($"api/stadiums/{id}");
+        #endregion
+
+
+        // =========================================================================
+        // MÉTODOS AYUDANTES GENÉRICOS (PRIVADOS)
+        // Aquí está la lógica centralizada para evitar la repetición de código.
+        // =========================================================================
+
+        private async Task<List<T>> GetAsync<T>(string endpoint)
         {
             try
             {
-                var response = await _httpClient.GetAsync("api/positions");
+                var response = await _httpClient.GetAsync(endpoint);
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadFromJsonAsync<List<Position>>();
+                    return await response.Content.ReadFromJsonAsync<List<T>>();
             }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return new List<Position>();
+            catch (Exception ex) { Debug.WriteLine($"[API GET LIST ERROR] Endpoint: {endpoint} | Error: {ex.Message}"); }
+            return new List<T>();
         }
 
-        public async Task<Position> GetPositionAsync(int id)
+        private async Task<T> GetByIdAsync<T>(string endpoint, int id)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"api/positions/{id}");
+                var response = await _httpClient.GetAsync($"{endpoint}/{id}");
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadFromJsonAsync<Position>();
+                    return await response.Content.ReadFromJsonAsync<T>();
             }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return null;
+            catch (Exception ex) { Debug.WriteLine($"[API GET BY ID ERROR] Endpoint: {endpoint}/{id} | Error: {ex.Message}"); }
+            return default(T); // Devuelve null para objetos
         }
 
-        public async Task<bool> AddPositionAsync(Position position)
+        private async Task<bool> PostAsync<T>(string endpoint, T data)
         {
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("api/positions", position);
+                var response = await _httpClient.PostAsJsonAsync(endpoint, data);
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
+            catch (Exception ex) { Debug.WriteLine($"[API POST ERROR] Endpoint: {endpoint} | Error: {ex.Message}"); }
             return false;
         }
 
-        public async Task<bool> UpdatePositionAsync(int id, Position position)
+        private async Task<bool> PutAsync<T>(string endpointWithId, T data)
         {
             try
             {
-                var response = await _httpClient.PutAsJsonAsync($"api/positions/{id}", position);
+                var response = await _httpClient.PutAsJsonAsync(endpointWithId, data);
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
+            catch (Exception ex) { Debug.WriteLine($"[API PUT ERROR] Endpoint: {endpointWithId} | Error: {ex.Message}"); }
             return false;
         }
 
-        public async Task<bool> DeletePositionAsync(int id)
+        private async Task<bool> DeleteAsync(string endpointWithId)
         {
             try
             {
-                var response = await _httpClient.DeleteAsync($"api/positions/{id}");
+                var response = await _httpClient.DeleteAsync(endpointWithId);
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
+            catch (Exception ex) { Debug.WriteLine($"[API DELETE ERROR] Endpoint: {endpointWithId} | Error: {ex.Message}"); }
             return false;
         }
-
-        // MÉTODOS PARA LEAGUES
-
-
-        public async Task<List<League>> GetLeaguesAsync()
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync("api/leagues");
-                if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<League>>();
-            }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return new List<League>();
-        }
-
-        public async Task<League> GetLeagueAsync(int id)
-        {
-            try
-            {
-                var response = await _httpClient.GetAsync($"api/leagues/{id}");
-                if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<League>();
-            }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return null;
-        }
-
-        public async Task<bool> AddLeagueAsync(League league)
-        {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync("api/leagues", league);
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return false;
-        }
-
-        public async Task<bool> UpdateLeagueAsync(int id, League league)
-        {
-            try
-            {
-                var response = await _httpClient.PutAsJsonAsync($"api/leagues/{id}", league);
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return false;
-        }
-
-        public async Task<bool> DeleteLeagueAsync(int id)
-        {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"api/leagues/{id}");
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); }
-            return false;
-        }
-
-      
-        // MÉTODOS PARA TEAMS
-
-        public async Task<List<Team>> GetTeamsAsync() { try { var response = await _httpClient.GetAsync("api/teams"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Team>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Team>(); }
-        public async Task<Team> GetTeamAsync(int id) { try { var response = await _httpClient.GetAsync($"api/teams/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Team>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddTeamAsync(Team team) { try { var response = await _httpClient.PostAsJsonAsync("api/teams", team); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateTeamAsync(int id, Team team) { try { var response = await _httpClient.PutAsJsonAsync($"api/teams/{id}", team); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteTeamAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/teams/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-        
-        // MÉTODOS PARA PLAYERS
- 
-        public async Task<List<Player>> GetPlayersAsync() { try { var response = await _httpClient.GetAsync("api/players"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Player>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Player>(); }
-        public async Task<Player> GetPlayerAsync(int id) { try { var response = await _httpClient.GetAsync($"api/players/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Player>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddPlayerAsync(Player player) { try { var response = await _httpClient.PostAsJsonAsync("api/players", player); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdatePlayerAsync(int id, Player player) { try { var response = await _httpClient.PutAsJsonAsync($"api/players/{id}", player); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeletePlayerAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/players/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-       
-        // MÉTODOS PARA COMPETITIONS
- 
-        public async Task<List<Competition>> GetCompetitionsAsync() { try { var response = await _httpClient.GetAsync("api/competitions"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Competition>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Competition>(); }
-        public async Task<Competition> GetCompetitionAsync(int id) { try { var response = await _httpClient.GetAsync($"api/competitions/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Competition>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddCompetitionAsync(Competition competition) { try { var response = await _httpClient.PostAsJsonAsync("api/competitions", competition); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateCompetitionAsync(int id, Competition competition) { try { var response = await _httpClient.PutAsJsonAsync($"api/competitions/{id}", competition); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteCompetitionAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/competitions/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-        // MÉTODOS PARA COUNTRIES
-  
-        public async Task<List<Country>> GetCountriesAsync() { try { var response = await _httpClient.GetAsync("api/countries"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Country>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Country>(); }
-        public async Task<Country> GetCountryAsync(int id) { try { var response = await _httpClient.GetAsync($"api/countries/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Country>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddCountryAsync(Country country) { try { var response = await _httpClient.PostAsJsonAsync("api/countries", country); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateCountryAsync(int id, Country country) { try { var response = await _httpClient.PutAsJsonAsync($"api/countries/{id}", country); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteCountryAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/countries/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-      
-
-        // (Añadidos para completar la interfaz)
-        public async Task<List<Federation>> GetFederationsAsync() { try { var response = await _httpClient.GetAsync("api/federations"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Federation>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Federation>(); }
-        public async Task<Federation> GetFederationAsync(int id) { try { var response = await _httpClient.GetAsync($"api/federations/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Federation>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddFederationAsync(Federation federation) { try { var response = await _httpClient.PostAsJsonAsync("api/federations", federation); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateFederationAsync(int id, Federation federation) { try { var response = await _httpClient.PutAsJsonAsync($"api/federations/{id}", federation); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteFederationAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/federations/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-        public async Task<List<Match>> GetMatchesAsync() { try { var response = await _httpClient.GetAsync("api/matches"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Match>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Match>(); }
-        public async Task<Match> GetMatchAsync(int id) { try { var response = await _httpClient.GetAsync($"api/matches/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Match>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddMatchAsync(Match match) { try { var response = await _httpClient.PostAsJsonAsync("api/matches", match); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateMatchAsync(int id, Match match) { try { var response = await _httpClient.PutAsJsonAsync($"api/matches/{id}", match); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteMatchAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/matches/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-        public async Task<List<Season>> GetSeasonsAsync() { try { var response = await _httpClient.GetAsync("api/seasons"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Season>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Season>(); }
-        public async Task<Season> GetSeasonAsync(int id) { try { var response = await _httpClient.GetAsync($"api/seasons/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Season>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddSeasonAsync(Season season) { try { var response = await _httpClient.PostAsJsonAsync("api/seasons", season); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateSeasonAsync(int id, Season season) { try { var response = await _httpClient.PutAsJsonAsync($"api/seasons/{id}", season); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteSeasonAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/seasons/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-
-        public async Task<List<Stadium>> GetStadiumsAsync() { try { var response = await _httpClient.GetAsync("api/stadiums"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<List<Stadium>>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return new List<Stadium>(); }
-        public async Task<Stadium> GetStadiumAsync(int id) { try { var response = await _httpClient.GetAsync($"api/stadiums/{id}"); if (response.IsSuccessStatusCode) return await response.Content.ReadFromJsonAsync<Stadium>(); } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return null; }
-        public async Task<bool> AddStadiumAsync(Stadium stadium) { try { var response = await _httpClient.PostAsJsonAsync("api/stadiums", stadium); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> UpdateStadiumAsync(int id, Stadium stadium) { try { var response = await _httpClient.PutAsJsonAsync($"api/stadiums/{id}", stadium); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
-        public async Task<bool> DeleteStadiumAsync(int id) { try { var response = await _httpClient.DeleteAsync($"api/stadiums/{id}"); return response.IsSuccessStatusCode; } catch (Exception ex) { Debug.WriteLine($"ERROR: {ex.Message}"); } return false; }
     }
 }

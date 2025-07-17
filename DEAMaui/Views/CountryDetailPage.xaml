@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
              x:DataType="viewmodel:CountryDetailViewModel"
-             x:Class="DEAMaui.Views.Country.CountryDetailPage"
+             x:Class="DEAMaui.Views.CountryDetailPage"
              Title="{Binding Title}">
 
     <ScrollView>

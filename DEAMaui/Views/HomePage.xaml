@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             x:DataType="viewmodel:HomePageViewModel"
              x:Class="DEAMaui.Views.HomePage"
-             Title="HomePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <Label 
+                Text="Bienvenido a FootballHub"
+                FontSize="Header"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Selecciona una sección para continuar:"
+                HorizontalOptions="Center" 
+                Margin="0,0,0,20"/>
+
+            <!-- Botón para ir a Países -->
+            <Button 
+                Text="Ver Países"
+                Command="{Binding NavigateToCommand}"
+                CommandParameter="CountriesPage"
+                HeightRequest="50"
+                FontSize="Medium"/>
+
+            <!-- Botón para ir a Ligas -->
+            <Button 
+                Text="Ver Ligas"
+                Command="{Binding NavigateToCommand}"
+                CommandParameter="LeaguesPage"
+                HeightRequest="50"
+                FontSize="Medium"/>
+
+            <!-- Botón para ir a Equipos -->
+            <Button 
+                Text="Ver Equipos"
+                Command="{Binding NavigateToCommand}"
+                CommandParameter="TeamsPage"
+                HeightRequest="50"
+                FontSize="Medium"/>
+
+            <!-- Añade el resto de los botones aquí siguiendo el mismo patrón -->
+            <!-- Ejemplo: -->
+            <!--
+            <Button 
+                Text="Ver Jugadores"
+                Command="{Binding NavigateToCommand}"
+                CommandParameter="PlayersPage"
+                HeightRequest="50"
+                FontSize="Medium"/>
+            -->
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

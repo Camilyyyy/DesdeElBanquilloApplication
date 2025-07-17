@@ -69,10 +69,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\Country\CountriesPage.xaml">
+	  <MauiXaml Update="Views\CountriesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Country\CountryDetailPage.xaml">
+	  <MauiXaml Update="Views\CountryDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CountryInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">
