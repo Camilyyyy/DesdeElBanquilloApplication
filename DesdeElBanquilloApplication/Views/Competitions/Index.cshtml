@@ -1,53 +1,145 @@
 ﻿@model IEnumerable<DEAModels.Competition>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Competencias";
 }
 
-<h1>Index</h1>
+<!-- Título con fondo degradado -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #b2fefa, #f9f9f9, #fbc2eb);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Competencias
+</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<!-- Botón Crear Nueva Competencia con animación y degradado -->
+<p class="text-end mb-3">
+    <a asp-action="Create" class="create-btn">
+        <i class="fas fa-plus me-2"></i> Crear Nueva Competencia
+    </a>
 </p>
-<table class="table">
-    <thead>
+
+<!-- Barra de búsqueda -->
+<div class="mb-3">
+    <input type="text" class="form-control" id="searchInput" placeholder="Buscar Competencias..." onkeyup="searchTable()" style="border-radius: 8px; transition: all 0.3s ease-in-out;">
+</div>
+
+<!-- Tabla de competencias -->
+<table class="table table-bordered table-hover" style="border-radius: 8px; overflow: hidden; transition: all 0.3s ease-in-out; background-color: #f9f9f9;">
+    <thead style="background-color: #3a4b5c; color: white;">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Federation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Season)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Country)</th>
+            <th>@Html.DisplayNameFor(model => model.Federation)</th>
+            <th>@Html.DisplayNameFor(model => model.Season)</th>
+            <th class="text-center">Acciones</th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Federation.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Season.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdCompetition">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdCompetition">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdCompetition">Delete</a>
-            </td>
-        </tr>
-}
+    <tbody id="competitionTable">
+        @foreach (var item in Model)
+        {
+            <tr style="background-color: #ffffff; transition: background-color 0.3s;">
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Country.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Federation.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Season.Name)</td>
+                <td class="text-center">
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.IdCompetition" title="Editar Competencia" style="border-radius: 5px; transition: all 0.3s ease;">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.IdCompetition" title="Ver Detalles" style="border-radius: 5px; transition: all 0.3s ease;">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.IdCompetition" onclick="return confirm('¿Estás seguro de que deseas eliminar esta competencia?')" title="Eliminar Competencia" style="border-radius: 5px; transition: all 0.3s ease;">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- Paginación estilo “Ver Ligas” -->
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Navegación de Páginas">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">Anterior</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">1</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">2</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">3</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">Siguiente</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Script de búsqueda -->
+<script>
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("competitionTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            if (td) {
+                var showRow = false;
+                for (var j = 0; j < td.length; j++) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        showRow = true;
+                        break;
+                    }
+                }
+                tr[i].style.display = showRow ? "" : "none";
+            }
+        }
+    }
+</script>
+
+<!-- Estilos personalizados -->
+<style>
+    /* Botón Crear Nueva Competencia */
+    .create-btn {
+        background: linear-gradient(to right, #ffecd2, #fcb69f);
+        color: #1f3c88;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        text-decoration: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+        display: inline-block;
+    }
+
+        .create-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #fcb69f, #ffecd2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+    /* Botones de paginación tipo “Ver Ligas” */
+    .custom-gradient-btn {
+        background: linear-gradient(to right, #ffe0b3, #ffb3a7);
+        color: #1f3c88;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-weight: 500;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .custom-gradient-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+        }
+</style>

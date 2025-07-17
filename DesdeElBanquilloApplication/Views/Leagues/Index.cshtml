@@ -1,53 +1,153 @@
 ﻿@model IEnumerable<DEAModels.League>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ligas";
 }
 
-<h1>Index</h1>
+<!-- Título con fondo degradado -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #b2fefa, #f9f9f9, #fbc2eb);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Ligas
+</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<!-- Botón Crear Nueva Liga -->
+<p class="text-end mb-3">
+    <a asp-action="Create" class="create-btn">
+        <i class="fas fa-plus me-2"></i> Crear Nueva Liga
+    </a>
 </p>
-<table class="table">
-    <thead>
+
+<!-- Barra de búsqueda -->
+<div class="mb-3">
+    <input type="text" class="form-control" id="searchInput" placeholder="Buscar ligas..." onkeyup="searchTable()" style="border-radius: 8px; transition: all 0.3s ease-in-out;">
+</div>
+
+<!-- Tabla de ligas -->
+<table class="table table-bordered table-hover" style="border-radius: 8px; overflow: hidden; background-color: #f9f9f9;">
+    <thead style="background-color: #3a4b5c; color: white;">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedDate)</th>
+            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+            <th>@Html.DisplayNameFor(model => model.Country)</th>
+            <th class="text-center">Acciones</th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdLeague">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdLeague">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdLeague">Delete</a>
-            </td>
-        </tr>
-}
+    <tbody id="leagueTable">
+        @foreach (var item in Model)
+        {
+            <tr style="background-color: #ffffff; transition: background-color 0.3s;">
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                <td>@Html.DisplayFor(modelItem => item.Country.Name)</td>
+                <td class="text-center">
+                    <a class="btn btn-warning btn-sm action-btn" asp-action="Edit" asp-route-id="@item.IdLeague" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-info btn-sm action-btn" asp-action="Details" asp-route-id="@item.IdLeague" title="Detalles">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-danger btn-sm action-btn" asp-action="Delete" asp-route-id="@item.IdLeague" title="Eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta liga?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<!-- Paginación visual -->
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Paginación">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">Anterior</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">1</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">2</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">3</a></li>
+            <li class="page-item"><a class="page-link custom-gradient-btn" href="#">Siguiente</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Script búsqueda -->
+<script>
+    function searchTable() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("leagueTable");
+        var tr = table.getElementsByTagName("tr");
+
+        for (let i = 0; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName("td");
+            if (td.length > 0) {
+                let showRow = false;
+                for (let j = 0; j < td.length; j++) {
+                    let txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        showRow = true;
+                        break;
+                    }
+                }
+                tr[i].style.display = showRow ? "" : "none";
+            }
+        }
+    }
+</script>
+
+<!-- Estilos personalizados -->
+<style>
+    .create-btn {
+        background: linear-gradient(to right, #ffecd2, #fcb69f);
+        color: #1f3c88;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        text-decoration: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+        display: inline-block;
+    }
+
+        .create-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #fcb69f, #ffecd2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+    .action-btn {
+        border-radius: 5px;
+        margin: 0 2px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+
+    .custom-gradient-btn {
+        background: linear-gradient(to right, #ffe0b3, #ffb3a7);
+        color: #1f3c88;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-weight: 500;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .custom-gradient-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+        }
+</style>

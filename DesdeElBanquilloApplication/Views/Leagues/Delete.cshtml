@@ -1,45 +1,90 @@
 ﻿@model DEAModels.League
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Liga";
 }
 
-<h1>Delete</h1>
+<!-- TÍTULO CON DEGRADADO -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #ffdde1, #f9f9f9, #ee9ca7);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Eliminar Liga
+</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>League</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdLeague" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<!-- MENSAJE DE CONFIRMACIÓN -->
+<h4 class="text-center mb-4">¿Estás seguro de que deseas eliminar esta liga?</h4>
+
+<!-- DETALLES DE LA LIGA -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="p-4 shadow-sm" style="background-color: #ffffff; border-radius: 12px;">
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Name)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+                <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.IsActive)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.IsActive)</dd>
+
+                <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.Country)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Country.Name)</dd>
+            </dl>
+
+            <!-- FORMULARIO DE CONFIRMACIÓN -->
+            <form asp-action="Delete" class="text-center mt-4">
+                <input type="hidden" asp-for="IdLeague" />
+
+                <button type="submit" class="delete-btn me-2">
+                    <i class="fas fa-trash-alt me-1"></i> Eliminar
+                </button>
+
+                <a asp-action="Index" class="back-link">
+                    <i class="fas fa-arrow-left me-1"></i> Volver al listado
+                </a>
+            </form>
+        </div>
+    </div>
 </div>
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    .delete-btn {
+        background: linear-gradient(to right, #f85032, #e73827);
+        color: #ffffff;
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .delete-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #e73827, #f85032);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .back-link {
+        text-decoration: none;
+        color: #1f3c88;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+        .back-link:hover {
+            color: #0d2c6e;
+            text-decoration: underline;
+        }
+
+    dt, dd {
+        padding: 4px 0;
+    }
+</style>

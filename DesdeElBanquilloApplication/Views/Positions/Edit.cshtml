@@ -1,34 +1,84 @@
 ﻿@model DEAModels.Position
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Posición";
 }
 
-<h1>Edit</h1>
+<!-- TÍTULO CON DEGRADADO -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #b2fefa, #f9f9f9, #fbc2eb);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Editar Posición
+</h1>
 
-<h4>Position</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<!-- FORMULARIO CON ESTILO -->
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="p-4 shadow-sm" style="background-color: #ffffff; border-radius: 12px;">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <input type="hidden" asp-for="IdPosition" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+
+            <div class="form-group mb-4">
+                <label asp-for="Name" class="form-label">Nombre de la Posición</label>
+                <input asp-for="Name" class="form-control" style="border-radius: 8px;" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="form-group text-center">
+                <button type="submit" class="create-btn">
+                    <i class="fas fa-save me-2"></i> Guardar Cambios
+                </button>
             </div>
         </form>
+
+        <div class="text-center mt-3">
+            <a asp-action="Index" class="back-link">
+                <i class="fas fa-arrow-left me-1"></i> Volver al listado
+            </a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+<!-- VALIDACIÓN -->
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    .create-btn {
+        background: linear-gradient(to right, #ffecd2, #fcb69f);
+        color: #1f3c88;
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .create-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #fcb69f, #ffecd2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .back-link {
+        text-decoration: none;
+        color: #1f3c88;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+        .back-link:hover {
+            color: #0d2c6e;
+            text-decoration: underline;
+        }
+</style>

@@ -1,57 +1,92 @@
 ﻿@model DEAModels.Team
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Equipo";
 }
 
-<h1>Delete</h1>
+<!-- TÍTULO CON DEGRADADO -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #fbc2eb, #f9f9f9, #b2fefa);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Eliminar Equipo
+</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Team</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoundedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoundedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Competition)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Competition.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.League)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.League.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdTeam" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<!-- CONFIRMACIÓN -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="alert alert-warning text-center mb-4" style="border-radius: 10px;">
+            <h4 class="fw-bold">¿Estás seguro de que deseas eliminar este equipo?</h4>
+        </div>
+
+        <!-- DETALLES DEL EQUIPO -->
+        <div class="p-4 mb-3 shadow-sm" style="background-color: #ffffff; border-radius: 12px;">
+            <dl class="row">
+                <dt class="col-sm-3">Nombre</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt class="col-sm-3">Ciudad</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.City)</dd>
+
+                <dt class="col-sm-3">Fecha de Fundación</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.FoundedDate)</dd>
+
+                <dt class="col-sm-3">Competencia</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Competition.Name)</dd>
+
+                <dt class="col-sm-3">País</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Country.Name)</dd>
+
+                <dt class="col-sm-3">Liga</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.League.Name)</dd>
+            </dl>
+        </div>
+
+        <!-- BOTONES -->
+        <form asp-action="Delete" class="text-center">
+            <input type="hidden" asp-for="IdTeam" />
+            <button type="submit" class="delete-btn me-2">
+                <i class="fas fa-trash-alt me-1"></i> Eliminar
+            </button>
+            <a asp-action="Index" class="back-link">
+                <i class="fas fa-arrow-left me-1"></i> Volver al listado
+            </a>
+        </form>
+    </div>
 </div>
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    .delete-btn {
+        background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        color: #721c24;
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .delete-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #fad0c4, #ff9a9e);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .back-link {
+        text-decoration: none;
+        color: #1f3c88;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .back-link:hover {
+            color: #0d2c6e;
+            text-decoration: underline;
+        }
+</style>

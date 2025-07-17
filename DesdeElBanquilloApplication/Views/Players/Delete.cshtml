@@ -1,81 +1,103 @@
 ﻿@model DEAModels.Player
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Jugador";
 }
 
-<h1>Delete</h1>
+<!-- TÍTULO CON DEGRADADO -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #ffecd2, #fcb69f, #ffd3a5);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Eliminar Jugador
+</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Player</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Age)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.JerseyNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JerseyNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MarketValue)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MarketValue)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Height)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Height)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Weight)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Weight)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Team)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Team.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Position.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdPlayer" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<!-- CONFIRMACIÓN -->
+<h4 class="text-center mb-4 text-danger fw-bold">¿Estás seguro que deseas eliminar este jugador?</h4>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="p-4 shadow-sm" style="background-color: #fff; border-radius: 12px;">
+
+            <dl class="row mb-4">
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Age)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Age)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.JerseyNumber)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.JerseyNumber)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MarketValue)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.MarketValue)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.BirthDate)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.BirthDate)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Height)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Height)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Weight)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Weight)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Team)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Team.Name)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Position)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Position.Name)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Country)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Country.Name)</dd>
+            </dl>
+
+            <form asp-action="Delete" class="text-center">
+                <input type="hidden" asp-for="IdPlayer" />
+
+                <button type="submit" class="delete-btn me-3">
+                    <i class="fas fa-trash-alt me-2"></i> Eliminar
+                </button>
+
+                <a asp-action="Index" class="back-link">
+                    <i class="fas fa-arrow-left me-1"></i> Volver al listado
+                </a>
+            </form>
+        </div>
+    </div>
 </div>
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    .delete-btn {
+        background: linear-gradient(to right, #ff4e50, #f9d423);
+        color: white;
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .delete-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #f9d423, #ff4e50);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .back-link {
+        text-decoration: none;
+        color: #1f3c88;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+        .back-link:hover {
+            color: #0d2c6e;
+            text-decoration: underline;
+        }
+</style>

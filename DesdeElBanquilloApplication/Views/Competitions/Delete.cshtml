@@ -1,45 +1,84 @@
 ﻿@model DEAModels.Competition
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Competencia";
 }
 
-<h1>Delete</h1>
+<!-- TÍTULO CON DEGRADADO -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #f6d365, #fda085, #fbc2eb);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Eliminar Competencia
+</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Competition</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Federation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Federation.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Season)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Season.Name)
-        </dd>
+<!-- MENSAJE DE CONFIRMACIÓN -->
+<div class="text-center mb-4">
+    <h4 class="fw-bold text-danger">¿Estás seguro de que deseas eliminar esta competencia?</h4>
+</div>
+
+<!-- DETALLES DE LA COMPETENCIA -->
+<div class="p-4 mx-auto shadow-sm" style="max-width: 700px; background-color: #ffffff; border-radius: 12px;">
+    <dl class="row mb-0">
+        <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(model => model.Country)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.Country.Name)</dd>
+
+        <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(model => model.Federation)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.Federation.Name)</dd>
+
+        <dt class="col-sm-4 fw-semibold">@Html.DisplayNameFor(model => model.Season)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(model => model.Season.Name)</dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <!-- FORMULARIO DE ELIMINACIÓN -->
+    <form asp-action="Delete" class="mt-4 text-center">
         <input type="hidden" asp-for="IdCompetition" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+
+        <button type="submit" class="delete-btn me-3">
+            <i class="fas fa-trash-alt me-1"></i> Eliminar
+        </button>
+
+        <a asp-action="Index" class="back-link">
+            <i class="fas fa-arrow-left me-1"></i> Volver al listado
+        </a>
     </form>
 </div>
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    .delete-btn {
+        background: linear-gradient(to right, #f85032, #e73827);
+        color: #fff;
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .delete-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #e73827, #f85032);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .back-link {
+        text-decoration: none;
+        color: #1f3c88;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+        .back-link:hover {
+            color: #0d2c6e;
+            text-decoration: underline;
+        }
+</style>

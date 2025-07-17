@@ -1,42 +1,105 @@
 ﻿@model DEAModels.Stadium
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Estadio";
 }
 
-<h1>Details</h1>
+<!-- TÍTULO CON DEGRADADO -->
+<h1 class="text-center mb-4" style="
+    background: linear-gradient(to right, #b2fefa, #f9f9f9, #fbc2eb);
+    color: #333;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Detalles del Estadio
+</h1>
 
-<div>
-    <h4>Stadium</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoundedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoundedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Capacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Team)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Team.Name)
-        </dd>
-    </dl>
+<!-- DETALLES DEL ESTADIO -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="p-4 shadow-sm" style="background-color: #ffffff; border-radius: 12px;">
+            <dl class="row">
+                <dt class="col-sm-4 text-end fw-semibold">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt class="col-sm-4 text-end fw-semibold">
+                    @Html.DisplayNameFor(model => model.FoundedDate)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.FoundedDate)
+                </dd>
+
+                <dt class="col-sm-4 text-end fw-semibold">
+                    @Html.DisplayNameFor(model => model.Capacity)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Capacity)
+                </dd>
+
+                <dt class="col-sm-4 text-end fw-semibold">
+                    @Html.DisplayNameFor(model => model.Team)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Team.Name)
+                </dd>
+            </dl>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="text-center mt-4">
+            <a asp-action="Edit" asp-route-id="@Model?.IdStadium" class="action-btn me-2">
+                <i class="fas fa-edit me-1"></i> Editar
+            </a>
+            <a asp-action="Index" class="back-link">
+                <i class="fas fa-arrow-left me-1"></i> Volver al listado
+            </a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdStadium">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<!-- ESTILOS PERSONALIZADOS -->
+<style>
+    .action-btn {
+        background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+        color: #1f3c88;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 500;
+        text-decoration: none;
+        border: none;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .back-link {
+        text-decoration: none;
+        color: #1f3c88;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+        .back-link:hover {
+            color: #0d2c6e;
+            text-decoration: underline;
+        }
+
+    dt {
+        color: #333;
+    }
+
+    dd {
+        color: #555;
+    }
+</style>
