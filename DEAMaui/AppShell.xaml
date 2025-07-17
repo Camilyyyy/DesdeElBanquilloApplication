@@ -18,8 +18,13 @@
             Title="Países"
             ContentTemplate="{DataTemplate views:CountriesPage}"
             Route="CountriesPage" />
+        
+        <ShellContent
+            Title="Posiciones"
+            Icon="positions_icon.svg" 
+            ContentTemplate="{DataTemplate views:PositionsPage}"
+            Route="PositionsPage" />
 
-           
     </TabBar>
 
 </Shell>

@@ -28,6 +28,14 @@
                 HeightRequest="50"
                 FontSize="Medium"/>
 
+            <!-- Botón para ir a Países -->
+            <Button 
+             Text="Ver Posiciones"
+             Command="{Binding NavigateToCommand}"
+             CommandParameter="PositionsPage"
+             HeightRequest="50"
+             FontSize="Medium"/>    
+
             <!-- Botón para ir a Ligas -->
             <Button 
                 Text="Ver Ligas"
@@ -44,16 +52,7 @@
                 HeightRequest="50"
                 FontSize="Medium"/>
 
-            <!-- Añade el resto de los botones aquí siguiendo el mismo patrón -->
-            <!-- Ejemplo: -->
-            <!--
-            <Button 
-                Text="Ver Jugadores"
-                Command="{Binding NavigateToCommand}"
-                CommandParameter="PlayersPage"
-                HeightRequest="50"
-                FontSize="Medium"/>
-            -->
+           
 
         </VerticalStackLayout>
     </ScrollView>

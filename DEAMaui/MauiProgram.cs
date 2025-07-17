@@ -19,7 +19,7 @@ namespace DEAMaui
 
             builder.Services.AddSingleton<IApiService, ApiService>();
 
-            // Registrar ViewModels y Vistas
+            // Home
 
             builder.Services.AddSingleton<HomePageViewModel>();
             builder.Services.AddSingleton<HomePage>();
@@ -32,9 +32,15 @@ namespace DEAMaui
             builder.Services.AddTransient<CountryDetailPage>();
             builder.Services.AddTransient<CountryInfoViewModel>();
             builder.Services.AddTransient<CountryInfoPage>();
-            //
 
+            //Posicion
 
+            builder.Services.AddSingleton<PositionsViewModel>();
+            builder.Services.AddSingleton<PositionsPage>();
+            builder.Services.AddTransient<PositionDetailViewModel>();
+            builder.Services.AddTransient<PositionDetailPage>();
+            builder.Services.AddTransient<PositionInfoViewModel>();
+            builder.Services.AddTransient<PositionInfoPage>();
 
             return builder.Build();
         }
