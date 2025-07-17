@@ -56,12 +56,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<MauiXaml Update="Views\CountriesPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Folder Include="Data\" />
 		<!-- La carpeta DEAModels no es necesaria si usas el proyecto compartido -->
 	</ItemGroup>
@@ -72,6 +66,12 @@
 		<ProjectReference Include="..\DEAModels\DEAModels.csproj" />
 
 		<!-- ELIMINADO: <ProjectReference Include="..\DEAApi\DEAApi.csproj" /> -->
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

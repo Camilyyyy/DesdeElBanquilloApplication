@@ -21,7 +21,7 @@ namespace DEAMaui
 
             // Registrar ViewModels y Vistas
             builder.Services.AddSingleton<CountriesViewModel>();
-            builder.Services.AddSingleton<CountriesPage>();
+            builder.Services.AddSingleton<HomePage>();
 
 
             return builder.Build();
