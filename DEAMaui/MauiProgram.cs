@@ -1,7 +1,7 @@
-﻿using DEAMaui.Views;
+﻿using DEAMaui.Views.Country;
 using DEAMaui.ViewModels;
 using Microsoft.Extensions.Logging;
-
+using DEAMaui.Services;
 namespace DEAMaui
 {
     public static class MauiProgram
@@ -17,11 +17,14 @@ namespace DEAMaui
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<IApiService, ApiService>();
 
             // Registrar ViewModels y Vistas
             builder.Services.AddSingleton<CountriesViewModel>();
-            builder.Services.AddSingleton<HomePage>();
+            builder.Services.AddSingleton<CountriesPage>();
+
+            builder.Services.AddTransient<CountryDetailViewModel>();
+            builder.Services.AddTransient<CountryDetailPage>();
 
 
             return builder.Build();

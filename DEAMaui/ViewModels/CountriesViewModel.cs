@@ -1,65 +1,62 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using DEAModels;
-using Microsoft.Maui.Controls;
 
+
+using CommunityToolkit.Mvvm.Input;
+using DEAMaui.Services;
+using DEAModels;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using DEAMaui.Views.Country;
 namespace DEAMaui.ViewModels
 {
-    public class CountriesViewModel : INotifyPropertyChanged
+    public partial class CountriesViewModel : BaseViewModel 
     {
-        private readonly ApiService _apiService;
+        private readonly IApiService _apiService;
         public ObservableCollection<Country> Countries { get; } = new();
 
-        private Country _selectedCountry;
-        public Country SelectedCountry
+        public CountriesViewModel(IApiService apiService)
         {
-            get => _selectedCountry;
-            set { _selectedCountry = value; OnPropertyChanged(nameof(SelectedCountry)); }
+            Title = "Países del Mundo";
+            _apiService = apiService;
         }
 
-        public ICommand LoadCountriesCommand { get; }
-        public ICommand AddCountryCommand { get; }
-        public ICommand DeleteCountryCommand { get; }
-
-        public CountriesViewModel()
+        [RelayCommand]
+        async Task GetCountriesAsync()
         {
-            _apiService = new ApiService();
-            LoadCountriesCommand = new Command(async () => await LoadCountries());
-            AddCountryCommand = new Command<string>(async (name) => await AddCountry(name));
-            DeleteCountryCommand = new Command<Country>(async (country) => await DeleteCountry(country));
-        }
+            if (IsBusy)
+                return;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private async Task LoadCountries()
-        {
-            var countries = await _apiService.GetCountriesAsync();
-            Countries.Clear();
-            foreach (var country in countries)
+            try
             {
-                Countries.Add(country);
+                IsBusy = true;
+                var countries = await _apiService.GetCountriesAsync();
+
+                if (Countries.Count != 0)
+                    Countries.Clear();
+
+                foreach (var country in countries)
+                    Countries.Add(country);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"No se pudieron cargar los países: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", "No se pudo conectar con la API.", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
-        private async Task AddCountry(string name)
+        [RelayCommand]
+        async Task GoToDetailsAsync(Country country)
         {
-            if (string.IsNullOrWhiteSpace(name)) return;
-            var newCountry = new Country { Name = name };
-            await _apiService.AddCountryAsync(newCountry);
-            await LoadCountries(); // Recargar la lista
-        }
-
-        private async Task DeleteCountry(Country country)
-        {
-            if (country == null) return;
-            await _apiService.DeleteCountryAsync(country.IdCountry);
-            Countries.Remove(country);
+            // Navega a la página de detalles.
+            // Si 'country' es null, es para crear uno nuevo.
+            // Si tiene datos, es para editar.
+            await Shell.Current.GoToAsync(nameof(CountryDetailPage), true, new Dictionary<string, object>
+            {
+                { "Country", country }
+            });
         }
     }
 }
