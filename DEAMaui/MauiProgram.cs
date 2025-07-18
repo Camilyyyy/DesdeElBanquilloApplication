@@ -85,6 +85,24 @@ namespace DEAMaui
             builder.Services.AddTransient<CompetitionDetailPage>();
             builder.Services.AddTransient<CompetitionInfoViewModel>();
             builder.Services.AddTransient<CompetitionInfoPage>();
+
+            //Season
+
+            builder.Services.AddSingleton<SeasonsViewModel>();
+            builder.Services.AddSingleton<SeasonsPage>();
+            builder.Services.AddTransient<SeasonDetailViewModel>();
+            builder.Services.AddTransient<SeasonDetailPage>();
+            builder.Services.AddTransient<SeasonInfoViewModel>();
+            builder.Services.AddTransient<SeasonInfoPage>();
+
+            //Stadiums
+
+            builder.Services.AddSingleton<StadiumsViewModel>();
+            builder.Services.AddSingleton<StadiumsPage>();
+            builder.Services.AddTransient<StadiumDetailViewModel>();
+            builder.Services.AddTransient<StadiumDetailPage>();
+            builder.Services.AddTransient<StadiumInfoViewModel>();
+            builder.Services.AddTransient<StadiumInfoPage>();
             return builder.Build();
         }
     }

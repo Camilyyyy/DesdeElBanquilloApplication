@@ -51,8 +51,16 @@
            Command="{Binding NavigateToCommand}"
            CommandParameter="PlayersPage"
            HeightRequest="50"
-           FontSize="Medium"/>  
+           FontSize="Medium"/>
 
+            <!-- Botón para ir a Competicion -->
+            <Button 
+            Text="Ver Competiciones"
+            Command="{Binding NavigateToCommand}"
+            CommandParameter="CompetitionsPage"
+            HeightRequest="50"
+            FontSize="Medium"/>
+            
             <!-- Botón para ir a Países -->
             <Button 
                 Text="Ver Países"
@@ -70,9 +78,23 @@
             HeightRequest="50"
             FontSize="Medium"/>
 
-           
+            <!-- Botón para ir a Temporadas -->
+            <Button 
+            Text="Ver Temporadas"
+            Command="{Binding NavigateToCommand}"
+            CommandParameter="SeasonsPage"
+            HeightRequest="50"
+            FontSize="Medium"/>
 
-          
+            <!-- Botón para ir a Estadios -->
+            <Button 
+            Text="Ver Estadios"
+            Command="{Binding NavigateToCommand}"
+            CommandParameter="StadiumsPage"
+            HeightRequest="50"
+            FontSize="Medium"/>
+
+
 
 
         </VerticalStackLayout>

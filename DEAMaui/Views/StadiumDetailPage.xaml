@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             xmlns:converters="clr-namespace:DEAMaui.Converters"
+             x:DataType="viewmodel:StadiumDetailViewModel"
+             x:Class="DEAMaui.Views.StadiumDetailPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <converters:IntToStringConverter x:Key="IntToStringConverter" />
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="Nombre del Estadio"/>
+            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
+                <Entry Text="{Binding Stadium.Name}" Placeholder="Ej. Santiago Bernabéu"/>
+            </Frame>
+
+            <Label Text="Capacidad"/>
+            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
+                <Entry Text="{Binding Stadium.Capacity, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
+            </Frame>
+
+            <Label Text="Fecha de Fundación"/>
+            <DatePicker Date="{Binding Stadium.FoundedDate}"/>
+
+            <Label Text="Equipo"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona un equipo"
+                        ItemsSource="{Binding Teams}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedTeam}"/>
+            </Frame>
+
+            <Button Text="Guardar" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,20,0,0"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -50,6 +50,16 @@
             ContentTemplate="{DataTemplate views:CompetitionsPage}"
             Route="CompetitionsPage" />
 
+        <ShellContent
+            Title="Temporadas"
+            ContentTemplate="{DataTemplate views:SeasonsPage}"
+            Route="SeasonsPage" />
+        
+        <ShellContent
+            Title="Estadios"
+            ContentTemplate="{DataTemplate views:StadiumsPage}"
+            Route="StadiumsPage" />
+
     </TabBar>
 
 </Shell>

@@ -32,6 +32,14 @@ namespace DEAMaui
             // Competition
             Routing.RegisterRoute(nameof(CompetitionDetailPage), typeof(CompetitionDetailPage));
             Routing.RegisterRoute(nameof(CompetitionInfoPage), typeof(CompetitionInfoPage));
+
+            //Season
+            Routing.RegisterRoute(nameof(SeasonDetailPage), typeof(SeasonDetailPage));
+            Routing.RegisterRoute(nameof(SeasonInfoPage), typeof(SeasonInfoPage));
+
+            //Stadiums
+            Routing.RegisterRoute(nameof(StadiumDetailPage), typeof(StadiumDetailPage));
+            Routing.RegisterRoute(nameof(StadiumInfoPage), typeof(StadiumInfoPage));
         }
     }
 }
