@@ -14,6 +14,8 @@ namespace DEAMaui.ViewModels
     {
         private readonly IApiService _apiService;
 
+        private readonly ILocalFileService _localFileService;
+
         [ObservableProperty]
         Match match = new Match();
 
@@ -35,9 +37,10 @@ namespace DEAMaui.ViewModels
         [ObservableProperty]
         Stadium selectedStadium;
 
-        public MatchDetailViewModel(IApiService apiService)
+        public MatchDetailViewModel(IApiService apiService, ILocalFileService localFileService)
         {
             _apiService = apiService;
+            _localFileService = localFileService;
         }
 
         public async Task LoadDependenciesAsync()
@@ -92,7 +95,6 @@ namespace DEAMaui.ViewModels
         [RelayCommand]
         async Task SaveAsync()
         {
-            // Sincronización Forzada de Claves Foráneas
             Match.IdHomeTeam = SelectedHomeTeam?.IdTeam ?? 0;
             Match.IdAwayTeam = SelectedAwayTeam?.IdTeam ?? 0;
             Match.IdCompetition = SelectedCompetition?.IdCompetition ?? 0;
@@ -121,7 +123,6 @@ namespace DEAMaui.ViewModels
                     IdAwayTeam = Match.IdAwayTeam,
                     IdCompetition = Match.IdCompetition,
                     IdStadium = Match.IdStadium,
-                    // Propiedades de navegación en null
                     HomeTeam = null,
                     AwayTeam = null,
                     Competition = null,
@@ -129,13 +130,36 @@ namespace DEAMaui.ViewModels
                 };
 
                 bool success;
-                if (matchToSend.IdMatch == 0)
-                { success = await _apiService.AddMatchAsync(matchToSend); }
-                else
-                { success = await _apiService.UpdateMatchAsync(matchToSend.IdMatch, matchToSend); }
+                string action; // Variable para saber qué acción registrar
 
-                if (success) { await Shell.Current.GoToAsync($"//{nameof(MatchesPage)}"); }
-                else { await Shell.Current.DisplayAlert("Error de API", "No se pudo guardar el partido.", "OK"); }
+                if (matchToSend.IdMatch == 0)
+                {
+                    success = await _apiService.AddMatchAsync(matchToSend);
+                    action = "CREADO";
+                }
+                else
+                {
+                    success = await _apiService.UpdateMatchAsync(matchToSend.IdMatch, matchToSend);
+                    action = "ACTUALIZADO";
+                }
+
+                if (success)
+                {
+                    // --- INICIO DE LA MODIFICACIÓN ---
+                    // 4. Si el guardado fue exitoso, lo registramos en el archivo local.
+                    //    Necesitamos re-asignar las propiedades de navegación para que el log sea completo.
+                    matchToSend.HomeTeam = SelectedHomeTeam;
+                    matchToSend.AwayTeam = SelectedAwayTeam;
+                    matchToSend.Competition = SelectedCompetition;
+                    await _localFileService.LogMatchActionAsync(action, matchToSend);
+                    // --- FIN DE LA MODIFICACIÓN ---
+
+                    await Shell.Current.GoToAsync($"//{nameof(MatchesPage)}");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error de API", "No se pudo guardar el partido.", "OK");
+                }
             }
             catch (Exception ex)
             {

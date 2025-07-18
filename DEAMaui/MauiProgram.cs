@@ -18,6 +18,7 @@ namespace DEAMaui
                 });
 
             builder.Services.AddSingleton<IApiService, ApiService>();
+            builder.Services.AddSingleton<ILocalFileService, LocalFileService>();
 
             // Home
 
