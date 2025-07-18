@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             x:DataType="viewmodel:TeamDetailViewModel"
+             x:Class="DEAMaui.Views.TeamDetailPage"
+             Title="{Binding Title}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="Nombre del Equipo"/>
+            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
+                <Entry Text="{Binding Team.Name}" Placeholder="Ej. Real Madrid"/>
+            </Frame>
+
+            <Label Text="Ciudad"/>
+            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
+                <Entry Text="{Binding Team.City}" Placeholder="Ej. Madrid"/>
+            </Frame>
+
+            <Label Text="Fecha de Fundación"/>
+            <DatePicker Date="{Binding Team.FoundedDate}"/>
+
+            <Label Text="Competición"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona una competición"
+                        ItemsSource="{Binding Competitions}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedCompetition}"/>
+            </Frame>
+
+            <Label Text="País"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona un país"
+                        ItemsSource="{Binding Countries}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedCountry}"/>
+            </Frame>
+
+            <Label Text="Liga"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona una liga"
+                        ItemsSource="{Binding Leagues}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedLeague}"/>
+            </Frame>
+
+            <Button Text="Guardar" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,20,0,0"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             x:DataType="viewmodel:TeamInfoViewModel"
+             x:Class="DEAMaui.Views.TeamInfoPage"
+             Title="{Binding Title}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="25">
+            <Frame Padding="20" CornerRadius="10" BorderColor="LightGray" HasShadow="True">
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*,*,*,*" RowSpacing="10" ColumnSpacing="15">
+                    <Label Grid.Row="0" Grid.Column="0" Text="Nombre:" FontAttributes="Bold"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding Team.Name}"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Text="Ciudad:" FontAttributes="Bold"/>
+                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding Team.City}"/>
+
+                    <Label Grid.Row="2" Grid.Column="0" Text="Fundación:" FontAttributes="Bold"/>
+                    <Label Grid.Row="2" Grid.Column="1" Text="{Binding Team.FoundedDate, StringFormat='{0:dd/MM/yyyy}'}"/>
+
+                    <Label Grid.Row="3" Grid.Column="0" Text="País:" FontAttributes="Bold"/>
+                    <Label Grid.Row="3" Grid.Column="1" Text="{Binding Team.Country.Name}"/>
+
+                    <Label Grid.Row="4" Grid.Column="0" Text="Liga:" FontAttributes="Bold"/>
+                    <Label Grid.Row="4" Grid.Column="1" Text="{Binding Team.League.Name}"/>
+                </Grid>
+            </Frame>
+            <Button Text="Volver" Command="{Binding GoBackCommand}" Margin="0,30,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -67,6 +67,16 @@ namespace DEAMaui
             builder.Services.AddTransient<PlayerDetailPage>();
             builder.Services.AddTransient<PlayerInfoViewModel>();
             builder.Services.AddTransient<PlayerInfoPage>();
+
+            //Equipo
+
+            builder.Services.AddSingleton<TeamsViewModel>();
+            builder.Services.AddSingleton<TeamsPage>();
+            builder.Services.AddTransient<TeamDetailViewModel>();
+            builder.Services.AddTransient<TeamDetailPage>();
+            builder.Services.AddTransient<TeamInfoViewModel>();
+            builder.Services.AddTransient<TeamInfoPage>();
+
             return builder.Build();
         }
     }

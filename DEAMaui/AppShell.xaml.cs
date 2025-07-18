@@ -24,6 +24,10 @@ namespace DEAMaui
             //Jugador
             Routing.RegisterRoute(nameof(PlayerDetailPage), typeof(PlayerDetailPage));
             Routing.RegisterRoute(nameof(PlayerInfoPage), typeof(PlayerInfoPage));
+
+            //Equipo
+            Routing.RegisterRoute(nameof(TeamDetailPage), typeof(TeamDetailPage));
+            Routing.RegisterRoute(nameof(TeamInfoPage), typeof(TeamInfoPage));
         }
     }
 }
