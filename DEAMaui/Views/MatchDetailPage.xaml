@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             xmlns:converters="clr-namespace:DEAMaui.Converters"
+             x:DataType="viewmodel:MatchDetailViewModel"
+             x:Class="DEAMaui.Views.MatchDetailPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <converters:NullableIntToStringConverter x:Key="NullableIntConverter" />
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="Fecha del Partido"/>
+            <DatePicker Date="{Binding Match.MatchDate}"/>
+
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Equipo Local"/>
+                    <Picker Title="Selecciona..." ItemsSource="{Binding Teams}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedHomeTeam}"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="5" Grid.Column="2">
+                    <Label Text="Equipo Visitante"/>
+                    <Picker Title="Selecciona..." ItemsSource="{Binding Teams}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedAwayTeam}"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Goles Local"/>
+                    <Entry Text="{Binding Match.HomeGoals, Converter={StaticResource NullableIntConverter}}" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="5" Grid.Column="2">
+                    <Label Text="Goles Visitante"/>
+                    <Entry Text="{Binding Match.AwayGoals, Converter={StaticResource NullableIntConverter}}" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Label Text="Competición"/>
+            <Picker Title="Selecciona..." ItemsSource="{Binding Competitions}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCompetition}"/>
+
+            <Label Text="Estadio"/>
+            <Picker Title="Selecciona..." ItemsSource="{Binding Stadiums}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedStadium}"/>
+
+            <Label Text="Estado del Partido"/>
+            <Picker Title="Selecciona..." ItemsSource="{Binding StatusOptions}" SelectedItem="{Binding Match.Status}"/>
+
+            <Label Text="Árbitro"/>
+            <Entry Text="{Binding Match.Referee}" Placeholder="Nombre del árbitro"/>
+
+            <Button Text="Guardar" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,20,0,0"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

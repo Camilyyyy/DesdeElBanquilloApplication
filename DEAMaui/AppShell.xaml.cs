@@ -40,6 +40,9 @@ namespace DEAMaui
             //Stadiums
             Routing.RegisterRoute(nameof(StadiumDetailPage), typeof(StadiumDetailPage));
             Routing.RegisterRoute(nameof(StadiumInfoPage), typeof(StadiumInfoPage));
+            //Matches
+            Routing.RegisterRoute(nameof(MatchDetailPage), typeof(MatchDetailPage));
+            Routing.RegisterRoute(nameof(MatchInfoPage), typeof(MatchInfoPage));
         }
     }
 }

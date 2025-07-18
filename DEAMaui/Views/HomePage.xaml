@@ -78,6 +78,14 @@
             HeightRequest="50"
             FontSize="Medium"/>
 
+            <!-- Botón para ir a Partidos -->
+            <Button 
+            Text="Ver Partidos"
+            Command="{Binding NavigateToCommand}"
+            CommandParameter="MatchesPage"
+            HeightRequest="50"
+            FontSize="Medium"/>
+            
             <!-- Botón para ir a Temporadas -->
             <Button 
             Text="Ver Temporadas"

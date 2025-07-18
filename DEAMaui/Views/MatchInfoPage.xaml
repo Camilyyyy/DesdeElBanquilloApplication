@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             x:DataType="viewmodel:MatchInfoViewModel"
+             x:Class="DEAMaui.Views.MatchInfoPage"
+             Title="{Binding Title}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="25">
+            <Frame Padding="20" CornerRadius="10" BorderColor="LightGray" HasShadow="True">
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*,*,*,*,*" RowSpacing="10" ColumnSpacing="15">
+
+                    <Label Grid.Row="0" Grid.Column="0" Text="Fecha:" FontAttributes="Bold"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding Match.MatchDate, StringFormat='{0:dd MMM yyyy, HH:mm}'}"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Text="Resultado:" FontAttributes="Bold"/>
+                    <!-- INICIO DE LA CORRECCIÓN -->
+                    <Label Grid.Row="1" Grid.Column="1">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0} {1} - {2} {3}">
+                                <Binding Path="Match.HomeTeam.Name" />
+                                <Binding Path="Match.HomeGoals" />
+                                <Binding Path="Match.AwayGoals" />
+                                <Binding Path="Match.AwayTeam.Name" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <!-- FIN DE LA CORRECCIÓN -->
+
+                    <Label Grid.Row="2" Grid.Column="0" Text="Competición:" FontAttributes="Bold"/>
+                    <Label Grid.Row="2" Grid.Column="1" Text="{Binding Match.Competition.Name}"/>
+
+                    <Label Grid.Row="3" Grid.Column="0" Text="Estadio:" FontAttributes="Bold"/>
+                    <Label Grid.Row="3" Grid.Column="1" Text="{Binding Match.Stadium.Name}"/>
+
+                    <Label Grid.Row="4" Grid.Column="0" Text="Estado:" FontAttributes="Bold"/>
+                    <Label Grid.Row="4" Grid.Column="1" Text="{Binding Match.Status}"/>
+
+                    <Label Grid.Row="5" Grid.Column="0" Text="Árbitro:" FontAttributes="Bold"/>
+                    <Label Grid.Row="5" Grid.Column="1" Text="{Binding Match.Referee}"/>
+                </Grid>
+            </Frame>
+            <Button Text="Volver" Command="{Binding GoBackCommand}" Margin="0,30,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

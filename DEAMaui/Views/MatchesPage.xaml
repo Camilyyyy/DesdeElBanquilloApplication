@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             xmlns:model="clr-namespace:DEAModels;assembly=DEAModels"
+             x:DataType="viewmodel:MatchesViewModel"
+             x:Class="DEAMaui.Views.MatchesPage"
+             Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Añadir" Command="{Binding GoToEditPageCommand}" CommandParameter="{x:Null}" />
+    </ContentPage.ToolbarItems>
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*">
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" />
+        <RefreshView Command="{Binding GetMatchesCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Red" Grid.Row="0">
+            <CollectionView ItemsSource="{Binding Matches}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Match">
+                        <Grid x:Name="ItemContainer" Padding="10">
+                            <Frame Padding="15" CornerRadius="8" HasShadow="True" BorderColor="LightGray">
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Editar" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MatchesViewModel}}, Path=GoToEditPageCommand}" CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}"/>
+                                        <MenuFlyoutItem Text="Ver Información" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MatchesViewModel}}, Path=GoToInfoPageCommand}" CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}"/>
+                                        <MenuFlyoutSeparator />
+                                        <MenuFlyoutItem Text="Eliminar" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MatchesViewModel}}, Path=DeleteMatchCommand}" CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}" />
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+
+                                <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="Auto,Auto">
+                                    <Label Grid.Column="0" Text="{Binding HomeTeam.Name}" HorizontalOptions="Center" FontAttributes="Bold"/>
+
+                                    <!-- INICIO DE LA CORRECCIÓN -->
+                                    <Label Grid.Column="1" HorizontalOptions="Center" FontSize="Large">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                <Binding Path="HomeGoals" />
+                                                <Binding Path="AwayGoals" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                    <!-- FIN DE LA CORRECCIÓN -->
+
+                                    <Label Grid.Column="2" Text="{Binding AwayTeam.Name}" HorizontalOptions="Center" FontAttributes="Bold"/>
+                                    <Label Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding MatchDate, StringFormat='{0:dd MMM yyyy, HH:mm}'}" HorizontalOptions="Center" FontSize="Small" TextColor="Gray"/>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+        <Button Text="Refrescar Lista" Command="{Binding GetMatchesCommand}" IsEnabled="{Binding IsNotBusy}" Grid.Row="1" Margin="10"/>
+    </Grid>
+</ContentPage>

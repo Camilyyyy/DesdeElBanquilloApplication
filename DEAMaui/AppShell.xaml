@@ -60,6 +60,11 @@
             ContentTemplate="{DataTemplate views:StadiumsPage}"
             Route="StadiumsPage" />
 
+        <ShellContent
+         Title="Partidos"
+         ContentTemplate="{DataTemplate views:MatchesPage}"
+         Route="MatchesPage" />
+
     </TabBar>
 
 </Shell>

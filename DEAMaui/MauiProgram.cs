@@ -103,6 +103,15 @@ namespace DEAMaui
             builder.Services.AddTransient<StadiumDetailPage>();
             builder.Services.AddTransient<StadiumInfoViewModel>();
             builder.Services.AddTransient<StadiumInfoPage>();
+
+            //Matches
+            builder.Services.AddSingleton<MatchesViewModel>();
+            builder.Services.AddSingleton<MatchesPage>();
+            builder.Services.AddTransient<MatchDetailViewModel>();
+            builder.Services.AddTransient<MatchDetailPage>();
+            builder.Services.AddTransient<MatchInfoViewModel>();
+            builder.Services.AddTransient<MatchInfoPage>();
+
             return builder.Build();
         }
     }
