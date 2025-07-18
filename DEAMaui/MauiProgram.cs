@@ -77,6 +77,14 @@ namespace DEAMaui
             builder.Services.AddTransient<TeamInfoViewModel>();
             builder.Services.AddTransient<TeamInfoPage>();
 
+            //Competitions
+
+            builder.Services.AddSingleton<CompetitionsViewModel>();
+            builder.Services.AddSingleton<CompetitionsPage>();
+            builder.Services.AddTransient<CompetitionDetailViewModel>();
+            builder.Services.AddTransient<CompetitionDetailPage>();
+            builder.Services.AddTransient<CompetitionInfoViewModel>();
+            builder.Services.AddTransient<CompetitionInfoPage>();
             return builder.Build();
         }
     }
