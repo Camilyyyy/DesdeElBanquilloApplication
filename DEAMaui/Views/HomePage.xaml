@@ -4,108 +4,138 @@
              xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
              x:DataType="viewmodel:HomePageViewModel"
              x:Class="DEAMaui.Views.HomePage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="#f2f2f7">
+
+    <!-- RECURSOS: Estilos de tarjetas y botones -->
+    <ContentPage.Resources>
+        <Style x:Key="CardFrameStyle" TargetType="Frame">
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="HasShadow" Value="True" />
+            <Setter Property="HeightRequest" Value="120" />
+        </Style>
+
+        <Style x:Key="VerButtonStyle" TargetType="Button">
+            <Setter Property="Text" Value="Ver" />
+            <Setter Property="BackgroundColor" Value="#4a90e2" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="80" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="20">
+        <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label 
-                Text="Bienvenido a DesdeElBanquilloApplication"
-                FontSize="Header"
-                FontAttributes="Bold"
-                HorizontalOptions="Center" />
+            <!-- CABECERA CON DEGRADADO -->
+            <Border StrokeThickness="0" HeightRequest="80" Margin="0,0,0,10">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#b3fdfd" Offset="0.0" />
+                        <GradientStop Color="#fcdde8" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
 
+                <Label Text="Bienvenido a DesdeElBanquilloApplication"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+            </Border>
+
+            <!-- Subtítulo -->
             <Label 
                 Text="Selecciona una sección para continuar:"
-                HorizontalOptions="Center" 
-                Margin="0,0,0,20"/>
+                FontSize="16"
+                TextColor="#666"
+                HorizontalOptions="Center" />
 
-            <!-- Botón para ir a Posiciones -->
-            <Button 
-             Text="Ver Posiciones"
-             Command="{Binding NavigateToCommand}"
-             CommandParameter="PositionsPage"
-             HeightRequest="50"
-             FontSize="Medium"/>
-            
-            <!-- Botón para ir a Ligas -->
-                    <Button 
-             Text="Ver Ligas"
-             Command="{Binding NavigateToCommand}"
-             CommandParameter="LeaguesPage"
-             HeightRequest="50"
-             FontSize="Medium"/>
+            <!-- GRID DE TARJETAS -->
+            <Grid ColumnDefinitions="*,*,*" 
+                  RowDefinitions="Auto,Auto,Auto,Auto"
+                  ColumnSpacing="15" RowSpacing="15">
 
-            <!-- Botón para ir a Equipos -->
-            <Button 
-              Text="Ver Equipos"
-              Command="{Binding NavigateToCommand}"
-              CommandParameter="TeamsPage"
-              HeightRequest="50"
-              FontSize="Medium"/>
+                <!-- Fila 1 -->
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="0" Grid.Column="0">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Posiciones" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="PositionsPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="0" Grid.Column="1">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Ligas" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="LeaguesPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Botón para ir a Jugadores -->
-            <Button 
-           Text="Ver Jugadores"
-           Command="{Binding NavigateToCommand}"
-           CommandParameter="PlayersPage"
-           HeightRequest="50"
-           FontSize="Medium"/>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="0" Grid.Column="2">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Equipos" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="TeamsPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Botón para ir a Competicion -->
-            <Button 
-            Text="Ver Competiciones"
-            Command="{Binding NavigateToCommand}"
-            CommandParameter="CompetitionsPage"
-            HeightRequest="50"
-            FontSize="Medium"/>
-            
-            <!-- Botón para ir a Países -->
-            <Button 
-                Text="Ver Países"
-                Command="{Binding NavigateToCommand}"
-                CommandParameter="CountriesPage"
-                HeightRequest="50"
-                FontSize="Medium"/>
+                <!-- Fila 2 -->
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="1" Grid.Column="0">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Jugadores" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="PlayersPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="1" Grid.Column="1">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Competiciones" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="CompetitionsPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Botón para ir a Federacion -->
-            <Button 
-            Text="Ver Federaciones"
-            Command="{Binding NavigateToCommand}"
-            CommandParameter="FederationsPage"
-            HeightRequest="50"
-            FontSize="Medium"/>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="1" Grid.Column="2">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Países" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="CountriesPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Botón para ir a Partidos -->
-            <Button 
-            Text="Ver Partidos"
-            Command="{Binding NavigateToCommand}"
-            CommandParameter="MatchesPage"
-            HeightRequest="50"
-            FontSize="Medium"/>
-            
-            <!-- Botón para ir a Temporadas -->
-            <Button 
-            Text="Ver Temporadas"
-            Command="{Binding NavigateToCommand}"
-            CommandParameter="SeasonsPage"
-            HeightRequest="50"
-            FontSize="Medium"/>
+                <!-- Fila 3 -->
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="2" Grid.Column="0">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Federaciones" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="FederationsPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- Botón para ir a Estadios -->
-            <Button 
-            Text="Ver Estadios"
-            Command="{Binding NavigateToCommand}"
-            CommandParameter="StadiumsPage"
-            HeightRequest="50"
-            FontSize="Medium"/>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="2" Grid.Column="1">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Partidos" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="MatchesPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="2" Grid.Column="2">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Temporadas" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="SeasonsPage"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-
-
+                <!-- Fila 4 -->
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Row="3" Grid.Column="0">
+                    <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                        <Label Text="Estadios" HorizontalOptions="Center" FontAttributes="Bold"/>
+                        <Button Style="{StaticResource VerButtonStyle}" Command="{Binding NavigateToCommand}" CommandParameter="StadiumsPage"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
