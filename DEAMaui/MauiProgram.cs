@@ -60,6 +60,13 @@ namespace DEAMaui
             builder.Services.AddTransient<LeagueInfoViewModel>();
             builder.Services.AddTransient<LeagueInfoPage>();
 
+            //Jugador
+            builder.Services.AddSingleton<PlayersViewModel>();
+            builder.Services.AddSingleton<PlayersPage>();
+            builder.Services.AddTransient<PlayerDetailViewModel>();
+            builder.Services.AddTransient<PlayerDetailPage>();
+            builder.Services.AddTransient<PlayerInfoViewModel>();
+            builder.Services.AddTransient<PlayerInfoPage>();
             return builder.Build();
         }
     }

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
+             xmlns:converters="clr-namespace:DEAMaui.Converters" 
+             x:DataType="viewmodel:PlayerDetailViewModel"
+             x:Class="DEAMaui.Views.PlayerDetailPage"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <!-- Declaramos ambos convertidores para poder usarlos -->
+        <converters:IntToStringConverter x:Key="IntToStringConverter" />
+        <converters:NullableDecimalToStringConverter x:Key="DecimalConverter" />
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="Nombre del Jugador"/>
+            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
+                <Entry Text="{Binding Player.Name}" Placeholder="Ej. Lionel Messi"/>
+            </Frame>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Edad"/>
+                    <Entry Text="{Binding Player.Age, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                    <Label Text="Dorsal"/>
+                    <Entry Text="{Binding Player.JerseyNumber, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Label Text="Fecha de Nacimiento"/>
+            <DatePicker Date="{Binding Player.BirthDate}"/>
+
+            <!-- INICIO DE LA MODIFICACIÓN: Añadir campos restantes -->
+            <Label Text="Valor de Mercado (€)"/>
+            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
+                <Entry Text="{Binding Player.MarketValue, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 5000000.00" Keyboard="Numeric"/>
+            </Frame>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Altura (m)"/>
+                    <Entry Text="{Binding Player.Height, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 1.70" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                    <Label Text="Peso (kg)"/>
+                    <Entry Text="{Binding Player.Weight, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 72.5" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+            </Grid>
+            <!-- FIN DE LA MODIFICACIÓN -->
+
+            <Label Text="Equipo"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona un equipo"
+                        ItemsSource="{Binding Teams}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedTeam}"/>
+            </Frame>
+
+            <Label Text="Posición"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona una posición"
+                        ItemsSource="{Binding Positions}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedPosition}"/>
+            </Frame>
+
+            <Label Text="País"/>
+            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
+                <Picker Title="Selecciona un país"
+                        ItemsSource="{Binding Countries}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedCountry}"/>
+            </Frame>
+
+            <Button Text="Guardar" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,20,0,0"/>
+            <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

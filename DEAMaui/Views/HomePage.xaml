@@ -10,7 +10,7 @@
         <VerticalStackLayout Spacing="15" Padding="20">
 
             <Label 
-                Text="Bienvenido a FootballHub"
+                Text="Bienvenido a DesdeElBanquilloApplication"
                 FontSize="Header"
                 FontAttributes="Bold"
                 HorizontalOptions="Center" />
@@ -20,6 +20,39 @@
                 HorizontalOptions="Center" 
                 Margin="0,0,0,20"/>
 
+            <!-- Botón para ir a Posiciones -->
+            <Button 
+             Text="Ver Posiciones"
+             Command="{Binding NavigateToCommand}"
+             CommandParameter="PositionsPage"
+             HeightRequest="50"
+             FontSize="Medium"/>
+            
+            <!-- Botón para ir a Ligas -->
+                    <Button 
+             Text="Ver Ligas"
+             Command="{Binding NavigateToCommand}"
+             CommandParameter="LeaguesPage"
+             HeightRequest="50"
+             FontSize="Medium"/>
+
+            <!-- Botón para ir a Equipos -->
+            <Button 
+              Text="Ver Equipos"
+              Command="{Binding NavigateToCommand}"
+              CommandParameter="TeamsPage"
+              HeightRequest="50"
+              FontSize="Medium"/>
+
+
+            <!-- Botón para ir a Jugadores -->
+            <Button 
+           Text="Ver Jugadores"
+           Command="{Binding NavigateToCommand}"
+           CommandParameter="PlayersPage"
+           HeightRequest="50"
+           FontSize="Medium"/>  
+
             <!-- Botón para ir a Países -->
             <Button 
                 Text="Ver Países"
@@ -28,37 +61,19 @@
                 HeightRequest="50"
                 FontSize="Medium"/>
 
-            <!-- Botón para ir a Países -->
-            <Button 
-             Text="Ver Posiciones"
-             Command="{Binding NavigateToCommand}"
-             CommandParameter="PositionsPage"
-             HeightRequest="50"
-             FontSize="Medium"/>    
 
-            <!-- Botón para ir a Ligas -->
-            <Button 
-                Text="Ver Ligas"
-                Command="{Binding NavigateToCommand}"
-                CommandParameter="LeaguesPage"
-                HeightRequest="50"
-                FontSize="Medium"/>
-
-            <!-- Botón para ir a Equipos -->
-            <Button 
-                Text="Ver Equipos"
-                Command="{Binding NavigateToCommand}"
-                CommandParameter="TeamsPage"
-                HeightRequest="50"
-                FontSize="Medium"/>
-
-            <!-- Botón para ir a Equipos -->
+            <!-- Botón para ir a Federacion -->
             <Button 
             Text="Ver Federaciones"
             Command="{Binding NavigateToCommand}"
             CommandParameter="FederationsPage"
             HeightRequest="50"
             FontSize="Medium"/>
+
+           
+
+          
+
 
         </VerticalStackLayout>
     </ScrollView>

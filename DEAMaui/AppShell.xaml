@@ -35,6 +35,11 @@
             ContentTemplate="{DataTemplate views:LeaguesPage}"
             Route="LeaguesPage" />
 
+        <ShellContent
+            Title="Jugadores"
+            ContentTemplate="{DataTemplate views:PlayersPage}"
+            Route="PlayersPage" />
+
     </TabBar>
 
 </Shell>

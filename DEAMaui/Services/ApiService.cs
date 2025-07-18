@@ -1,5 +1,3 @@
-// EN: Services/ApiService.cs (VERSIÓN FINAL CORREGIDA Y REFACTORIZADA)
-
 using DEAMaui.Services;
 using DEAModels;
 using System.Diagnostics;
@@ -13,19 +11,9 @@ namespace DEAMaui.Services
 
         public ApiService()
         {
-
-#if DEBUG
-
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-            _httpClient = new HttpClient(handler);
-#else
-            // En modo Release (producción), se usa el HttpClient normal y seguro.
+            // Ya que usamos HTTP, no necesitamos el manejador especial para certificados SSL.
+            // Usamos un HttpClient simple y directo.
             _httpClient = new HttpClient();
-#endif
 
             string baseAddress = GetBaseAddress();
             _httpClient.BaseAddress = new Uri(baseAddress);
@@ -33,11 +21,13 @@ namespace DEAMaui.Services
 
         private string GetBaseAddress()
         {
-            const string HttpPort = "5062";
+            // El puerto 5062 es el que funciona según tu log de la aplicación web.
+            const string ApiHttpPort = "5062";
 
+            // Construimos la URL con el protocolo HTTP.
             return DeviceInfo.Platform == DevicePlatform.Android
-                ? $"http://10.0.2.2:{HttpPort}"
-                : $"http://localhost:{HttpPort}";
+                ? $"http://10.0.2.2:{ApiHttpPort}"
+                : $"http://localhost:{ApiHttpPort}";
         }
 
 

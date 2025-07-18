@@ -25,14 +25,22 @@ namespace DEAApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            return await _context.Players.Include(p => p.Team).Include(p => p.Position).Include(p => p.Country).ToListAsync();
+            return await _context.Players
+                                 .Include(p => p.Team)
+                                 .Include(p => p.Position)
+                                 .Include(p => p.Country)
+                                 .ToListAsync();
         }
 
         // GET: api/Players/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Player>> GetPlayer(int id)
         {
-            var player = await _context.Players.Include(p => p.Team).Include(p => p.Position).Include(p => p.Country).FirstOrDefaultAsync(p => p.IdPlayer==id);
+            var player = await _context.Players
+                                       .Include(p => p.Team)
+                                       .Include(p => p.Position)
+                                       .Include(p => p.Country)
+                                       .FirstOrDefaultAsync(p => p.IdPlayer == id);
 
             if (player == null)
             {
@@ -43,10 +51,10 @@ namespace DEAApi.Controllers
         }
 
         // PUT: api/Players/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayer(int id, Player player)
         {
+            // ... (Este método probablemente necesitará un manejo de errores similar al de POST)
             if (id != player.IdPlayer)
             {
                 return BadRequest();
@@ -60,28 +68,51 @@ namespace DEAApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PlayerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!PlayerExists(id)) { return NotFound(); } else { throw; }
             }
 
             return NoContent();
         }
 
-        // POST: api/Players
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // =========================================================================
+        // POST: api/Players (¡MÉTODO MODIFICADO!)
+        // =========================================================================
         [HttpPost]
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
-            _context.Players.Add(player);
-            await _context.SaveChangesAsync();
+            // Verificamos si el modelo que llega es válido según las anotaciones ([Required], etc.)
+            if (!ModelState.IsValid)
+            {
+                // Si no es válido, devolvemos un error 400 con los detalles de la validación.
+                return BadRequest(ModelState);
+            }
 
-            return CreatedAtAction("GetPlayer", new { id = player.IdPlayer }, player);
+            try
+            {
+                _context.Players.Add(player);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetPlayer), new { id = player.IdPlayer }, player);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Este bloque se activará si hay un error al guardar en la base de datos
+                // (ej. una clave foránea que no existe, una restricción violada).
+                // La 'InnerException' suele contener el mensaje de error real de SQL.
+                var innerExceptionMessage = ex.InnerException?.Message ?? ex.Message;
+
+                // Imprimimos el error en la consola de la API para verlo durante la depuración.
+                Console.WriteLine($"DB UPDATE EXCEPTION: {innerExceptionMessage}");
+
+                // Devolvemos un error 500 con un mensaje útil al cliente (la app MAUI).
+                return StatusCode(500, $"Error de base de datos: {innerExceptionMessage}");
+            }
+            catch (Exception ex)
+            {
+                // Captura cualquier otro error inesperado.
+                Console.WriteLine($"GENERIC EXCEPTION: {ex.Message}");
+                return StatusCode(500, $"Un error inesperado ocurrió: {ex.Message}");
+            }
         }
 
         // DELETE: api/Players/5
