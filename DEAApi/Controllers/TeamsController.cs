@@ -1,6 +1,4 @@
-﻿// EN: DEAApi/Controllers/TeamsController.cs
-
-using DEAModels;
+﻿using DEAModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 // Asegúrate de que este using apunte a la carpeta donde está tu DbContext de la API
