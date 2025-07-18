@@ -4,24 +4,67 @@
              xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
              x:DataType="viewmodel:CountryDetailViewModel"
              x:Class="DEAMaui.Views.CountryDetailPage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="#f2f2f7">
+
+    <!-- Estilos globales -->
+    <ContentPage.Resources>
+        <Style x:Key="CardFrameStyle" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="BorderColor" Value="#e0e0e0"/>
+        </Style>
+
+        <Style x:Key="SaveButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#4a90e2"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="HeightRequest" Value="45"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="20">
+        <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label Text="Nombre del País" FontSize="Small"/>
-            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
-                <Entry Text="{Binding Country.Name}" 
-                       Placeholder="Ej. España"
-                       FontSize="Medium"/>
+            <!-- CABECERA CON DEGRADADO -->
+            <Border StrokeThickness="0" HeightRequest="80">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#b3fdfd" Offset="0.0" />
+                        <GradientStop Color="#fcdde8" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Label Text="Detalles del País"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+            </Border>
+
+            <!-- CAMPO: Nombre del País -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="Nombre del País" FontAttributes="Bold"/>
+                    <Entry Text="{Binding Country.Name}" 
+                           Placeholder="Ej. España"
+                           FontSize="16"/>
+                </VerticalStackLayout>
             </Frame>
 
+            <!-- BOTÓN GUARDAR -->
             <Button Text="Guardar" 
+                    Style="{StaticResource SaveButtonStyle}"
                     Command="{Binding SaveCommand}"
                     IsEnabled="{Binding IsNotBusy}"
-                    HorizontalOptions="Fill"
-                    Margin="0,20,0,0"/>
+                    Margin="0,10,0,0"/>
 
+            <!-- INDICADOR DE CARGA -->
             <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
 
         </VerticalStackLayout>

@@ -2,82 +2,154 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
-             xmlns:converters="clr-namespace:DEAMaui.Converters" 
+             xmlns:converters="clr-namespace:DEAMaui.Converters"
              x:DataType="viewmodel:PlayerDetailViewModel"
              x:Class="DEAMaui.Views.PlayerDetailPage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="#f2f2f7">
 
+    <!-- ESTILOS -->
     <ContentPage.Resources>
-        <!-- Declaramos ambos convertidores para poder usarlos -->
         <converters:IntToStringConverter x:Key="IntToStringConverter" />
         <converters:NullableDecimalToStringConverter x:Key="DecimalConverter" />
+
+        <Style x:Key="CardFrameStyle" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="BorderColor" Value="#e0e0e0"/>
+        </Style>
+
+        <Style x:Key="SaveButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#4a90e2"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="HeightRequest" Value="45"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
     </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="20">
-            <Label Text="Nombre del Jugador"/>
-            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
-                <Entry Text="{Binding Player.Name}" Placeholder="Ej. Lionel Messi"/>
+        <VerticalStackLayout Spacing="20" Padding="20">
+
+            <!-- ENCABEZADO DEGRADADO -->
+            <Border StrokeThickness="0" HeightRequest="80">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#b3fdfd" Offset="0.0" />
+                        <GradientStop Color="#fcdde8" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Label Text="Detalles del Jugador"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+            </Border>
+
+            <!-- Nombre -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="Nombre del Jugador" FontAttributes="Bold"/>
+                    <Entry Text="{Binding Player.Name}" Placeholder="Ej. Lionel Messi"/>
+                </VerticalStackLayout>
             </Frame>
 
+            <!-- Edad y Dorsal -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Edad"/>
-                    <Entry Text="{Binding Player.Age, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1" Spacing="5">
-                    <Label Text="Dorsal"/>
-                    <Entry Text="{Binding Player.JerseyNumber, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
-                </VerticalStackLayout>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Column="0">
+                    <VerticalStackLayout>
+                        <Label Text="Edad" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Player.Age, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Column="1">
+                    <VerticalStackLayout>
+                        <Label Text="Dorsal" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Player.JerseyNumber, Converter={StaticResource IntToStringConverter}}" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+                </Frame>
             </Grid>
 
-            <Label Text="Fecha de Nacimiento"/>
-            <DatePicker Date="{Binding Player.BirthDate}"/>
-
-            <!-- INICIO DE LA MODIFICACIÓN: Añadir campos restantes -->
-            <Label Text="Valor de Mercado (€)"/>
-            <Frame Padding="10,0" CornerRadius="5" BorderColor="LightGray">
-                <Entry Text="{Binding Player.MarketValue, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 5000000.00" Keyboard="Numeric"/>
+            <!-- Fecha de nacimiento -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="Fecha de Nacimiento" FontAttributes="Bold"/>
+                    <DatePicker Date="{Binding Player.BirthDate}"/>
+                </VerticalStackLayout>
             </Frame>
 
+            <!-- Valor de mercado -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="Valor de Mercado (€)" FontAttributes="Bold"/>
+                    <Entry Text="{Binding Player.MarketValue, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 5000000.00" Keyboard="Numeric"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Altura y Peso -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Altura (m)"/>
-                    <Entry Text="{Binding Player.Height, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 1.70" Keyboard="Numeric"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1" Spacing="5">
-                    <Label Text="Peso (kg)"/>
-                    <Entry Text="{Binding Player.Weight, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 72.5" Keyboard="Numeric"/>
-                </VerticalStackLayout>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Column="0">
+                    <VerticalStackLayout>
+                        <Label Text="Altura (m)" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Player.Height, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 1.70" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Style="{StaticResource CardFrameStyle}" Grid.Column="1">
+                    <VerticalStackLayout>
+                        <Label Text="Peso (kg)" FontAttributes="Bold"/>
+                        <Entry Text="{Binding Player.Weight, Converter={StaticResource DecimalConverter}}" Placeholder="Ej. 72.5" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+                </Frame>
             </Grid>
-            <!-- FIN DE LA MODIFICACIÓN -->
 
-            <Label Text="Equipo"/>
-            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
-                <Picker Title="Selecciona un equipo"
-                        ItemsSource="{Binding Teams}"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedTeam}"/>
+            <!-- Equipo -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="Equipo" FontAttributes="Bold"/>
+                    <Picker Title="Selecciona un equipo"
+                            ItemsSource="{Binding Teams}"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedItem="{Binding SelectedTeam}"/>
+                </VerticalStackLayout>
             </Frame>
 
-            <Label Text="Posición"/>
-            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
-                <Picker Title="Selecciona una posición"
-                        ItemsSource="{Binding Positions}"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedPosition}"/>
+            <!-- Posición -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="Posición" FontAttributes="Bold"/>
+                    <Picker Title="Selecciona una posición"
+                            ItemsSource="{Binding Positions}"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedItem="{Binding SelectedPosition}"/>
+                </VerticalStackLayout>
             </Frame>
 
-            <Label Text="País"/>
-            <Frame Padding="5" CornerRadius="5" BorderColor="LightGray">
-                <Picker Title="Selecciona un país"
-                        ItemsSource="{Binding Countries}"
-                        ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedCountry}"/>
+            <!-- País -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <VerticalStackLayout>
+                    <Label Text="País" FontAttributes="Bold"/>
+                    <Picker Title="Selecciona un país"
+                            ItemsSource="{Binding Countries}"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedItem="{Binding SelectedCountry}"/>
+                </VerticalStackLayout>
             </Frame>
 
-            <Button Text="Guardar" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}" Margin="0,20,0,0"/>
+            <!-- Botón Guardar -->
+            <Button Text="Guardar"
+                    Style="{StaticResource SaveButtonStyle}"
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Margin="0,10,0,0"/>
+
+            <!-- Indicador de carga -->
             <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" />
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

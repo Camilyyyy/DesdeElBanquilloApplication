@@ -5,36 +5,101 @@
              xmlns:model="clr-namespace:DEAModels;assembly=DEAModels"
              x:DataType="viewmodel:StadiumsViewModel"
              x:Class="DEAMaui.Views.StadiumsPage"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="#f2f2f7">
+
+    <!-- Estilos reutilizables -->
+    <ContentPage.Resources>
+        <Style x:Key="CardFrameStyle" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="BorderColor" Value="#e0e0e0"/>
+        </Style>
+
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#4a90e2"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HeightRequest" Value="45"/>
+            <Setter Property="Margin" Value="10,10,10,20"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <!-- Botón Añadir en la barra superior -->
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Añadir" Command="{Binding GoToEditPageCommand}" CommandParameter="{x:Null}" />
     </ContentPage.ToolbarItems>
-    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*">
-        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" />
-        <RefreshView Command="{Binding GetStadiumsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="Red" Grid.Row="0">
-            <CollectionView ItemsSource="{Binding Stadiums}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Stadium">
-                        <Grid x:Name="ItemContainer" Padding="10">
-                            <Frame Padding="15" CornerRadius="8" HasShadow="True" BorderColor="LightGray">
-                                <FlyoutBase.ContextFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem Text="Editar" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StadiumsViewModel}}, Path=GoToEditPageCommand}" CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}"/>
-                                        <MenuFlyoutItem Text="Ver Información" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StadiumsViewModel}}, Path=GoToInfoPageCommand}" CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}"/>
-                                        <MenuFlyoutSeparator />
-                                        <MenuFlyoutItem Text="Eliminar" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StadiumsViewModel}}, Path=DeleteStadiumCommand}" CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}" />
-                                    </MenuFlyout>
-                                </FlyoutBase.ContextFlyout>
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold"/>
-                                    <Label Text="{Binding Team.Name}" FontSize="Small" TextColor="Gray"/>
-                                </VerticalStackLayout>
-                            </Frame>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
-        <Button Text="Refrescar Lista" Command="{Binding GetStadiumsCommand}" IsEnabled="{Binding IsNotBusy}" Grid.Row="1" Margin="10"/>
+
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+
+        <!-- CABECERA DEGRADADA -->
+        <Border Grid.Row="0" StrokeThickness="0" HeightRequest="80">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#b3fdfd" Offset="0.0" />
+                    <GradientStop Color="#fcdde8" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Label Text="Listado de Estadios"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="Black" />
+        </Border>
+
+        <!-- LISTADO -->
+        <Grid Grid.Row="1">
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+
+            <RefreshView Command="{Binding GetStadiumsCommand}"
+                         IsRefreshing="{Binding IsBusy}"
+                         RefreshColor="Red">
+
+                <CollectionView ItemsSource="{Binding Stadiums}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Stadium">
+                            <Grid x:Name="ItemContainer" Padding="10">
+                                <Frame Style="{StaticResource CardFrameStyle}">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="Editar"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StadiumsViewModel}}, Path=GoToEditPageCommand}"
+                                                            CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}" />
+                                            <MenuFlyoutItem Text="Ver Información"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StadiumsViewModel}}, Path=GoToInfoPageCommand}"
+                                                            CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem Text="Eliminar"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:StadiumsViewModel}}, Path=DeleteStadiumCommand}"
+                                                            CommandParameter="{Binding Source={x:Reference ItemContainer}, Path=BindingContext}" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+
+                                    <VerticalStackLayout Spacing="5">
+                                        <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#333" />
+                                        <Label Text="{Binding Team.Name}" FontSize="14" TextColor="Gray" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+
+        <!-- BOTÓN REFRESCAR -->
+        <Button Grid.Row="2"
+                Text="Refrescar Lista"
+                Style="{StaticResource MainButtonStyle}"
+                Command="{Binding GetStadiumsCommand}"
+                IsEnabled="{Binding IsNotBusy}" />
     </Grid>
 </ContentPage>

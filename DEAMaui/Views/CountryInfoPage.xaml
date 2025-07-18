@@ -4,40 +4,74 @@
              xmlns:viewmodel="clr-namespace:DEAMaui.ViewModels"
              x:DataType="viewmodel:CountryInfoViewModel"
              x:Class="DEAMaui.Views.CountryInfoPage"
-             Title="{Binding Title}">
-    <!-- El título de la página ahora mostrará el nombre del país -->
+             Title="{Binding Title}"
+             BackgroundColor="#f2f2f7">
+
+    <!-- Estilos reutilizables -->
+    <ContentPage.Resources>
+        <Style x:Key="CardFrameStyle" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="HasShadow" Value="True" />
+            <Setter Property="BorderColor" Value="#e0e0e0" />
+        </Style>
+
+        <Style x:Key="BackButtonStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="#4a90e2" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HeightRequest" Value="45" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="WidthRequest" Value="150" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="25">
+        <VerticalStackLayout Spacing="25" Padding="20">
 
-            <Frame Padding="20" CornerRadius="10" BorderColor="LightGray" HasShadow="True">
-                <VerticalStackLayout Spacing="15">
-                    <Label 
-                        Text="Información del País"
-                        FontSize="Title"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"/>
+            <!-- CABECERA CON DEGRADADO -->
+            <Border StrokeThickness="0" HeightRequest="80">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#b3fdfd" Offset="0.0" />
+                        <GradientStop Color="#fcdde8" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Label Text="Información del País"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+            </Border>
 
-                    <!-- Usamos un Grid para alinear bien las etiquetas y los valores -->
-                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" RowSpacing="10" ColumnSpacing="15" Margin="0,20,0,0">
+            <!-- TARJETA CON LA INFORMACIÓN -->
+            <Frame Style="{StaticResource CardFrameStyle}">
+                <Grid ColumnDefinitions="Auto,*"
+                      RowDefinitions="Auto"
+                      RowSpacing="10"
+                      ColumnSpacing="15">
 
-                        <!-- SE HA ELIMINADO LA FILA DEL ID -->
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Text="Nombre:"
+                           FontAttributes="Bold"
+                           FontSize="Medium"
+                           VerticalOptions="Center" />
 
-                        <Label Grid.Row="0" Grid.Column="0" Text="Nombre:" FontAttributes="Bold" FontSize="Medium" VerticalOptions="Center"/>
-
-                        <!-- Este es el Label que ahora debería mostrar el nombre correctamente -->
-                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding Country.Name}" FontSize="Medium" VerticalOptions="Center"/>
-
-                    </Grid>
-                </VerticalStackLayout>
+                    <Label Grid.Row="0" Grid.Column="1"
+                           Text="{Binding Country.Name}"
+                           FontSize="Medium"
+                           VerticalOptions="Center" />
+                </Grid>
             </Frame>
 
-            <!-- Este botón ahora debería funcionar -->
-            <Button Text="Volver" 
-                    Command="{Binding GoBackCommand}" 
-                    HorizontalOptions="Fill" 
-                    Margin="0,30,0,0"
-                    HeightRequest="50"/>
+            <!-- BOTÓN VOLVER -->
+            <Button Text="Volver"
+                    Style="{StaticResource BackButtonStyle}"
+                    Command="{Binding GoBackCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>
